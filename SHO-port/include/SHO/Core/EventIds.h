@@ -253,5 +253,6 @@ constexpr const char* ZoneUnCache                       = "ZoneUnCache";  // 0x0
 constexpr int kCount = 206;
 
 } // namespace Events
+namespace Event = Events;
 } // namespace Core
 } // namespace SHO

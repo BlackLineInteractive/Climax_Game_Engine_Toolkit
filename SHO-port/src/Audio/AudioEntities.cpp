@@ -10,7 +10,7 @@ AudioSound3D::AudioSound3D() {
 
 void AudioSound3D::Play() {
     m_isPlaying = true;
-    Core::EventManager::GetInstance().SendMsg("PlaySound3D", this, (void*)m_cueName.c_str());
+    Core::EventManager::GetInstance().SendMsg("PlaySound3D", this, (void*)m_waveName.c_str());
 }
 
 void AudioSound3D::Stop() {
@@ -39,6 +39,23 @@ void AudioStream::FadeOut(float duration) {
 
 AudioReverb::AudioReverb() {
     m_className = "AudioReverb";
+}
+
+MaterialMap::MaterialMap() {
+    m_className = "MaterialMap";
+}
+
+void MaterialMap::SetSoundForMaterial(int materialId, int soundId) {
+    if (materialId >= 0 && materialId < 17) {
+        m_materialSounds[materialId] = soundId;
+    }
+}
+
+int MaterialMap::GetSoundForMaterial(int materialId) const {
+    if (materialId >= 0 && materialId < 17) {
+        return m_materialSounds[materialId];
+    }
+    return 0;
 }
 
 } // namespace Audio

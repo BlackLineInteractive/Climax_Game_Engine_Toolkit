@@ -1,0 +1,1347 @@
+{
+ "class": "CPlayerBehaviour",
+ "constructor": "0x0012C3B0",
+ "size": 7152,
+ "fields": {
+  "0x14": {
+   "type": "int",
+   "raw": "iVar4",
+   "value": "iVar4"
+  },
+  "0x44": {
+   "type": "undefined4",
+   "raw": "1",
+   "value": "1"
+  },
+  "0x26c": {
+   "type": "int",
+   "raw": "(int)lVar1",
+   "value": "(int)lVar1"
+  },
+  "0x270": {
+   "type": "int",
+   "raw": "(int)lVar1",
+   "value": "(int)lVar1"
+  },
+  "0x1458": {
+   "type": "undefined4",
+   "raw": "1",
+   "value": "1"
+  },
+  "0x14c0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x14cc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x14d4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x14d8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x14dc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x14e0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x14e4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x14e8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x14f0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x14f4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x14f8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1524": {
+   "type": "undefined4",
+   "raw": "1",
+   "value": "1"
+  },
+  "0x1528": {
+   "type": "undefined4",
+   "raw": "1",
+   "value": "1"
+  },
+  "0x152c": {
+   "type": "undefined4",
+   "raw": "0x7f7fffff",
+   "value": "FLT_MAX"
+  },
+  "0x1530": {
+   "type": "undefined4",
+   "raw": "0x7f7fffff",
+   "value": "FLT_MAX"
+  },
+  "0x1534": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1538": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x153c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1540": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1544": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1548": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x154c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1550": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1554": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1558": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x155c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1560": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1564": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1568": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x156c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1570": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1574": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1578": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x157c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1580": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1584": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1588": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x158c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1590": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1594": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1598": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x159c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15a0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15a4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15a8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15ac": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15b0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15b4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15b8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15bc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15c0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15c4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15c8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15cc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15d0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15d4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15d8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15dc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15e0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15e4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15e8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15ec": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15f0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15f4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15f8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x15fc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1600": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1604": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1608": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x160c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1610": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1614": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1618": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x161c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1620": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1624": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1628": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x162c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1830": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1834": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1838": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x183c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1840": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1844": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1848": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x184c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1850": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1854": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1858": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x185c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1860": {
+   "type": "undefined4",
+   "raw": "1",
+   "value": "1"
+  },
+  "0x1864": {
+   "type": "undefined4",
+   "raw": "1",
+   "value": "1"
+  },
+  "0x1868": {
+   "type": "undefined4",
+   "raw": "1",
+   "value": "1"
+  },
+  "0x186c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1870": {
+   "type": "undefined4",
+   "raw": "1",
+   "value": "1"
+  },
+  "0x1874": {
+   "type": "undefined4",
+   "raw": "1",
+   "value": "1"
+  },
+  "0x1878": {
+   "type": "undefined4",
+   "raw": "1",
+   "value": "1"
+  },
+  "0x187c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1880": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1884": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1888": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1890": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1894": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1898": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18a0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18a4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18a8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18b0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18b4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18b8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18d0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18d4": {
+   "type": "undefined4",
+   "raw": "0x3ecccccd",
+   "value": "0.4f"
+  },
+  "0x18d8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18dc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18e0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18e4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18e8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18f0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18f4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x18f8": {
+   "type": "undefined4",
+   "raw": "0x3f800000",
+   "value": "1f"
+  },
+  "0x1900": {
+   "type": "undefined4",
+   "raw": "0x3f800000",
+   "value": "1f"
+  },
+  "0x1904": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1908": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1910": {
+   "type": "undefined8",
+   "raw": "*(undefined8 *)(iVar4 + 0x18f0)",
+   "value": "*(undefined8 *)(iVar4 + 0x18f0)"
+  },
+  "0x1918": {
+   "type": "undefined4",
+   "raw": "*(undefined4 *)(iVar4 + 0x18f8)",
+   "value": "*(undefined4 *)(iVar4 + 0x18f8)"
+  },
+  "0x1920": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1924": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1928": {
+   "type": "undefined4",
+   "raw": "uVar6",
+   "value": "uVar6"
+  },
+  "0x192c": {
+   "type": "undefined4",
+   "raw": "uVar5",
+   "value": "uVar5"
+  },
+  "0x1930": {
+   "type": "undefined4",
+   "raw": "uVar6",
+   "value": "uVar6"
+  },
+  "0x1934": {
+   "type": "undefined4",
+   "raw": "uVar5",
+   "value": "uVar5"
+  },
+  "0x1938": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x193c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1940": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1950": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1954": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1960": {
+   "type": "int",
+   "raw": "iVar4",
+   "value": "iVar4"
+  },
+  "0x1964": {
+   "type": "undefined4",
+   "raw": "1",
+   "value": "1"
+  },
+  "0x197c": {
+   "type": "undefined4",
+   "raw": "1",
+   "value": "1"
+  },
+  "0x1980": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1988": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x198c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x19a8": {
+   "type": "undefined4",
+   "raw": "uVar7",
+   "value": "uVar7"
+  },
+  "0x19ac": {
+   "type": "undefined4",
+   "raw": "uVar5",
+   "value": "uVar5"
+  },
+  "0x19b0": {
+   "type": "undefined4",
+   "raw": "0x40800000",
+   "value": "4f"
+  },
+  "0x19b4": {
+   "type": "undefined4",
+   "raw": "0x40a00000",
+   "value": "5f"
+  },
+  "0x19b8": {
+   "type": "undefined4",
+   "raw": "0x42b40000",
+   "value": "90f"
+  },
+  "0x19bc": {
+   "type": "undefined4",
+   "raw": "0x42c80000",
+   "value": "100f"
+  },
+  "0x19c0": {
+   "type": "undefined4",
+   "raw": "0x42800000",
+   "value": "64f"
+  },
+  "0x19c4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x19c8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x19cc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x19d0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x19d4": {
+   "type": "undefined4",
+   "raw": "0xffffffff",
+   "value": "-1"
+  },
+  "0x19d8": {
+   "type": "undefined4",
+   "raw": "0xffffffff",
+   "value": "-1"
+  },
+  "0x19dc": {
+   "type": "undefined4",
+   "raw": "0xffffffff",
+   "value": "-1"
+  },
+  "0x19e0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x19e4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x19e8": {
+   "type": "undefined4",
+   "raw": "0xffffffff",
+   "value": "-1"
+  },
+  "0x19ec": {
+   "type": "undefined4",
+   "raw": "0xffffffff",
+   "value": "-1"
+  },
+  "0x19f0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x19f4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x19f8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x19fc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a00": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a04": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a08": {
+   "type": "undefined4",
+   "raw": "0x42b40000",
+   "value": "90f"
+  },
+  "0x1a0c": {
+   "type": "undefined4",
+   "raw": "0x43340000",
+   "value": "180f"
+  },
+  "0x1a10": {
+   "type": "undefined4",
+   "raw": "0x42700000",
+   "value": "60f"
+  },
+  "0x1a14": {
+   "type": "undefined4",
+   "raw": "0xc2700000",
+   "value": "-60f"
+  },
+  "0x1a18": {
+   "type": "undefined4",
+   "raw": "uVar6",
+   "value": "uVar6"
+  },
+  "0x1a1c": {
+   "type": "undefined4",
+   "raw": "0xc1a00000",
+   "value": "-20f"
+  },
+  "0x1a20": {
+   "type": "undefined4",
+   "raw": "0x3e99999a",
+   "value": "0.3f"
+  },
+  "0x1a24": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a28": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a2c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a30": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a34": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a40": {
+   "type": "undefined8",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a48": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a50": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a54": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a58": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a64": {
+   "type": "undefined4",
+   "raw": "0xffffffff",
+   "value": "-1"
+  },
+  "0x1a68": {
+   "type": "undefined4",
+   "raw": "0xffffffff",
+   "value": "-1"
+  },
+  "0x1a6c": {
+   "type": "undefined4",
+   "raw": "0xffffffff",
+   "value": "-1"
+  },
+  "0x1a70": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a74": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a78": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a7c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a98": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1a9c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1aa0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1aa4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1aa8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1aac": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1ab0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1ab4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1ab8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1abc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1ac0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1ac4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1ac8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1acc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1ad0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1ad4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1ad8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1adc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1ae0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1ae4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1ae8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1aec": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1af0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1af4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1af8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1afc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b00": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b04": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b08": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b0c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b10": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b14": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b18": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b1c": {
+   "type": "undefined4",
+   "raw": "uVar7",
+   "value": "uVar7"
+  },
+  "0x1b20": {
+   "type": "undefined4",
+   "raw": "0x3d23d70a",
+   "value": "0.04f"
+  },
+  "0x1b24": {
+   "type": "undefined4",
+   "raw": "0x3f000000",
+   "value": "0.5f"
+  },
+  "0x1b28": {
+   "type": "undefined4",
+   "raw": "0x3f800000",
+   "value": "1f"
+  },
+  "0x1b50": {
+   "type": "int",
+   "raw": "iVar4",
+   "value": "iVar4"
+  },
+  "0x1b54": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b5c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b60": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b64": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b68": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b70": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b74": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b78": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b7c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b80": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b84": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b88": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b8c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b90": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b94": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b98": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1b9c": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1ba0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1ba4": {
+   "type": "undefined4",
+   "raw": "0x3ecccccd",
+   "value": "0.4f"
+  },
+  "0x1ba8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1bac": {
+   "type": "undefined4",
+   "raw": "0x3ecccccd",
+   "value": "0.4f"
+  },
+  "0x1bb0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1bb4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1bb8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1bbc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1bc0": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1bc4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1bc8": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1bcc": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  },
+  "0x1bd0": {
+   "type": "undefined4",
+   "raw": "0x40400000",
+   "value": "3f"
+  },
+  "0x1bd4": {
+   "type": "undefined4",
+   "raw": "uVar5",
+   "value": "uVar5"
+  },
+  "0x1bd8": {
+   "type": "undefined4",
+   "raw": "0x3f800000",
+   "value": "1f"
+  },
+  "0x1bdc": {
+   "type": "undefined4",
+   "raw": "0x3dcccccd",
+   "value": "0.1f"
+  },
+  "0x1be0": {
+   "type": "undefined4",
+   "raw": "uVar5",
+   "value": "uVar5"
+  },
+  "0x1be4": {
+   "type": "undefined4",
+   "raw": "0",
+   "value": "0"
+  }
+ }
+}

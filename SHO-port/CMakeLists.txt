@@ -2,11 +2,13 @@
 
 set(SHO_PORT_SOURCES
     src/Core/EventManager.cpp
+    src/Core/MessageRelay.cpp
     src/Core/SystemCommands.cpp
     src/Core/Behaviour.cpp
     src/Camera/BaseCamera.cpp
     src/Camera/StaticCamera.cpp
     src/Camera/ConstraintCamera.cpp
+    src/Camera/FollowCamera.cpp
     src/Camera/CameraManager.cpp
     src/Triggers/PlaneTrigger.cpp
     src/Triggers/ZoneTrigger.cpp
@@ -19,6 +21,7 @@ set(SHO_PORT_SOURCES
     src/Actor/PlayerBehaviour.cpp
     src/Actor/PlayerLight.cpp
     src/Actor/MirrorReflector.cpp
+    src/Actor/PlayerSpawner.cpp
     src/Actor/EnemyBehaviour.cpp
     src/Actor/Monster.cpp
     src/Inventory/ItemDef.cpp
@@ -30,7 +33,6 @@ set(SHO_PORT_SOURCES
     src/World/SceneQueue.cpp
     src/World/World.cpp
     src/Bridge/LevelBridge.cpp
-    src/Audio/AudioEntities.cpp
     src/Triggers/TriggerSystem.cpp
     src/Audio/AudioEngine.cpp
     src/Environment/FogSystem.cpp
@@ -48,6 +50,11 @@ set(SHO_PORT_SOURCES
     src/Puzzle/CalendarPuzzle.cpp
     src/Puzzle/TheatreBackdropPuzzle.cpp
     src/Puzzle/PuzzleManager.cpp
+    src/Triggers/ExtendedTriggers.cpp
+    src/World/PhysicsObject.cpp
+    src/Actor/BossBehaviours.cpp
+    src/Environment/PostProcessingFSE.cpp
+    src/Actor/IGCController.cpp
 )
 
 add_library(sho-port STATIC ${SHO_PORT_SOURCES})

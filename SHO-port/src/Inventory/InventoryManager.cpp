@@ -1,6 +1,7 @@
 #include "SHO/Inventory/InventoryManager.h"
 #include "SHO/Actor/PlayerBehaviour.h"
 #include "SHO/Core/EventManager.h"
+#include "SHO/Core/EventIds.h"
 #include <algorithm>
 
 namespace SHO {
@@ -12,13 +13,13 @@ InventoryManager& InventoryManager::GetInstance() {
 }
 
 InventoryManager::InventoryManager() {
-    // Default Travis fists (unarmed melee weapon)
-    ItemDef fists("Weapon_Fists", "Fists", ItemCategory::WeaponMelee);
-    fists.SetDamage(8.0f);
+    // Default Travis fists from sho_inventory.json: "Fists", 10 dmg, 5 hits durability
+    ItemDef fists("Fists", "Fists", ItemCategory::WeaponMelee);
+    fists.SetDamage(10.0f);
     fists.SetRange(1.0f);
-    fists.SetDurability(-1); // Indestructible
+    fists.SetDurability(-1); // Fists never break completely
     AddItem(fists);
-    EquipWeapon("Weapon_Fists");
+    EquipWeapon("Fists");
 }
 
 void InventoryManager::AddItem(const ItemDef& item) {
@@ -84,7 +85,7 @@ bool InventoryManager::EquipWeapon(const std::string& weaponId) {
     if (item->GetCategory() == ItemCategory::WeaponMelee ||
         item->GetCategory() == ItemCategory::WeaponRanged) {
         m_equippedWeapon = item;
-        Core::EventManager::GetInstance().SendMsg("WeaponEquipped", this, (void*)weaponId.c_str());
+        Core::EventManager::GetInstance().SendMsg(Core::Event::MsgItemEquipped, this, (void*)weaponId.c_str());
         return true;
     }
     return false;
@@ -100,19 +101,16 @@ bool InventoryManager::UseItem(const std::string& itemId, void* playerActor) {
     case HealthItemType::HealthDrink:
         if (player) player->Heal(player->GetMaxHealth() * 0.25f);
         RemoveItem(itemId, 1);
-        Core::EventManager::GetInstance().SendMsg("ItemUsed", this, (void*)itemId.c_str());
         return true;
 
     case HealthItemType::FirstAidKit:
         if (player) player->Heal(player->GetMaxHealth() * 0.75f);
         RemoveItem(itemId, 1);
-        Core::EventManager::GetInstance().SendMsg("ItemUsed", this, (void*)itemId.c_str());
         return true;
 
     case HealthItemType::Ampoule:
         if (player) player->Heal(player->GetMaxHealth());
         RemoveItem(itemId, 1);
-        Core::EventManager::GetInstance().SendMsg("ItemUsed", this, (void*)itemId.c_str());
         return true;
 
     default:

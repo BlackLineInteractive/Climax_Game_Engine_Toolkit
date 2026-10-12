@@ -1,6 +1,5 @@
 #include "SHO/Actor/PlayerBehaviour.h"
 #include "SHO/Camera/CameraManager.h"
-#include "SHO/Core/EventManager.h"
 #include <algorithm>
 #include <cmath>
 
@@ -12,114 +11,121 @@ PlayerBehaviour::PlayerBehaviour() {
     m_name = "Travis";
     m_health = 100.0f;
     m_maxHealth = 100.0f;
+
+    OnInit();
+}
+
+PlayerBehaviour::~PlayerBehaviour() {
+    auto& em = Core::EventManager::GetInstance();
+    for (uint32_t handle : m_eventHandles) {
+        em.UnlinkMsg(handle);
+    }
+    m_eventHandles.clear();
 }
 
 void PlayerBehaviour::OnInit() {
-    ListenToEvent("CameraCut");
+    auto& em = Core::EventManager::GetInstance();
+
+    // Link real SLES_551.47 messages recovered from FUN_0012c3b0 / MESSAGES.md
+    auto link = [&](const char* eventName) {
+        uint32_t h = em.LinkMsg(eventName, [this](const Core::Msg& msg) {
+            OnEvent(msg);
+        });
+        m_eventHandles.push_back(h);
+    };
+
+    link(Core::Event::PlayerTorchOn);
+    link(Core::Event::PlayerTorchOff);
+    link(Core::Event::RadioStaticEnable);
+    link(Core::Event::RadioStaticDisable);
+    link(Core::Event::ScreenStaticEnable);
+    link(Core::Event::ScreenStaticDisable);
+    link(Core::Event::EnablePlayerControl);
+    link(Core::Event::DisablePlayerCombat);
+    link(Core::Event::EnablePlayerCombat);
+    link(Core::Event::EnablePlayerRender);
+    link(Core::Event::MsgGrabStarted);
+    link(Core::Event::MsgGrabFinished);
+    link(Core::Event::MsgGrabCancel);
+    link(Core::Event::MsgSetGrabSyncState);
 }
 
 void PlayerBehaviour::OnEvent(const Core::Msg& msg) {
-    if (msg.id.name == "CameraCut") {
-        // When camera cut occurs during motion, latch current world move vector
-        // so Travis continues in the same physical direction without spinning around!
-        if (std::abs(m_stickX) > 0.15f || std::abs(m_stickY) > 0.15f) {
-            m_isDirectionLatched = true;
+    if (msg.id.name == Core::Event::PlayerTorchOn) {
+        m_torchOn = true;
+    } else if (msg.id.name == Core::Event::PlayerTorchOff) {
+        m_torchOn = false;
+    } else if (msg.id.name == Core::Event::RadioStaticEnable) {
+        m_radioStaticEnabled = true;
+    } else if (msg.id.name == Core::Event::RadioStaticDisable) {
+        m_radioStaticEnabled = false;
+    } else if (msg.id.name == Core::Event::ScreenStaticEnable) {
+        m_screenStaticEnabled = true;
+    } else if (msg.id.name == Core::Event::ScreenStaticDisable) {
+        m_screenStaticEnabled = false;
+    } else if (msg.id.name == Core::Event::EnablePlayerControl) {
+        m_controlEnabled = true;
+    } else if (msg.id.name == Core::Event::EnablePlayerCombat) {
+        m_combatEnabled = true;
+    } else if (msg.id.name == Core::Event::DisablePlayerCombat) {
+        m_combatEnabled = false;
+    } else if (msg.id.name == Core::Event::MsgGrabStarted) {
+        m_isGrappled = true;
+    } else if (msg.id.name == Core::Event::MsgGrabFinished || msg.id.name == Core::Event::MsgGrabCancel) {
+        m_isGrappled = false;
+        m_grabSyncAnim.clear();
+    } else if (msg.id.name == Core::Event::MsgSetGrabSyncState) {
+        if (msg.data) {
+            m_grabSyncAnim = static_cast<const char*>(msg.data);
         }
     }
 }
 
-void PlayerBehaviour::StartGrapple(Actor* enemy) {
-    m_state = PlayerState::Grappled;
-    m_grappler = enemy;
-    m_grappleProgress = 0.0f;
-    m_grappleTimer = 3.5f; // 3.5 seconds to escape
-    Core::EventManager::GetInstance().SendMsg("QTEGrappleStarted", this);
+void PlayerBehaviour::SendTorchToggle() {
+    auto& em = Core::EventManager::GetInstance();
+    if (m_torchOn) {
+        em.SendMsg(Core::Event::PlayerTorchOff, this);
+    } else {
+        em.SendMsg(Core::Event::PlayerTorchOn, this);
+    }
 }
 
-bool PlayerBehaviour::UpdateGrappleQTE(float dt, bool buttonPressed) {
-    if (m_state != PlayerState::Grappled) return false;
-
-    if (buttonPressed) {
-        m_grappleProgress += 0.20f; // Each mash adds 20%
+void PlayerBehaviour::NotifyCameraTransition() {
+    // Direction latch from TODO.md §4c & FUN_0012e2a0:
+    // When camera angle transitions during movement, latch current world move vector
+    // so Travis continues along the same physical trajectory until analog stick is released.
+    if (std::abs(m_stickX) > 0.15f || std::abs(m_stickY) > 0.15f) {
+        m_isDirectionLatched = true;
     }
-
-    // Natural decay over time
-    m_grappleProgress = std::max(0.0f, m_grappleProgress - 0.15f * dt);
-    m_grappleTimer -= dt;
-
-    if (m_grappleProgress >= 1.0f) {
-        BreakFreeFromGrapple();
-        return true;
-    }
-
-    if (m_grappleTimer <= 0.0f) {
-        // Failed struggle: take grapple bite damage
-        TakeDamage(25.0f, GetForward() * -1.0f);
-        m_state = PlayerState::Idle;
-        m_grappler = nullptr;
-        Core::EventManager::GetInstance().SendMsg("QTEGrappleFailed", this);
-        return false;
-    }
-
-    return false;
 }
 
-void PlayerBehaviour::BreakFreeFromGrapple() {
-    m_state = PlayerState::Idle;
-    if (m_grappler) {
-        // Push grappler back and stagger it
-        m_grappler->TakeDamage(10.0f, GetForward());
-        m_grappler = nullptr;
-    }
-    Core::EventManager::GetInstance().SendMsg("QTEGrappleEscaped", this);
-}
-
-void PlayerBehaviour::UpdateThreat(const std::vector<Actor*>& enemies) {
-    float maxStatic = 0.0f;
-    const float radioMaxRadius = 12.0f;
-    Core::Vec3 myPos = GetPosition();
-
-    for (auto* enemy : enemies) {
-        if (!enemy || !enemy->IsAlive()) continue;
-
-        float dist = glm::distance(myPos, enemy->GetPosition());
-        if (dist < radioMaxRadius) {
-            float s = 1.0f - (dist / radioMaxRadius);
-            if (s > maxStatic) {
-                maxStatic = s;
-            }
-        }
-    }
-
-    m_radioStatic = maxStatic;
+void PlayerBehaviour::UpdateStateVariables() {
+    float stickMag = std::sqrt(m_stickX * m_stickX + m_stickY * m_stickY);
+    m_hasRun = Core::HasFlag(m_buttons, Core::PadButton::Square) && stickMag > 0.3f && !m_isFatigued;
+    m_hasStanced = Core::HasFlag(m_buttons, Core::PadButton::R1);
+    m_hasAttacked = Core::HasFlag(m_buttons, Core::PadButton::Cross) && m_hasStanced;
+    m_hasInteracted = Core::HasFlag(m_buttons, Core::PadButton::Cross) && !m_hasStanced;
+    m_hasReloaded = Core::HasFlag(m_buttons, Core::PadButton::Square) && m_hasStanced;
+    m_hasToggled = Core::HasFlag(m_buttons, Core::PadButton::Triangle);
 }
 
 void PlayerBehaviour::HandleMovement(float dt) {
-    if (!IsAlive()) {
-        m_state = PlayerState::Dead;
+    if (!IsAlive() || !m_controlEnabled || m_isGrappled) {
         return;
     }
 
-    if (m_state == PlayerState::Grappled) {
-        return;
-    }
+    UpdateStateVariables();
 
-    // Stamina recovery when not running
     float stickMag = std::sqrt(m_stickX * m_stickX + m_stickY * m_stickY);
     if (stickMag < 0.15f) {
         m_isDirectionLatched = false;
         m_latchedMoveDir = Core::Vec3(0.0f);
 
-        // Regenerate stamina faster while standing still
-        m_stamina = std::min(m_maxStamina, m_stamina + 35.0f * dt);
-        if (m_stamina > 25.0f) {
-            m_isExhausted = false;
-        }
-
-        if (m_isExhausted) {
-            m_state = PlayerState::Exhausted;
-        } else {
-            m_state = PlayerState::Idle;
+        // Ground truth stamina recovery from FUN_0012c3b0 / FUN_0012e2a0:
+        // Standing recovers faster (m_staminaRecoveryRate = 3.0f * dt scaling)
+        m_stamina = std::min(m_maxStamina, m_stamina + m_staminaRecoveryRate * 8.0f * dt);
+        if (m_stamina >= m_fatigueThreshold) {
+            m_isFatigued = false;
         }
         return;
     }
@@ -129,7 +135,7 @@ void PlayerBehaviour::HandleMovement(float dt) {
     if (m_isDirectionLatched && glm::length(m_latchedMoveDir) > 0.1f) {
         moveDir = m_latchedMoveDir;
     } else {
-        // Camera-relative input calculation
+        // Camera-relative input calculation (CamMsgReceiveTrackingDetails basis)
         auto& camMgr = Camera::CameraManager::GetInstance();
         auto* activeCam = camMgr.GetActiveCamera();
 
@@ -153,36 +159,30 @@ void PlayerBehaviour::HandleMovement(float dt) {
         m_latchedMoveDir = moveDir;
     }
 
-    // Determine running vs walking based on Square button and stamina state
-    bool runRequested = Core::HasFlag(m_buttons, Core::PadButton::Square) || stickMag > 0.85f;
-    if (runRequested && !m_isExhausted && m_stamina > 5.0f) {
-        m_state = PlayerState::Run;
+    // Stamina calculation from FUN_0012e2a0
+    if (m_hasRun) {
         m_stamina = std::max(0.0f, m_stamina - 15.0f * dt);
         if (m_stamina <= 0.0f) {
-            m_isExhausted = true;
+            m_isFatigued = true;
+            m_hasRun = false;
         }
     } else {
-        if (m_isExhausted) {
-            m_state = PlayerState::Exhausted;
-        } else {
-            m_state = PlayerState::Walk;
-        }
-        m_stamina = std::min(m_maxStamina, m_stamina + 20.0f * dt);
-        if (m_stamina > 25.0f) {
-            m_isExhausted = false;
+        m_stamina = std::min(m_maxStamina, m_stamina + m_staminaRecoveryRate * 4.0f * dt);
+        if (m_stamina >= m_fatigueThreshold) {
+            m_isFatigued = false;
         }
     }
 
     float speed = m_walkSpeed;
-    if (m_state == PlayerState::Run) {
+    if (m_hasRun) {
         speed = m_runSpeed;
-    } else if (m_state == PlayerState::Exhausted) {
-        speed = m_walkSpeed * 0.6f; // Slow down during exhaustion
+    } else if (m_isFatigued) {
+        speed = m_walkSpeed * 0.65f;
     }
 
     Core::Vec3 displacement = moveDir * (speed * dt);
 
-    // Update facing orientation
+    // Orientation yaw update
     float targetYaw = glm::degrees(std::atan2(moveDir.x, moveDir.z));
     float yawDiff = targetYaw - m_yaw;
     while (yawDiff > 180.0f)  yawDiff -= 360.0f;

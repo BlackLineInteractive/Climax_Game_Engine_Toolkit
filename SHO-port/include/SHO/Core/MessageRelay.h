@@ -1,129 +1,58 @@
 #pragma once
 
+#include "SHO/Core/Behaviour.h"
+#include "SHO/Core/EventManager.h"
+#include "SHO/Core/EventIds.h"
 #include <string>
 #include <vector>
-#include <functional>
-#include <map>
-#include <memory>
-#include <glm/glm.hpp>
 
 namespace SHO {
 namespace Core {
 
-enum class MessageType {
-    // Triggers & Level Flow
-    TriggerEnter,
-    TriggerExit,
-    TriggerActivate,
-    ZoneTransition,
-    DoorInteraction,
-    DoorLocked,
-    DoorUnlocked,
-
-    // Cameras
-    CameraCut,
-    CameraBlend,
-
-    // Player Actions
-    PlayerWalk,
-    PlayerRun,
-    PlayerFootstep,
-    PlayerFlashlightToggle,
-    PlayerAttack,
-    PlayerDamaged,
-    PlayerDied,
-
-    // Items & Puzzles
-    ItemCollected,
-    ItemUsed,
-    PuzzleActivated,
-    PuzzleSolved,
-    PuzzleFailed,
-
-    // Audio & Atmosphere
-    PlayAudioCue,
-    PlayStreamMusic,
-    StopStreamMusic,
-    SetFogDensity
+// ─────────────────────────────────────────────────────────────────────────────
+// CMessageRelay
+// Decompiled from SLES_551.47: Factory @ 0x0016CE80, Ctor @ 0x0016CEC8 (size 220)
+// Manages 1 input trigger event, up to 10 relayed output events with delays,
+// and enable/disable control messages.
+// ─────────────────────────────────────────────────────────────────────────────
+struct RelayedMessageTarget {
+    std::string targetEvent; // 0x4c + i * 8
+    float delaySec = 0.0f;   // 0x9c + i * 4
 };
 
-struct GameEvent {
-    MessageType type;
-    std::string sender;
-    std::string target;
-    std::string stringParam;
-    int         intParam = 0;
-    float       floatParam = 0.0f;
-    glm::vec3   vectorParam = glm::vec3(0.0f);
-    void*       userData = nullptr;
-};
-
-using GameEventCallback = std::function<void(const GameEvent&)>;
-
-class MessageRelay {
+class MessageRelay : public Behaviour {
 public:
-    static MessageRelay& GetInstance() {
-        static MessageRelay instance;
-        return instance;
-    }
+    MessageRelay();
+    virtual ~MessageRelay();
 
-    // Subscribe to a specific message type
-    void Subscribe(MessageType type, GameEventCallback callback) {
-        m_listeners[type].push_back(callback);
-    }
+    void OnInit() override;
+    void OnUpdate(float dt) override;
 
-    // Dispatch an event immediately to all subscribers
-    void Send(const GameEvent& event) {
-        auto it = m_listeners.find(event.type);
-        if (it != m_listeners.end()) {
-            for (auto& cb : it->second) {
-                if (cb) cb(event);
-            }
-        }
-    }
+    void SetInputEvent(const std::string& inputEvt) { m_inputEvent = inputEvt; }
+    void AddRelayedTarget(const std::string& targetEvt, float delaySec = 0.0f);
 
+    void SetEnableMessage(const std::string& msg);
+    void SetDisableMessage(const std::string& msg);
 
-    // Convenience broadcast helpers
-    void BroadcastTriggerEnter(const std::string& triggerName, const std::string& entityName) {
-        GameEvent e;
-        e.type = MessageType::TriggerEnter;
-        e.sender = triggerName;
-        e.target = entityName;
-        Send(e);
-    }
-
-    void BroadcastZoneTransition(const std::string& fromZone, const std::string& toZone) {
-        GameEvent e;
-        e.type = MessageType::ZoneTransition;
-        e.sender = fromZone;
-        e.target = toZone;
-        Send(e);
-    }
-
-    void BroadcastCameraCut(int cameraIndex, float fovDeg) {
-        GameEvent e;
-        e.type = MessageType::CameraCut;
-        e.intParam = cameraIndex;
-        e.floatParam = fovDeg;
-        Send(e);
-    }
-
-    void BroadcastFootstep(const std::string& surfaceName, const glm::vec3& position) {
-        GameEvent e;
-        e.type = MessageType::PlayerFootstep;
-        e.stringParam = surfaceName;
-        e.vectorParam = position;
-        Send(e);
-    }
-
-    void Clear() {
-        m_listeners.clear();
-    }
+    void TriggerRelay();
+    bool IsActive() const { return m_active; }
 
 private:
-    MessageRelay() = default;
-    std::map<MessageType, std::vector<GameEventCallback>> m_listeners;
+    std::string m_inputEvent;                           // 0x44
+    std::vector<RelayedMessageTarget> m_targets;       // 0x4c (up to 10 targets)
+    std::string m_enableMsg;                            // 0xb8
+    std::string m_disableMsg;                           // 0xc0
+    bool m_active = true;                               // 0xd8 = 1
 
+    struct PendingDispatch {
+        std::string eventName;
+        float remainingTime;
+    };
+    std::vector<PendingDispatch> m_pendingQueue;
+
+    uint32_t m_inputHandle = 0;
+    uint32_t m_enableHandle = 0;
+    uint32_t m_disableHandle = 0;
 };
 
 } // namespace Core

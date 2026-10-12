@@ -1,30 +1,32 @@
 #pragma once
 
 #include "SHO/Environment/Light.h"
+#include "SHO/Core/EventManager.h"
+#include "SHO/Core/EventIds.h"
 
 namespace SHO {
 namespace Actor {
 
-// Translated from CPlayerLight (Travis's pocket flashlight)
+// Translated from CPlayerLight (factory @ 0x00141CB8, ctor @ 0x00141D00, size 160)
+// Subscribes to PlayerTorchOn / PlayerTorchOff and attaches to bone TORCH_MOUNT.
 class PlayerLight : public Environment::Light {
 public:
     PlayerLight();
-    virtual ~PlayerLight() = default;
+    virtual ~PlayerLight();
 
-    void SetFlashlightOn(bool on) {
-        m_isOn = on;
-        SetActive(on);
-        SetVisible(on);
-    }
-    bool IsFlashlightOn() const { return m_isOn; }
-    void Toggle() { SetFlashlightOn(!m_isOn); }
+    void OnInit();
+    void OnEvent(const Core::Msg& msg);
 
-    // Update light position & direction to follow Travis's chest
-    void UpdateFollow(const Core::Vec3& playerPos, const Core::Vec3& playerFwd, float dt);
+    bool IsTorchOn() const { return m_isOn; }
+    void SetTorchOn(bool on);
+
+    const std::string& GetMountBone() const { return m_mountBone; }
 
 private:
-    bool  m_isOn = true;
-    float m_flickerTimer = 0.0f;
+    std::string m_mountBone = "TORCH_MOUNT";
+    bool  m_isOn = false;
+    uint32_t m_torchOnHandle = 0;
+    uint32_t m_torchOffHandle = 0;
 };
 
 } // namespace Actor
