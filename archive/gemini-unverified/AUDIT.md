@@ -119,3 +119,68 @@ Facts, not code. They are already in `SHO-port/docs/*.md` and
 Travis registers and the 33 he links, the per-frame path
 `0x00137230 → 0x00130028 → 0x001300F0`, the 29 animation-variable names and
 their offsets. That is where the recovery restarts.
+
+---
+
+# Second pass: the whole codebase (2026-10-12)
+
+The first pass covered `SHO-port/` and what `c82bc07` touched. This one read
+every game-facing file under `src/` and `include/`, by content rather than by
+author — some of what follows predates Gemini.
+
+## Fixed against the binary
+
+| Where | Was | Now |
+|---|---|---|
+| `Game/SceneQueue` | a fixed 13-step order with 0x0C = "FadeOut 1 s", 0x0D = "FadeIn 1 s", a 0x09 always pushed, and every handler gated on "the streamer" | transcribed from `FUN_00179FB8`: 0x0C/0x0D are one fader driven by a `{kind, mode, seconds}` descriptor (`FUN_0017B128`; New Game passes 0x339F68 = {0,0,1.0} and 0x339F50 = {1,0,1.0}), a mode-2 stop node follows the opening, 0x09 only when leaving a different scene, 0x0B carries "PrePurge"/"PostPurge", the closing transition sits *after* 0x11. The gate is `FUN_001EF8F8` — the fader moving — and only 9 of the 17 handlers have it. Order checked with a test host for both New Game and a room change. |
+| `play_main` intro | the menu played SCN01, then loaded IntroRoad | `FUN_001CF718` plays nothing; scn01 is an `FMVTrigger` inside IntroRoad (`ZoneActivate → CMessageRelay → playFMV → FMVTrigger "scn01" → relayFMVEnd → border_Start, relayIGC2`). The menu now queues IntroRoad directly; the intro waits for the message graph to be implemented. |
+| `play_main` `frontEndRows` | 380, under a comment proving 448 | 448 (the PAL framebuffer; the flag row lands at 43–56 % as the comment's measurement says). |
+| `play_main` `textScale` | 1.3, set in `550d0e4` with no basis | 1.0 — the formula from `FUN_00215190`. |
+
+## Removed
+
+`play_main.cpp`: a 1-second splash hold (the comment above it says the splash
+has no timer); drop shadow and a fake bold on all text; `CursorMove`/`Select`
+placeholder sounds; menu music at 0.65, faded in over 2 s and muted on every
+screen but the main menu; a 1 s fade into the menu, a fade on every boot state,
+a ⅓ s fade between menu screens, a ½ s fade into the intro; a "MENU" fallback
+movie; the `gameoptions` screen shifted up 32.5 rows on request; a pre-lit `_h`
+flag variant preferred over the tint the original uses; hand-typed "Silent Hill
+Origins" drawn when the logo movie is missing. `sho-game` also lost the
+toolkit's grey backdrop.
+
+## Moved out of `climax-game` into `climax-harness`
+
+`climax-game` claimed "level logic recovered from the object graph". These are
+not, so they now live in `src/Harness/` (namespace `ClimaxEngine::Harness`),
+each header saying so at the top:
+
+* `Body` — the sphere controller, ray and line-of-sight tests. The engine uses
+  `CollisionBSP::TestSphere` with a surface-class mask; none of it is read.
+* `CameraView` — `CameraAim` / `ResolveCameraView`: tracking fallback for
+  static cameras, 55° tilt cap, constraint cameras simply following, eye
+  stepped through walls.
+* `ButtonTriggers` — real objects, guessed property meanings. Toolkit only.
+
+`FindZoneSpawn` no longer falls back to an arbitrary spawner; that decision is
+the caller's (`FindPlayerSpawn`, now in `ZoneLinks`).
+
+## Kept, flagged — confirmed by the owner rather than by the binary
+
+* `LUMBRYRD` under the Konami logo. Not named in SLES or SH.ARC; the owner
+  confirmed it from the retail game (2026-10-12). Marked as such in the code.
+
+## Still not the game's, still in the build — known and labelled
+
+* `CameraSwitcher`: which side of a PlaneTrigger is which camera, the
+  unbounded plane, 0.12 hysteresis (comment says so).
+* `ZoneLinkAt` reach (the caller's 0.9 in `sho-game` is HARNESS).
+* `FrontEnd::MenuState`: interprets the XML (`onup`, `onaccept`, toggles) by
+  attribute name; a back-stack on cancel and left = off / right = on are not
+  checked against the UI engine (`FUN_001B5410` and neighbours).
+* Tints `0xC8505050` / white are applied as 0..255; the GS treats 0x80 as 1.0,
+  so the unselected flag may be too dark and the selected one too dim. Open.
+* The New Game trigger (accept on `newgame`) — the code that really fires
+  `FUN_001CF718` is reached from `FUN_001D21E8`, not read.
+* Renderer approximations, all commented: CColorLight falloff, the Wii ice
+  look, the 0.02 alpha cut. Fog stays off in `sho-game`.

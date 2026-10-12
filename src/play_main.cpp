@@ -500,13 +500,13 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
   // y=192..252 over 448 rows is 42.9-56.3%. 512 puts it at 37.5-49.2% (too
   // high) and 368 at 46.7-58.5% (too low). --uirows is here to re-check that
   // against a capture, not to be tuned by eye.
-  float frontEndRows = 380.0f;
+  float frontEndRows = 448.0f;   // the PAL framebuffer; see uiQuad
   // Multiplies the XML screens' text only. The scale itself is
   // textsize / designHeight from FUN_00215190, and designHeight is the one
   // number in that formula I picked (12, the KFONT header word at 0x14)
   // without confirming which offset the runtime font struct uses. This knob is
   // that uncertainty, made visible instead of buried in a magic constant.
-  float textScale = 1.3f;
+  float textScale = 1.0f;
   for (int i = 1; i < argc; ++i) {
     if (std::strcmp(argv[i], "--check") == 0)
       checkOnly = true;
