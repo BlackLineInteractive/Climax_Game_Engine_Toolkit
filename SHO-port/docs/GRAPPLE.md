@@ -23,7 +23,7 @@ the archive say what it actually does:
 
 So an `CFMAController` is a named hook: when this message arrives, force Travis
 into that animation state. More than half of all instances in the game are the
-mirror transitions, and the rest are recoveries — getting up from a fall,
+mirror transitions, and the rest are recoveries - getting up from a fall,
 stepping back, flinching, being caught by fire.
 
 Ghost Rider's symbols place the class under
@@ -39,7 +39,7 @@ Four real messages carry the grab, and the player links three of them:
     MsgSetGrabSyncState
 
 `MsgSetGrabSyncState` is the interesting one: a grab is a two-body animation
-that has to stay in step, and the enemy's own row names the clip — property 68
+that has to stay in step, and the enemy's own row names the clip - property 68
 of `CEnemyBehaviour` is `Grabbed_2Back` and its equivalent per monster. So the
 monster owns the grab animation and something synchronises the pair.
 
@@ -62,7 +62,7 @@ text are message names:
 Four normalised floats and a pair of enter/exit message names, dominated by the
 mirror transition and by a screen filter being started and stopped. Whatever
 this class is, it is per-level tuning for an effect that turns on and off with
-a message — not a per-frame proximity calculation over the monster list. The
+a message - not a per-frame proximity calculation over the monster list. The
 name is Origins' own; Ghost Rider has no such class, so there is no unstripped
 version to check against.
 
@@ -80,7 +80,7 @@ None of those four numbers exists in the game, and no data structure found so
 far holds a meter. What `MsgGrabStarted` actually leads to has to be read out
 of the player, in `FUN_001300F0` and below.
 
-**How the mirror transition runs end to end.** Three systems name it —
+**How the mirror transition runs end to end.** Three systems name it -
 `CFMAController` forces the animation, `cThreatController` starts and stops a
 filter, and `MirrorReflector` in the port queues a level change. They are
 clearly the same sequence, driven by messages like `effectEnterMirror` and

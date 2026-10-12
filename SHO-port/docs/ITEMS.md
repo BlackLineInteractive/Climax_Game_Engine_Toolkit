@@ -6,8 +6,8 @@
 
 The item table is not in the executable. It is 164 `CInventoryItemDef` objects
 placed in the archive like any other level object, one per item, each carrying
-all 37 properties. That means the whole thing — damage, durability, clip sizes,
-sounds, string-table ids — can be read out of the retail disc without touching
+all 37 properties. That means the whole thing - damage, durability, clip sizes,
+sounds, string-table ids - can be read out of the retail disc without touching
 a disassembler:
 
     python3 tools/dump_class.py game-iso/SHO/SH.ARC CInventoryItemDef \
@@ -28,8 +28,8 @@ Property 0 is the category, and it partitions the table cleanly:
     5   14   accolades: Brawler, Butcher, Cartographer, Collector, Explorer,
              Fireman, Shooter, Sprinter, Stalker, Saviour, Vincent, Ambassador, Dog, Weapons
 
-Properties 2, 3, 5 and 6 are string-table ids — `inventory_Shotgun_name`,
-`_namep`, `_short`, `_long` — so the display text comes out of `Strings.<code>`
+Properties 2, 3, 5 and 6 are string-table ids - `inventory_Shotgun_name`,
+`_namep`, `_short`, `_long` - so the display text comes out of `Strings.<code>`
 and is already localised. Property 35 is the world model
 (`Torch`, `Radio`, `HO_K_ER`), and 36 the document body for notes.
 
@@ -69,12 +69,12 @@ the list is category 2.
 | Magnum | 65 | | 6 | 6 | 10 | 15 |
 | M1911Pistol | 25 | | 8 | 8 | 15 | 15 |
 | TargetPistol | 20 | | 6 | 6 | 15 | 15 |
-| TeslaRifle | 15 | | — | 50 | 10 | 15 |
+| TeslaRifle | 15 | | - | 50 | 10 | 15 |
 | AK47 | 12 | | 18 | 30 | 15 | 15 |
 
 Durability 0 means the weapon never breaks: `ButchersGreatSword`, `FireAxe`,
 `LonelyMoonGauntlets` and `TeslaRifle`, all four of them unlockables or boss
-gear. Durability 1 is the household objects that shatter on the first hit —
+gear. Durability 1 is the household objects that shatter on the first hit -
 that mechanic is exactly what the data says, no inference needed.
 
 Property 20 is the break sound and it groups the weapons by material:
@@ -85,27 +85,27 @@ and `bulk_toaster`. Properties 29, 30 and 31 are fire, reload and dry-fire
 rifle has its own three.
 
 Properties 27 and 28 are 1.0 on everything melee and 0.9 / 0.3 on the pistols,
-rifle and AK47 — the shotgun and the Tesla stay at 1.0. Two movement
+rifle and AK47 - the shotgun and the Tesla stay at 1.0. Two movement
 multipliers, most likely walk and aim, but that pairing is read off the numbers
 rather than out of the code.
 
 ## Not recovered
 
-**Property 19.** It runs 15 for fists and throwables, 25–35 for ordinary melee
-and 40–51 for the long thin ones — `PoolCue` 51, `BrokenPole` 45, `BrokenWood`
+**Property 19.** It runs 15 for fists and throwables, 25-35 for ordinary melee
+and 40-51 for the long thin ones - `PoolCue` 51, `BrokenPole` 45, `BrokenWood`
 and `DripStand` 40. That ordering is reach, or something that behaves exactly
 like reach, and nothing has confirmed it. Same for 24 and 25 on firearms: 24
 orders as range (Rifle 100, Shotgun 5) and 25 as its opposite, but neither has
 been matched to the code that reads it.
 
-**Indices 7–11, 13–15, 21–23, 26, 32–34.** Mostly constant across the table,
+**Indices 7-11, 13-15, 21-23, 26, 32-34.** Mostly constant across the table,
 so they are defaults nobody touched, and they are unread.
 
 **What the port does with all of this.** `src/Inventory/` and
 `src/Combat/CombatSystem.cpp` do not load `sho_inventory.json`. They carry a
 hand-written item list with invented numbers, and its weapon ids
 (`Weapon_KitchenKnife`, `Weapon_HuntingRifle`, `Weapon_AssaultRifle`) are not
-the game's — the game calls them `ButchersKnife`, `Rifle` and `AK47`. Wiring
+the game's - the game calls them `ButchersKnife`, `Rifle` and `AK47`. Wiring
 the real table in is the next job in this file, and it is a small one: the data
 is already extracted.
 

@@ -3,14 +3,14 @@
 Static analysis of `SLES_551.47` (Silent Hill Origins, PlayStation 2, MIPS
 R5900) and `main.dol` (Silent Hill: Shattered Memories, Wii, PowerPC).
 
-This is the only route to the things that are provably *not* in the asset data —
-the PS2 blend mode, the Wii TEV setup, per-class property semantics — because
+This is the only route to the things that are provably *not* in the asset data -
+the PS2 blend mode, the Wii TEV setup, per-class property semantics - because
 those live in code, not in the containers. See [TODO.md](../TODO.md) for which
 open questions depend on it.
 
 ---
 
-## 1. `SLES_551.47` — Origins, PS2
+## 1. `SLES_551.47` - Origins, PS2
 
 A stripped but otherwise complete ELF: no symbol table, but every **section name
 survives**, which is far more than these discs usually keep.
@@ -23,9 +23,9 @@ one PT_LOAD: file 0x1000, vaddr 0x00100000, filesz 5 980 936, memsz 6 513 676
 | Section | Address | Size | Notes |
 |---------|---------|------|-------|
 | `.text` | 0x00100000 | 2 270 260 | main code |
-| `.vutext` | 0x0032A440 | 58 064 | **VU1 microcode** — the geometry pipeline |
-| `.DVP.ovlytab` | — | 432 | VU overlay table |
-| `.DVP.overlay.*` | — | — | 36 named VU overlays, keyed by hash |
+| `.vutext` | 0x0032A440 | 58 064 | **VU1 microcode** - the geometry pipeline |
+| `.DVP.ovlytab` | - | 432 | VU overlay table |
+| `.DVP.overlay.*` | - | - | 36 named VU overlays, keyed by hash |
 | `.data` | 0x00338780 | 3 477 380 | |
 | `.vudata` | 0x00689710 | 192 | |
 | `.rodata` | 0x00689800 | 170 856 | strings, tables |
@@ -87,8 +87,8 @@ jal   0x1fe298
 addiu $a3, $zero, 0x6c      ; a3 = object size     108 bytes
 ```
 
-Note that MIPS never stores an address as a word — it builds it from a
-`lui`/`addiu` pair — so searching for a 32-bit pointer to a string finds
+Note that MIPS never stores an address as a word - it builds it from a
+`lui`/`addiu` pair - so searching for a 32-bit pointer to a string finds
 nothing. Every one of these names is referenced exactly once, from its own
 registration.
 
@@ -110,13 +110,13 @@ A few entries, for the flavour of it:
 | `CIGCCharacter` | 0x00184650 | 5344 |
 
 126 classes are registered against the 115 name strings visible in `.rodata`,
-and the list includes plenty the containers never instance — `AreaTriggerBox`,
+and the list includes plenty the containers never instance - `AreaTriggerBox`,
 `AudioReverb`, `SavePoint`, `cBlackOutFSE`, `CFullScreenRain`.
 
 **Why this matters.** Each factory address is that class's constructor, and the
 constructor is where the class binds its serialised properties. That is the
 direct route to the per-class property semantics `SH_FORMAT.md` §3 currently
-describes empirically — including the volume classes whose property 1 is a
+describes empirically - including the volume classes whose property 1 is a
 collision extent rather than a placement matrix.
 
 ### 1.3 The container chunk vocabulary
@@ -133,7 +133,7 @@ All 16 registrations, cross-checked against 60 retail containers:
 | Chunk | Handler | Occurrences in retail data |
 |-------|---------|---------------------------|
 | 0x0700 | 0x001D8190 | 0 |
-| **0x0704** | 0x001FC208 | **998** — placed game object |
+| **0x0704** | 0x001FC208 | **998** - placed game object |
 | 0x0705 | 0x001FC170 | 0 |
 | 0x0706 | 0x001D7648 | 0 |
 | 0x0707 | 0x001D7658 | 0 |
@@ -144,9 +144,9 @@ All 16 registrations, cross-checked against 60 retail containers:
 | 0x070F | 0x00201AF8 | 0 |
 | 0x0712 | 0x001FF910 | 0 |
 | 0x0715 | 0x00201B78 | 0 |
-| **0x0716** | 0x00201C60 | **334** — named section |
+| **0x0716** | 0x00201C60 | **334** - named section |
 | 0x071A | 0x001FC280 | 0 |
-| 0x071B | 0x001FC208 | 0 — same handler as 0x0704, so the same layout |
+| 0x071B | 0x001FC208 | 0 - same handler as 0x0704, so the same layout |
 | 0x071D | 0x001D8278 | 0 |
 
 `0x071C`, the type directory, appears 57 times in the data but has **no entry in
@@ -164,7 +164,7 @@ Three functions define the whole container format, and each was read rather
 than inferred. Ghost Rider ships unstripped, so they carry their real names;
 Silent Hill Origins has the same code at different addresses.
 
-**`RWS::CStreamHandler::ProcessStream`** — the outer walk.
+**`RWS::CStreamHandler::ProcessStream`** - the outer walk.
 
 ```c
 ProcessStream(RwStream* s) {
@@ -181,14 +181,14 @@ check:
 ```
 
 Two things matter. The loop is driven purely by end-of-stream, with no byte
-budget — this toolkit needs one because it runs the same walk recursively over
+budget - this toolkit needs one because it runs the same walk recursively over
 sub-ranges instead of real sub-streams. And **the engine never repositions the
 stream after a handler**: every handler must consume exactly its chunk. That
 contract is now enforced by a tripwire in `CResourceHandler::ProcessStream`,
 which reports any handler that reads the wrong number of bytes. On the retail
 archive it fires zero times.
 
-**`RWS::LoadEmbeddedAsset`** — the `0x0716` section handler.
+**`RWS::LoadEmbeddedAsset`** - the `0x0716` section handler.
 
 ```c
 u32 headerSize;  RwStreamRead(s, &headerSize, 4);
@@ -207,12 +207,12 @@ LoadResource(tag, guid, name, ..., s, payloadSize);
 
 Every read is a plain little-endian `lw`; there is no byte swapping anywhere,
 which settles the byte order of the PlayStation 2 container for good. The engine
-also validates nothing — it reads a length, allocates, and walks with pointer
+also validates nothing - it reads a length, allocates, and walks with pointer
 arithmetic. Our own guards are therefore ours alone, and they must only ever
 reject corrupt data: a guard that rejected a valid `tagLen` is what silently
 disabled all geometry once.
 
-**`RWS::CAttributePacket::CreateEntity`** — the `0x0704` record walk.
+**`RWS::CAttributePacket::CreateEntity`** - the `0x0704` record walk.
 
 ```c
 for (;;) {
@@ -229,7 +229,7 @@ Two further points fall out of reading the code, and both say the toolkit's
 current shape is already right.
 
 **`0x071C`, the type directory, is dead weight at runtime.** It has no entry in
-the handler table, and the constant appears nowhere in the container code — the
+the handler table, and the constant appears nowhere in the container code - the
 three matches in the binary are ordinary numbers inside `CHellBike` and an
 unrelated `HandleAttributes`. The engine therefore meets it as an unknown chunk
 and skips it. It is build-tool metadata. Keeping it as a cross-check is
@@ -255,7 +255,7 @@ follow a function.
 
 ---
 
-## 2. `main.dol` — Shattered Memories, Wii
+## 2. `main.dol` - Shattered Memories, Wii
 
 A standard DOL: no sections names, just load segments.
 
@@ -274,21 +274,21 @@ data6  file 0x453540 -> 0x80526720     10 720
 data7  file 0x455F20 -> 0x8052B5E0     19 104
 ```
 
-**173 class names**, against the PS2 game's 126 — the sequel grew a lot. New
+**173 class names**, against the PS2 game's 126 - the sequel grew a lot. New
 families that have no Origins counterpart: `CAIWorldBehaviour`,
 `CAIFrozenLakeEnemyRespot`, `CAnimSkeleton`, `CAmbientVoicemail`,
 `CAmbientTextMessage`, `CAmbientInterferencePoint`, `CButtonPuzzle`,
 `CButtonMashListener`, `CBasicMount`, `CAnimatedPOVCamera`.
 
 The binary also embeds copies of both archive directories, and a third complete
-archive of boot resources — see [SHSM_ARC_FORMAT.md](../formats/SHSM_ARC_FORMAT.md) §2.4,
+archive of boot resources - see [SHSM_ARC_FORMAT.md](../formats/SHSM_ARC_FORMAT.md) §2.4,
 where those are used to prove that resource names exist nowhere on the disc.
 
 ### 2.1 What is not done here yet
 
 The equivalent registry walk. PowerPC builds an address from an `addis`/`ori`
 or `addis`/`addi` pair, the same shape as the MIPS `lui`/`addiu`, so the same
-technique applies — but the scan has to cover the 4 MB `text1` segment, and the
+technique applies - but the scan has to cover the 4 MB `text1` segment, and the
 naive Python search over it is too slow to be worth running as written. Indexing
 `addis` instructions by their immediate first would make it quick.
 
@@ -298,7 +298,7 @@ naive Python search over it is too slow to be worth running as written. Indexing
 
 `docs/port_class_map.json` is the cross-reference the port works from: every
 class Origins registers, with its instance size and factory address from
-`SLES_551.47`, and — where Ghost Rider has the same class — the property table
+`SLES_551.47`, and - where Ghost Rider has the same class - the property table
 recovered from its `HandleAttributes`.
 
 **126 classes in Origins, 63 with a recovered property table.** The rest split
@@ -320,7 +320,7 @@ for a class with many properties:
     sll $idx, $id, 2 ; lui/addiu base ; addu ; lw ; jr
 
 That found 118 of 213 classes. The others use a **chain of comparisons**
-instead, which is what a handful of properties compiles to — and it is easy to
+instead, which is what a handful of properties compiles to - and it is easy to
 miss, because the compare is often a *branch-likely* (`beql`), an instruction
 `tools/mips.py` did not decode at all until this pass. Adding both the
 branch-likely family and a compare-chain reader took recovery to **201 of 213**.
@@ -331,7 +331,7 @@ by hand when chasing the camera's field of view.
 
 ### Cases call as often as they store
 
-Half the cases never write a field — they hand the value to a setter, so
+Half the cases never write a field - they hand the value to a setter, so
 reporting only stores labelled them "(no direct store)" and discarded the most
 useful fact about them. The extractor now records the callee:
 
@@ -341,14 +341,14 @@ useful fact about them. The extractor now records the callee:
     CStaticCamera  idx 4  -> +0xf8 float, +0xfc float, cosf
 
 The `ReplaceLinkedMsg` on a property is worth noting on its own: it confirms
-from the code side what the container data already showed — objects are wired
+from the code side what the container data already showed - objects are wired
 to each other by name, through properties, at load time.
 
 ### Name demangling
 
 Nested names (`Q28Triggers14AreaTriggerBox`, `Q26Camera17CConstraintCamera`)
 were not demangled, so `Camera`, `Triggers`, `Spawning`, `Characters` and
-`RWS::Audio` — most of the engine — never matched Origins' registry. Handling
+`RWS::Audio` - most of the engine - never matched Origins' registry. Handling
 the `Q` form took the cross-reference from 21 shared classes to 67.
 
 ## 4. Next targets
@@ -367,6 +367,6 @@ In rough order of value:
 4. **The archive key.** `SHSM_ARC_FORMAT.md` §2.4 rules out every hash of every
    recoverable name. Whatever the resource-request path in `main.dol` passes to
    the archive would settle it.
-5. **`.vutext`** — 58 KB of VU1 microcode, the actual geometry pipeline. Only
+5. **`.vutext`** - 58 KB of VU1 microcode, the actual geometry pipeline. Only
    worth reading if the VIF interpretation ever turns out to be wrong, which so
    far it has not.

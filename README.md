@@ -8,13 +8,13 @@
 
 ---
 
-**Climax Silent Hill Engine Toolkit** — a real-time 3D level viewer, asset decoder, and archive extraction toolkit for game levels and locations built on Climax Engine: **Silent Hill Origins** (PS2 / PSP), **Silent Hill: Shattered Memories** (Wii / PS2 / PSP), and **Ghost Rider** (PS2 / PSP).
+**Climax Silent Hill Engine Toolkit** - a real-time 3D level viewer, asset decoder, and archive extraction toolkit for game levels and locations built on Climax Engine: **Silent Hill Origins** (PS2 / PSP), **Silent Hill: Shattered Memories** (Wii / PS2 / PSP), and **Ghost Rider** (PS2 / PSP).
 
-Opens proprietary Climax Engine container files (no file extension — named like `MO_1_Room102`), decodes native PS2 and Wii GPU textures, and renders full level geometry, baked lighting, collision meshes, and placed game objects interactively. Decodes the game audio as well: the per-level sound banks, the music streams and the cutscene dialogue. Includes full archive unpackers for `SH.ARC`, `data.arc`, and `igc.arc`.
+Opens proprietary Climax Engine container files (no file extension - named like `MO_1_Room102`), decodes native PS2 and Wii GPU textures, and renders full level geometry, baked lighting, collision meshes, and placed game objects interactively. Decodes the game audio as well: the per-level sound banks, the music streams and the cutscene dialogue. Includes full archive unpackers for `SH.ARC`, `data.arc`, and `igc.arc`.
 
-**Toolkit 0.6 · Game pre-alpha 0.0.1.2** — two version numbers, because there are now two things here. The toolkit inspects the games. The game *plays* one: Travis walks the hospital under the series' own fixed cameras, opens doors between levels, and none of it is scripted by hand — every camera, trigger, spawn point and animation comes out of the retail data.
+**Toolkit 0.6 · Game pre-alpha 0.0.1.2** - two version numbers, because there are now two things here. The toolkit inspects the games. The game *plays* one: Travis walks the hospital under the series' own fixed cameras, opens doors between levels, and none of it is scripted by hand - every camera, trigger, spawn point and animation comes out of the retail data.
 
-> License: [GPL-3.0](LICENSE) — free to use, study, change and share; derived work stays under the same license.
+> License: [GPL-3.0](LICENSE) - free to use, study, change and share; derived work stays under the same license.
 
 ---
 
@@ -23,7 +23,7 @@ Opens proprietary Climax Engine container files (no file extension — named lik
 There are two ways in, because there are two programs.
 
 `sho-game` is the port. Run it with no arguments and it boots the way the disc
-does — the splash, the language and aspect screens, the logo movie, the main
+does - the splash, the language and aspect screens, the logo movie, the main
 menu, the intro clip, and then the first room:
 
 ```
@@ -33,7 +33,7 @@ sho-game --level HO_1_Lobby      # skip the front end, open one room
 
 None of that sequence is invented. The order of the boot records, which screen
 is skippable, the five flags and their order, the button mask the pad is read
-through — all of it is transcribed out of `SLES_551.47`; `docs/TODO.md` §6c–6f
+through - all of it is transcribed out of `SLES_551.47`; `docs/TODO.md` §6c-6f
 records where each piece came from.
 
 `ClimaxGameEngineToolkit` is the viewer. Open `SH.ARC`, load a hospital level,
@@ -41,44 +41,44 @@ tick **Walk (collision)**.
 
 | | |
 |---|---|
-| `W A S D` | move — relative to the active camera, as the original is |
+| `W A S D` | move - relative to the active camera, as the original is |
 | `Shift` | run |
 | `E` | use a door when the prompt appears |
 | `M` | release the mouse |
 | `F1` | hide the interface |
 | `[` `]` | step through the player's animations |
 
-The camera reverses your direction when it cuts to a new angle. That is not a bug — it is what the game did, and it is preserved deliberately.
+The camera reverses your direction when it cuts to a new angle. That is not a bug - it is what the game did, and it is preserved deliberately.
 
 ### What the game already does on its own
 
 Nothing in this list is hand-authored; each is read out of the shipped data.
 
-- **Spawning.** `CPlayerSpawner` — and the one you arrive on is named after the room you came *from*, so you step out of the right door facing the right way.
+- **Spawning.** `CPlayerSpawner` - and the one you arrive on is named after the room you came *from*, so you step out of the right door facing the right way.
 - **Cameras.** Position, field of view and aim from the placement matrix. `CStaticCamera` holds its authored shot; `CConstraintCamera` follows Travis, because 400 of its 417 instances carry no pitch at all and compute it at runtime.
 - **Camera cuts.** `PlaneTrigger` names one camera per crossing direction.
 - **Doors.** `ZoneTrigger` names the destination container, the event and the button. 418 of the 464 doorways in the game resolve to a matching spawn point on the other side.
 - **Collision.** The level's own `CBSP` mesh, with sliding and ground snapping.
-- **Travis.** Model, textures, face, and his own animation set — idle, walk and run picked out by their authored filenames (`PC_TG_Walk.anm`).
+- **Travis.** Model, textures, face, and his own animation set - idle, walk and run picked out by their authored filenames (`PC_TG_Walk.anm`).
 
 - **The boot sequence and the menu.** Splash, language, aspect, logo movie,
-  main menu, intro clip — read out of the executable rather than guessed at,
+  main menu, intro clip - read out of the executable rather than guessed at,
   down to which screen can be skipped and which cannot.
 
 ### What it does not do yet
 
-Saves, inventory, combat, enemies, facial animation (`rwID_DMORPHANIMATION` — a
+Saves, inventory, combat, enemies, facial animation (`rwID_DMORPHANIMATION` - a
 morph system the toolkit does not implement), and localisation beyond the string
 table. Some trigger volumes are the wrong size, which needs the executable read
 rather than guessed at.
 
-The gameplay systems above the level — Travis's state machine, the monsters,
-items, combat, puzzles — are not in the build. An earlier attempt at them was
+The gameplay systems above the level - Travis's state machine, the monsters,
+items, combat, puzzles - are not in the build. An earlier attempt at them was
 written without the decompiled executable; it is kept, unbuilt, in
 `archive/gemini-unverified/` with an audit of what in it was real
 (`AUDIT.md` there). They come back one recovered function at a time, each with
-its `SLES_551.47` address. Until then, walking in `sho-game` is a harness —
-camera-relative movement and idle/walk/run — and is labelled as one in the
+its `SLES_551.47` address. Until then, walking in `sho-game` is a harness -
+camera-relative movement and idle/walk/run - and is labelled as one in the
 source. `SHO-port/docs/` holds the facts already recovered and what to read
 next.
 
@@ -111,32 +111,32 @@ next.
 
 ## Features
 
-- **Mount `SH.ARC` directly** — browse and load levels by their real internal names
+- **Mount `SH.ARC` directly** - browse and load levels by their real internal names
   (`MO_1_Room102`, `TH_E_Lobby`, …), with matching texture dictionaries pulled in automatically
-- **Placed game objects** — reads the `0x0704` instance chunks, so spawners, cameras,
+- **Placed game objects** - reads the `0x0704` instance chunks, so spawners, cameras,
   pickups, lights and triggers appear at their real world coordinates instead of the origin
-- **Correct model placement** — models stored in `rwID_RWS` / `rwID_CLUMP` sections are
+- **Correct model placement** - models stored in `rwID_RWS` / `rwID_CLUMP` sections are
   instanced wherever the game objects that reference them say, instead of piling up at 0,0,0
-- **Level cameras** — jump to any of the fixed cameras the game cuts between
-- **glTF 2.0 export** — one mesh per texture name, with embedded textures and level lights
-- **Shattered Memories (Wii)** — mounts `data.arc` / `igc.arc`, recurses into their
+- **Level cameras** - jump to any of the fixed cameras the game cuts between
+- **glTF 2.0 export** - one mesh per texture name, with embedded textures and level lights
+- **Shattered Memories (Wii)** - mounts `data.arc` / `igc.arc`, recurses into their
   nested archives, labels entries from their contents (the archive stores no names),
   and renders them: GX display-list geometry for levels, props and characters, plus
-  the GameCube/Wii textures — CMPR, RGBA8, RGB5A3, I4/I8/IA4/IA8, RGB565
-- **Playback panel** — sound, skeletal animation and UV animation in one window:
+  the GameCube/Wii textures - CMPR, RGBA8, RGB5A3, I4/I8/IA4/IA8, RGB565
+- **Playback panel** - sound, skeletal animation and UV animation in one window:
   the level's own sound bank (footsteps, doors, room tone), the 75 music streams from
   `MUSIC/` and the 35 cutscene tracks from `IGC.ARC`, with seeking, looping and WAV export
-- **Material blend modes from the asset** — the `0x0A01` material extension carries the
+- **Material blend modes from the asset** - the `0x0A01` material extension carries the
   mode the engine reads through `ClimaxT1MaterialGetFrameBlendMode`: standard alpha,
   additive, subtractive, and `NONE`, which writes the surface straight out and ignores
   alpha entirely. That last one is what character skin relies on
-- **Animated fire** — the `0x2B` sections hold RenderWare UV animations, and the flame
+- **Animated fire** - the `0x2B` sections hold RenderWare UV animations, and the flame
   materials name one. Two tiled sheets scroll past each other at different rates; without
   it a flame is a still rectangle
 - Parse and render SHO container files with embedded geometry, materials, and PS2 textures
 - Decode native PS2 PSMT4 / PSMT8 / PSMCT32 texture formats via software unswizzle
 - Eight render modes: Textured, Vertex Color, Flat Shaded, Normals, Depth, Checkerboard, Unlit
-- Skeletal animation clips decoded — 3029 across the archive, with the bone table read from
+- Skeletal animation clips decoded - 3029 across the archive, with the bone table read from
   the HAnim plugin; evaluation and skinning are not wired up yet
 - Collision mesh overlay with optional semi-transparent fill
 - Clump object markers (octahedron wireframe + projected labels)
@@ -150,11 +150,11 @@ next.
 
 ## Format Notes
 
-### `SH.ARC` / `IGC.ARC` — the game archive
+### `SH.ARC` / `IGC.ARC` - the game archive
 
 An `"A2.0"` archive: a 20-byte header, a 16-byte record per file, and a name table
 that occupies the tail of the file. Payloads are raw zlib streams, except where
-`uncompressedSize` is zero — those are stored uncompressed, which is how all 35
+`uncompressedSize` is zero - those are stored uncompressed, which is how all 35
 cutscene entries of `IGC.ARC` are written.
 
 ```
@@ -189,10 +189,10 @@ type and how many instances exist, followed by a flat chunk list:
 A `0x0716` section header is
 `[count][tagLen][tag][guid(16)][nameLen][name]` followed by two build-path strings.
 
-A `0x0704` body is a flat list of tagged records — `[u32 size][u32 id][payload]` —
+A `0x0704` body is a flat list of tagged records - `[u32 size][u32 id][payload]` -
 where the top byte of `id` selects the kind (`0x20` class name, `0x40` GUID,
 `0x80` instance name, `0x00` indexed property). **Property 1 is a 64-byte
-column-major 4×4 world matrix** — the object's placement. Names are 0xBF-padded.
+column-major 4×4 world matrix** - the object's placement. Names are 0xBF-padded.
 Property indices restart at 0 for each component of an object, so a group boundary
 is simply "the index stopped increasing".
 
@@ -200,7 +200,7 @@ A 16-byte property is the GUID of a `0x0716` section the object owns. That is ho
 geometry gets placed: `rwID_WORLD` sections are already in level space, but
 `rwID_RWS` and `rwID_CLUMP` sections are re-usable models, and the object holding
 the reference supplies the transform. The same model is often referenced several
-times — in `IntroRoad` one RWS model is instanced at four different spots.
+times - in `IntroRoad` one RWS model is instanced at four different spots.
 
 `CColorLight` carries an RGBA colour in group 0 property 0, and
 `[type][cone angle°][range][enabled]` in group 1.
@@ -223,8 +223,8 @@ Sections that may appear inside a `0x0716`:
 ### Audio
 
 Four containers, two codecs. `rwaID_WAVEDICT` sections hold the level's own sound
-bank — 2980 named samples across the 255 retail containers, all mono Sony 4-bit
-ADPCM at 6–32 kHz. `MUSIC/*.RWS` are RenderWare Audio streams, also mono ADPCM,
+bank - 2980 named samples across the 255 retail containers, all mono Sony 4-bit
+ADPCM at 6-32 kHz. `MUSIC/*.RWS` are RenderWare Audio streams, also mono ADPCM,
 with the rate and channel count in the 0x080E header and the data at a fixed
 offset of 2048. `IGC.ARC/*.IGCStream` multiplexes 1024-byte pieces of a 48 kHz
 16-bit stereo ADS into a record stream, tagged `0xA000`; concatenating them
@@ -286,7 +286,7 @@ brew install cmake sdl2 glew glm
 ```
 
 ```bash
-# Windows (vcpkg — reads the dependency list from vcpkg.json)
+# Windows (vcpkg - reads the dependency list from vcpkg.json)
 vcpkg install --triplet x64-windows
 ```
 
@@ -303,7 +303,7 @@ On Windows add the vcpkg toolchain to the configure step:
 cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake
 ```
 
-Then run it — the TXD list is optional, textures may be embedded in the container:
+Then run it - the TXD list is optional, textures may be embedded in the container:
 
 ```bash
 ./build/ClimaxGameEngineToolkit path/to/MO_1_Room102 [texture.txd ...]
@@ -320,7 +320,7 @@ make -j$(nproc)
 
 ## Usage
 
-Preferred — point it at the game archive and pick levels by name:
+Preferred - point it at the game archive and pick levels by name:
 
 ```
 ClimaxGameEngineToolkit path/to/SH.ARC [LevelName]
@@ -343,7 +343,7 @@ Export a level to glTF without opening the window:
 ClimaxGameEngineToolkit path/to/SH.ARC MO_1_Room102 --export room.glb
 ```
 
-Container files have **no extension** — `MO_1_Room102`, `MO_1_Courtyard`, etc.
+Container files have **no extension** - `MO_1_Room102`, `MO_1_Courtyard`, etc.
 Textures can be embedded in the container or supplied as separate TXD archives.
 
 ---
@@ -356,7 +356,7 @@ Press **F2** in the application for the full manual.
 |-------------------------|------------------------------------------|
 | Orbit camera            | Right-click drag / orbit sphere (top-right) |
 | Zoom                    | Scroll wheel (proportional to distance)  |
-| Move pivot              | Gizmo arrows / plane handles — follows the cursor 1:1 |
+| Move pivot              | Gizmo arrows / plane handles - follows the cursor 1:1 |
 | Snap pivot while moving | Hold **Ctrl** (or tick **Snap**)         |
 | Jump to a level camera  | **Jump to camera** dropdown              |
 | Reset camera            | **1**                                    |
@@ -394,49 +394,49 @@ symbols, so any accidental include causes a link error instead of a silent
 violation.
 
 ```
-climax-core   (static library — no GL, no SDL, no ImGui)
-  src/Core/RWS/FileSystem/CArchive.cpp   — SH.ARC / IGC.ARC reader
-  src/Core/UI/StringTable.cpp            — UI string hash table
-  src/Core/UI/Font.cpp                   — PS2 KFont rasteriser → texture atlas
-  src/Core/UI/ScreenDef.cpp              — XML screen parser (mainmenu, newgame…)
-  src/Platform/PS2/PS2Texture.cpp        — PS2 VRAM / GS format decoder (CPU)
-  src/Platform/PS2/AudioParser.cpp       — VAG / ADS / RWS / IGC audio decoders
-  src/Platform/Wii/WiiGeometry.cpp       — GameCube/Wii display-list geometry
+climax-core   (static library - no GL, no SDL, no ImGui)
+  src/Core/RWS/FileSystem/CArchive.cpp   - SH.ARC / IGC.ARC reader
+  src/Core/UI/StringTable.cpp            - UI string hash table
+  src/Core/UI/Font.cpp                   - PS2 KFont rasteriser → texture atlas
+  src/Core/UI/ScreenDef.cpp              - XML screen parser (mainmenu, newgame…)
+  src/Platform/PS2/PS2Texture.cpp        - PS2 VRAM / GS format decoder (CPU)
+  src/Platform/PS2/AudioParser.cpp       - VAG / ADS / RWS / IGC audio decoders
+  src/Platform/Wii/WiiGeometry.cpp       - GameCube/Wii display-list geometry
 
-climax-game   (static library — no GL, no SDL, no ImGui; links climax-core)
-  src/Game/FrontEnd.cpp                  — boot sequence state machine
-  src/Game/SceneQueue.cpp                — FUN_00179FB8 / FUN_00179D60 scene loading
-  src/Game/CameraLinks.cpp               — PlaneTrigger camera pairs & cutting
-  src/Game/ZoneLinks.cpp                 — doors and spawn points
+climax-game   (static library - no GL, no SDL, no ImGui; links climax-core)
+  src/Game/FrontEnd.cpp                  - boot sequence state machine
+  src/Game/SceneQueue.cpp                - FUN_00179FB8 / FUN_00179D60 scene loading
+  src/Game/CameraLinks.cpp               - PlaneTrigger camera pairs & cutting
+  src/Game/ZoneLinks.cpp                 - doors and spawn points
 
-climax-harness  (static library — no GL, no SDL, no ImGui; links climax-game)
+climax-harness  (static library - no GL, no SDL, no ImGui; links climax-game)
   Stand-ins, not the game's code; each header says so.
-  src/Harness/Body.cpp                   — sphere body against the collision mesh
-  src/Harness/CameraView.cpp             — camera aim / eye placement
-  src/Harness/ButtonTriggers.cpp         — toolkit-only trigger reading
+  src/Harness/Body.cpp                   - sphere body against the collision mesh
+  src/Harness/CameraView.cpp             - camera aim / eye placement
+  src/Harness/ButtonTriggers.cpp         - toolkit-only trigger reading
 
-ClimaxGameEngineToolkit  (executable — SDL + GL + ImGui; links climax-game)
-  src/main.cpp                           — render loop, GL shaders, input
-  src/UI/UI.cpp                          — inspector panels, audio player, file browser
-  src/Loader/Loader.cpp                  — container parser, geometry upload
-  src/Loader/GeometryDecoder.cpp         — RW geometry chunk decoder
-  src/Loader/ResourceLoader.cpp          — texture / model resource cache
-  src/Loader/Export.cpp                  — glTF 2.0 / GLB writer
-  src/SG/SceneObject.cpp                 — scene-graph node
-  src/Core/Common.cpp                    — ViewerState globals (toolkit only)
-  src/Platform/PS2/RwsAudio.cpp          — SDL audio device, voice mixer
-  src/Platform/Wii/WiiTexture.cpp        — GX texture decoder (GPU upload)
-  src/Rendering/…                        — GL/Metal backend, GPU mesh, player model
+ClimaxGameEngineToolkit  (executable - SDL + GL + ImGui; links climax-game)
+  src/main.cpp                           - render loop, GL shaders, input
+  src/UI/UI.cpp                          - inspector panels, audio player, file browser
+  src/Loader/Loader.cpp                  - container parser, geometry upload
+  src/Loader/GeometryDecoder.cpp         - RW geometry chunk decoder
+  src/Loader/ResourceLoader.cpp          - texture / model resource cache
+  src/Loader/Export.cpp                  - glTF 2.0 / GLB writer
+  src/SG/SceneObject.cpp                 - scene-graph node
+  src/Core/Common.cpp                    - ViewerState globals (toolkit only)
+  src/Platform/PS2/RwsAudio.cpp          - SDL audio device, voice mixer
+  src/Platform/Wii/WiiTexture.cpp        - GX texture decoder (GPU upload)
+  src/Rendering/…                        - GL/Metal backend, GPU mesh, player model
 
-SHO-port/include/SHO/Core/EventIds.h     — the 206 message names, generated
-archive/gemini-unverified/               — unbuilt; see AUDIT.md there
+SHO-port/include/SHO/Core/EventIds.h     - the 206 message names, generated
+archive/gemini-unverified/               - unbuilt; see AUDIT.md there
 
-sho-game   (executable — the game; SDL + GL; links climax-game)
-  src/play_main.cpp                      — the front end: boot, menu, intro
-  SHO-port/src/Main.cpp                  — the level, from the handover onward
-  src/Rendering/VideoPlayer.cpp          — FFmpeg-based FMV player (optional)
+sho-game   (executable - the game; SDL + GL; links climax-game)
+  src/play_main.cpp                      - the front end: boot, menu, intro
+  SHO-port/src/Main.cpp                  - the level, from the handover onward
+  src/Rendering/VideoPlayer.cpp          - FFmpeg-based FMV player (optional)
 
-vendor/   (Makefile build only — CMake fetches into build/_deps/)
+vendor/   (Makefile build only - CMake fetches into build/_deps/)
   imgui/
   imguizmo/
 ```
@@ -444,7 +444,7 @@ vendor/   (Makefile build only — CMake fetches into build/_deps/)
 
 ## License
 
-[GNU General Public License v3.0](LICENSE) — Copyright (c) 2025-2026 Blackline Interactive.
+[GNU General Public License v3.0](LICENSE) - Copyright (c) 2025-2026 Blackline Interactive.
 
 You may use, study, change and share this program. If you distribute it, or
 anything derived from it, that work must carry the same license and its source

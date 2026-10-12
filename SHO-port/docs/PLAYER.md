@@ -20,7 +20,7 @@ The constructor registers 22 messages and links 33. The names come from
 `docs/executables/MESSAGES.md`, which recovers all 206 message names in the
 build; the constants are in `include/SHO/Core/EventIds.h`.
 
-Registered — what Travis sends:
+Registered - what Travis sends:
 
     PlayerActivate          PlayerDeactivate        KillPlayerWithExplosion
     PlayerTorchOn           PlayerTorchOff          PlayerTorchCreated
@@ -32,7 +32,7 @@ plus eight `Tutorial*` messages that are Ghost Rider's and that nothing in
 Origins listens to. They survive because the class is shared between the two
 games. Do not port them.
 
-Linked — what Travis answers to:
+Linked - what Travis answers to:
 
     iMsgRunningTick         iMsgPausedTick          iMsgSetPausedMode
     MsgActivate             MsgDeactivate
@@ -58,7 +58,7 @@ state machine hangs off that link.
 
 **The torch, the radio static and the screen static are three separate
 systems.** Each has its own enable/disable pair, and each pair is both sent and
-listened to by the player — which is how a trigger elsewhere in the level
+listened to by the player - which is how a trigger elsewhere in the level
 drives them.
 
 **Combat, control and rendering are three independent switches.**
@@ -87,7 +87,7 @@ computing its vertical aim at run time rather than carrying an authored one
 (`docs/TODO.md` §4a).
 
 `FUN_00130028` resolves an animation dictionary on first use, builds a matrix
-and then reaches `FUN_001300F0` — 5088 bytes, the largest function in the
+and then reaches `FUN_001300F0` - 5088 bytes, the largest function in the
 player, and **not yet read**. It is the state machine.
 
 ## Not recovered
@@ -97,9 +97,9 @@ Everything below is what `src/Actor/PlayerBehaviour.cpp` and
 binary.
 
 **Stamina.** The port drains 15 units a second while running, regenerates 20
-walking and 35 standing, and locks running out below 25. The system is real —
+walking and 35 standing, and locks running out below 25. The system is real -
 `Stamina`, `ReduceStamina` and `Fatigue` are strings in the executable, and
-`Fatigue`/`Stamina` sit in what looks like the save-data field list — but
+`Fatigue`/`Stamina` sit in what looks like the save-data field list - but
 none of those four numbers is. They were picked to feel right.
 
 **The state set.** Idle / Walk / Run / Aim / Attack / Exhausted / Grappled /
@@ -107,8 +107,8 @@ Dead is a reasonable guess at a survival-horror character and nothing more. The
 real set is whatever `FUN_001300F0` switches on.
 
 **The direction latch across a camera cut.** Implemented against the
-non-existent `CameraCut` message. The behaviour itself — Travis keeping his
-world direction until the stick is re-centred — is described in
+non-existent `CameraCut` message. The behaviour itself - Travis keeping his
+world direction until the stick is re-centred - is described in
 `docs/TODO.md` §4c as something the original does and this does not; it is
 still worth having, but it has to be driven from the camera manager.
 
@@ -120,7 +120,7 @@ neither of them has been read.
 `1 − dist/12` against the nearest monster. `RadioStaticEnable` and
 `RadioStaticDisable` are messages, not a continuous level, so at minimum the
 shape is wrong: something decides on and off. `cThreatController` carries the
-per-level numbers and they are in the archive — see [GRAPPLE.md](GRAPPLE.md).
+per-level numbers and they are in the archive - see [GRAPPLE.md](GRAPPLE.md).
 
 ## What to read next
 

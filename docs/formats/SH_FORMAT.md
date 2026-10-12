@@ -1,4 +1,4 @@
-# Climax Silent Hill Engine — File Format Reference
+# Climax Silent Hill Engine - File Format Reference
 
 This document describes the container and archive formats used by the Climax
 engine in *Silent Hill: Origins*. It is derived from analysis of the retail PAL
@@ -36,7 +36,7 @@ parser in this repository uses it as such.
 
 ---
 
-## 2. `SH.ARC` — the game archive
+## 2. `SH.ARC` - the game archive
 
 ### 2.1 Purpose
 
@@ -166,8 +166,8 @@ Every chunk, at every level of the format, begins with the same 12 bytes:
 | Offset | Type | Field |
 |--------|------|-------|
 | 0x00 | `u32` | `type` |
-| 0x04 | `u32` | `size` — payload length, excluding this header |
-| 0x08 | `u32` | `version` — always `RW_VERSION` |
+| 0x04 | `u32` | `size` - payload length, excluding this header |
+| 0x08 | `u32` | `version` - always `RW_VERSION` |
 
 The next chunk begins at `offset + 12 + size`.
 
@@ -180,7 +180,7 @@ payload begins at `0x0C`.
 | Offset | Type | Field |
 |--------|------|-------|
 | 0x0C | `u32` | Number of entries |
-| 0x10 | — | First entry |
+| 0x10 | - | First entry |
 
 Each entry is a NUL-terminated ASCII class name, padded with NUL bytes to the
 next 4-byte boundary, followed by a `u32` instance count. The directory ends at
@@ -188,7 +188,7 @@ next 4-byte boundary, followed by a `u32` instance count. The directory ends at
 
 The counts are authoritative. Summing them gives the exact number of `0x0704`
 chunks that follow, which makes the directory a useful self-check on any object
-parser — see §3.7.
+parser - see §3.7.
 
 ### 3.4 Resource section (`0x0716`)
 
@@ -219,7 +219,7 @@ chunk      = dataOffset + 4             -> the first RenderWare chunk
 
 **The payload is a SEQUENCE of chunks, not a single root.** `rwID_WORLD` and
 `rwID_CLUMP` happen to start with theirs, but `rwID_RWS` opens with header chunks
-`0x23`/`0x24` and `0x29` and only then holds the real `Clump` — at offset +116 in
+`0x23`/`0x24` and `0x29` and only then holds the real `Clump` - at offset +116 in
 one `IntroRoad` section and +65976 in another. Reading only the first chunk misses
 that geometry entirely.
 
@@ -299,8 +299,8 @@ Column 3 is the translation. Columns 0 through 2 are the basis vectors and carry
 scale where the object is scaled, which is common for trigger volumes.
 
 An identity transform is meaningful and not an error. Classes that exist purely
-as logic — `CZone`, `CZoneCollision`, `GameMessage`, `CMessageRelay`,
-`CAudioLocatorBehaviour` — have no position and legitimately store identity.
+as logic - `CZone`, `CZoneCollision`, `GameMessage`, `CMessageRelay`,
+`CAudioLocatorBehaviour` - have no position and legitimately store identity.
 
 #### 3.5.2 Resource references
 
@@ -418,9 +418,9 @@ is divided between materials.
 
 | Offset | Type | Field |
 |--------|------|-------|
-| 0x0C | `u32` | `flags` — 0 selects indexed triangle lists, 1 selects strips |
+| 0x0C | `u32` | `flags` - 0 selects indexed triangle lists, 1 selects strips |
 | 0x10 | `u32` | `meshCount` |
-| 0x18 | — | First batch record |
+| 0x18 | - | First batch record |
 
 Each batch record is:
 
@@ -445,30 +445,30 @@ The stream is a sequence of 32-bit VIF codes. Each code is:
 | Bits | Field |
 |------|-------|
 | 31 | Interrupt |
-| 30–24 | Opcode |
-| 23–16 | `num` |
-| 15–0 | `immediate` |
+| 30-24 | Opcode |
+| 23-16 | `num` |
+| 15-0 | `immediate` |
 
 Opcodes relevant to this format:
 
 | Opcode | Name | Trailing data |
 |--------|------|---------------|
-| `0x00` | `NOP` | — |
-| `0x01` | `STCYCL` | — (`immediate` carries `CL` in bits 0–7, `WL` in bits 8–15) |
-| `0x02` | `OFFSET` | — |
-| `0x03` | `BASE` | — |
-| `0x04` | `ITOP` | — |
-| `0x05` | `STMOD` | — |
-| `0x10`, `0x11`, `0x13` | `FLUSHE`, `FLUSH`, `FLUSHA` | — |
-| `0x14`, `0x15`, `0x17` | `MSCAL`, `MSCALF`, `MSCNT` | — |
+| `0x00` | `NOP` | - |
+| `0x01` | `STCYCL` | - (`immediate` carries `CL` in bits 0-7, `WL` in bits 8-15) |
+| `0x02` | `OFFSET` | - |
+| `0x03` | `BASE` | - |
+| `0x04` | `ITOP` | - |
+| `0x05` | `STMOD` | - |
+| `0x10`, `0x11`, `0x13` | `FLUSHE`, `FLUSH`, `FLUSHA` | - |
+| `0x14`, `0x15`, `0x17` | `MSCAL`, `MSCALF`, `MSCNT` | - |
 | `0x20` | `STMASK` | 4 bytes |
 | `0x30`, `0x31` | `STROW`, `STCOL` | 16 bytes |
 | `0x4A` | `MPG` | `num x 8` bytes |
 | `0x50`, `0x51` | `DIRECT`, `DIRECTHL` | `immediate x 16` bytes |
-| `0x60`–`0x7F` | `UNPACK` | see below |
+| `0x60`-`0x7F` | `UNPACK` | see below |
 
-For `UNPACK`, bits 2–3 of the opcode give `VN` (component count minus one) and
-bits 0–1 give `VL` (element width):
+For `UNPACK`, bits 2-3 of the opcode give `VN` (component count minus one) and
+bits 0-1 give `VL` (element width):
 
 | `VL` | Width | Note |
 |------|-------|------|
@@ -519,7 +519,7 @@ and so on, texture coordinates 1, 5, 9, and so forth.
 Bit 15 of each `immediate` marks the address as relative to the double-buffer
 pointer `TOPS`; the low bits give the stream's slot, 0 through 3. The colour
 stream additionally sets bit 14, which selects zero-extension rather than sign-
-extension of its 8-bit components — correct for unsigned colour.
+extension of its 8-bit components - correct for unsigned colour.
 
 Some sections use `V4-32` for positions instead of `V3-32`, giving a 16-byte
 stride. Both forms occur in `IntroRoad`.
@@ -534,7 +534,7 @@ stream being missed, not of the data being absent.
 Packets are separated by a run of the filler byte `0xE5` extending to the start of
 the next packet, and by a 16-byte header that is not VIF. Neither needs to be
 decoded if the walker anchors on packet starts rather than reading the stream
-continuously — see §4.5.
+continuously - see §4.5.
 
 ### 4.5 Traversal
 
@@ -544,8 +544,8 @@ a 32-bit unpack of three or four components whose `immediate` is exactly
 inter-packet filler and header are stepped over without being interpreted.
 
 Anchoring on `STCYCL` alone does not work. Its encoded word occurs frequently
-inside vertex data — 3548 times in the first `rwID_WORLD` section of `IntroRoad`
-at arbitrary alignment against 1200 genuine occurrences — so the anchor must be
+inside vertex data - 3548 times in the first `rwID_WORLD` section of `IntroRoad`
+at arbitrary alignment against 1200 genuine occurrences - so the anchor must be
 the `UNPACK` itself.
 
 Applied to the first `rwID_WORLD` section of `IntroRoad`, the scan finds 300
@@ -572,7 +572,7 @@ u32 meshType        // 0 -> the block opens with STROW; VIFn_R0 * 16 is the real
 u8  vif[dataSize]
 ```
 
-Split *i* uses material `matID[i]` directly — no accumulation, no drift.
+Split *i* uses material `matID[i]` directly - no accumulation, no drift.
 
 Material lists belong to the owner, not the section. A world has one
 `MaterialList` as a child of `World`; a clump has one per `Geometry`. Merging them
@@ -613,7 +613,7 @@ Within the `0x1100` payload:
 |--------|------|-------|
 | 0x08 | `u32` | Vertex count |
 | 0x0C | `u32` | BSP node count |
-| 0x20 | — | First vertex |
+| 0x20 | - | First vertex |
 
 Vertices are 16 bytes: three `f32` coordinates and 4 bytes of flags. The face
 list follows the vertex array and the node array, the latter being 8 bytes per
@@ -674,7 +674,7 @@ Three formats occur:
 |------:|----------|
 | 8 | PSMT8 deswizzle, CLUT reordered |
 | 4 | nibbles expanded, deswizzled, 16-entry CLUT used as-is |
-| 32 | PSMCT32 — raw RGBA, no palette, no deswizzle |
+| 32 | PSMCT32 - raw RGBA, no palette, no deswizzle |
 
 The 32-bit case was missing for a long time and produced blank white sheets; in
 `IntroRoad` it covers the tree and grass cards.
@@ -687,7 +687,7 @@ CLUT entries in an interleaved order:
 newIndex = (p & 0xE7) + ((p & 0x08) << 1) + ((p & 0x10) >> 1)
 ```
 
-The 4-bit path expands nibbles to bytes, runs the same deswizzle and repacks —
+The 4-bit path expands nibbles to bytes, runs the same deswizzle and repacks -
 this matches the reference implementation.
 
 Alpha uses the PlayStation 2 convention where `0x80` is full opacity, so decoded
@@ -698,7 +698,7 @@ flat-shaded material at half opacity.
 The decoder has been verified end to end: exporting `IntroRoad` and measuring the
 resulting images gives exactly 100% opaque for road, rock, truck and signs, and a
 clean cut-out for foliage. When measuring PNG output, remember each scanline
-begins with a filter byte — sampling without skipping it reads colour channels as
+begins with a filter byte - sampling without skipping it reads colour channels as
 alpha and makes a correct decoder look broken.
 
 ---
@@ -716,8 +716,8 @@ and only a flat RGBA colour. In `IntroRoad`'s third world, material 0 is
 `0xFFFFFFFF` and material 8 is `0xFF666666`. The game shades these with material
 colour times vertex colour.
 
-In practice these are placeholder and trigger volumes — the white cards standing
-in front of the fir trees, the logic boxes around the truck — and drawing them
+In practice these are placeholder and trigger volumes - the white cards standing
+in front of the fir trees, the logic boxes around the truck - and drawing them
 paints solid sheets over the scene. They are currently skipped.
 
 ### 7.2 Vertex colours
@@ -725,7 +725,7 @@ paints solid sheets over the scene. They are currently skipped.
 World geometry carries baked lighting in its vertex colours. **Model clumps do
 not**: their vertex colours are exactly zero (`HO_Map`, `FX_save_point1`), and the
 game lights them at runtime. Multiplying by that zero turns the mesh black, so the
-multiply has to be skipped for such geometry — in *both* the textured and the
+multiply has to be skipped for such geometry - in *both* the textured and the
 untextured shader path. Fixing only one of them leaves a character's face black on
 black.
 
@@ -737,14 +737,14 @@ It is not a colour map. Rendering it as one paints white branches across every
 tree.
 
 It is also redundant here, because the base texture already carries its own alpha
-— `In_road_Grassx` is 68% fully transparent texels. These meshes should simply not
+- `In_road_Grassx` is 68% fully transparent texels. These meshes should simply not
 be drawn.
 
 ### 7.4 Transparency
 
 Blended geometry needs a second pass with depth writes **off**, drawn after the
 opaque one. Otherwise the first transparent surface writes depth and hides every
-transparent surface behind it — visible as fire layers and light beams cutting
+transparent surface behind it - visible as fire layers and light beams cutting
 each other out.
 
 Everything named `FX_*` goes into that pass regardless of its alpha, since effect
@@ -754,7 +754,7 @@ sheets must never occlude one another. Some of them have near-binary alpha
 The pass is not depth-sorted, so two blended layers can still composite in the
 wrong order.
 
-### 7.5 Blend mode — not in the asset
+### 7.5 Blend mode - not in the asset
 
 The blend function cannot be recovered from the container. This was checked
 exhaustively:
@@ -764,14 +764,14 @@ exhaustively:
 | Material `Extension` | An empty UV-anim plugin (`0x0A01`), byte-identical across all 68 materials of `HO_1_Lobby` |
 | `TEX0` GS register | Differs only in `PSM` (pixel format); `TFX = 0`, `TCC = 1` everywhere |
 | `rasterFormat` | Differs only in the palette-size nibble |
-| Alpha distribution | `FX_fire_Dahlia` and `FX_Flare_01` have identical signatures — flat opaque alpha, no gradient, no transparent texel — yet need opposite treatment |
+| Alpha distribution | `FX_fire_Dahlia` and `FX_Flare_01` have identical signatures - flat opaque alpha, no gradient, no transparent texel - yet need opposite treatment |
 
 On PlayStation 2 the blend function is the GS `ALPHA` register, which the engine
 sets per draw. It is state, not asset data, so no rule derived from the texture
 can separate a flame card from a lens flare.
 
-The workable answer is a short explicit list. Everything blends normally — which
-is what makes fire, smoke and the TV screen come out right — and only glow
+The workable answer is a short explicit list. Everything blends normally - which
+is what makes fire, smoke and the TV screen come out right - and only glow
 sprites (`FX_Flare`, `FX_Glow`, `FX_Halo`, `FX_Corona`, `FX_Lens`) are additive.
 Those fade through their *colour* over a black surround, so alpha blending would
 draw that surround as a black card.
@@ -782,7 +782,7 @@ The list is short, visible in the source, and extending it is one line.
 ### 7.6 Object placement
 
 Property 1 of a `0x0704` object is **not always a model transform**. On volume
-classes such as `CPhysicsObject` it is the extent of a collision box —
+classes such as `CPhysicsObject` it is the extent of a collision box -
 `IntroRoad` carries scales of `(1.0, 3.54, 26.1)` and `(8.87, 5.54, 5.66)`.
 Applying those to the referenced model stretches it far past the camera and looks
 like the prop has vanished.
@@ -809,7 +809,7 @@ same way as geometry, so the object that owns an animation is identifiable.
 
 The internal layout of neither section has been analysed, but one question that
 gates the whole feature is settled: **PS2 skin weights do not ride in the VIF
-packets.** Measured on `CIGCCharacter.Alessa` — all 104 packets carry exactly four
+packets.** Measured on `CIGCCharacter.Alessa` - all 104 packets carry exactly four
 streams at VU addresses 0..3 (`V3-32@0, V2-32@1, V4-8@2, V3-8@3`) and nothing
 higher. Indices and weights therefore live in the `Skin PLG (0x0116)` in its
 native layout.
@@ -828,7 +828,7 @@ codecs: Sony 4-bit ADPCM, or plain 16-bit PCM.
 
 | Source | Contents | Format |
 |--------|----------|--------|
-| `rwaID_WAVEDICT` section | the level's own sound bank | mono ADPCM, 6–32 kHz |
+| `rwaID_WAVEDICT` section | the level's own sound bank | mono ADPCM, 6-32 kHz |
 | `MUSIC/*.RWS` | 75 music streams | mono ADPCM, 44094 Hz (32000 for two) |
 | `IGC.ARC/*.IGCStream` | 35 cutscenes | stereo PCM16, 48 kHz |
 | loose `.ads` / `.vag` | the same two, unpacked | either |
@@ -855,7 +855,7 @@ shift of at most 12 and a filter index of at most 4, and the same holds for all
 2980 samples in the level banks. The decoder in this repository agrees
 sample-for-sample with an independent implementation over 560 000 samples.
 
-### 9.2 `rwaID_WAVEDICT` — the level sound bank
+### 9.2 `rwaID_WAVEDICT` - the level sound bank
 
 A regular `0x0716` section whose payload is a RenderWare Audio chunk tree. As
 elsewhere, `sec.dataStart` points at `[u32 payloadSize][chunk]`, so the tree
@@ -879,8 +879,8 @@ begins four bytes further in.
 Chunk headers are the ordinary RenderWare 12 bytes, `[type][size][version]`,
 with `size` excluding the header.
 
-The codec GUID is a single value across the whole archive —
-`9897ead9 bcbb7b44 96b26547 59102e16` — the same GUID the `.RWS` parameter block
+The codec GUID is a single value across the whole archive -
+`9897ead9 bcbb7b44 96b26547 59102e16` - the same GUID the `.RWS` parameter block
 spells out in text as `"VAG (Sony ADPCM)"`.
 
 No channel field appears in the header, and none is needed: the two candidate
@@ -890,10 +890,10 @@ every bank is mono.
 Cross-checked over the whole retail archive: all 255 dictionaries walk to
 exactly their declared end and yield 2980 samples, `waveCount` matches the
 number of `0x0804` blocks in every case, and every declared length matches its
-data chunk. Names are descriptive and stable — `door_jammed`, `footstep_carpet1`,
+data chunk. Names are descriptive and stable - `door_jammed`, `footstep_carpet1`,
 `motel_roomtonewind`, `road_backambl` / `road_backambr`.
 
-### 9.3 `MUSIC/*.RWS` — RenderWare Audio streams
+### 9.3 `MUSIC/*.RWS` - RenderWare Audio streams
 
 ```
 0x080D  file chunk, covering the whole file
@@ -906,7 +906,7 @@ data chunk. Names are descriptive and stable — `door_jammed`, `footstep_carpet
 audio data at a fixed offset of 2048
 ```
 
-Most tracks also carry a plain-text parameter block describing themselves —
+Most tracks also carry a plain-text parameter block describing themselves -
 `datatypename` = `"VAG (Sony ADPCM)"`, then `numchannels`, `samplerate`,
 `signed`, `audioframesize`, `samplesperframe`. It is absent from some tracks
 (`MENU.RWS` has none), so the binary fields above are the ones to read; where
@@ -914,10 +914,10 @@ both exist they agree.
 
 The stream is one contiguous mono run, not an interleave. The mean
 sample-to-sample step at the 2048-byte boundaries is 55.5 against an overall
-mean of 58.6 — there is no splice there, which there would be if the channels
+mean of 58.6 - there is no splice there, which there would be if the channels
 alternated.
 
-### 9.4 `IGC.ARC/*.IGCStream` — cutscenes
+### 9.4 `IGC.ARC/*.IGCStream` - cutscenes
 
 The archive entries declare `uncompressedSize = 0`, meaning the payload is
 stored raw rather than deflated (§2).
@@ -937,8 +937,8 @@ The audio is therefore **not contiguous**: it is cut into 1024-byte pieces and
 multiplexed with the animation. Concatenating every `0xA000` payload in order
 reassembles an ordinary ADS block.
 
-Reading the region after the `SShd` signature directly looks almost right — the
-pieces are 1024 bytes, exactly one stereo frame — but it splices four bytes of
+Reading the region after the `SShd` signature directly looks almost right - the
+pieces are 1024 bytes, exactly one stereo frame - but it splices four bytes of
 record header into every 1028, which drops the lag-1 autocorrelation of the
 result from 0.997 to 0.14. On all 35 streams the records walk to exactly EOF and
 the reassembled body matches the length `SSbd` declares, to the byte.
@@ -962,7 +962,7 @@ the left channel, then as many of the right. Every cutscene is
 
 Confirmed on the reassembled streams: per-channel lag-1 autocorrelation is
 0.997, and left against right correlates between 0.72 and 0.96 depending on the
-passage — the profile of a real stereo mix. Both figures collapse under any
+passage - the profile of a real stereo mix. Both figures collapse under any
 other split.
 
 ---
@@ -994,10 +994,10 @@ Implementations in this repository:
 
 ---
 
-## UI string tables — `Strings.Eng` and friends
+## UI string tables - `Strings.Eng` and friends
 
 Six of them ship: `Strings.Eng / Fre / Ger / Ita / Spa / Jap`. This is the
-game's text, and it is *not* what `LocaleUIEng` holds — that is a
+game's text, and it is *not* what `LocaleUIEng` holds - that is a
 `rwID_TEXDICTIONARY` of pre-rendered UI images.
 
     u32   version        2 in all six
@@ -1008,7 +1008,7 @@ game's text, and it is *not* what `LocaleUIEng` holds — that is a
     }
     UTF-16LE blob, each string NUL-terminated
 
-**All six languages carry the same hashes in the same order** — verified by
+**All six languages carry the same hashes in the same order** - verified by
 comparing the tables entry for entry. That is the whole story for adding a
 language: keep the table, replace the text, recompute the offsets. The hash
 function never has to be identified, which is fortunate, because it has not
@@ -1020,13 +1020,13 @@ keeps rebuilt files close to the originals in size.
 
 Inside the text:
 
-* every string opens with `\x01\x01`, which is not visible text — dropping it
+* every string opens with `\x01\x01`, which is not visible text - dropping it
   shifts the rest;
 * `\x03` plus one byte is a glyph placeholder: `\x03\x05` a face button,
   `\x03\x10` the platform trademark. `Strings.Eng` uses these to write
   "PlayStation®2" and "press ✕ to continue" without baking a platform into the
   text;
-* control characters appear as data — item names contain a bare `\r`
+* control characters appear as data - item names contain a bare `\r`
   (`"a \x01\rportable TV"`).
 
     python3 tools/strings.py dump  game-iso/SHO/SH.ARC Strings.Eng eng.tsv
@@ -1036,7 +1036,7 @@ Verified round-trip: 2115 of 2115 strings identical after dump and rebuild.
 
 ## `bootmenu.xml`
 
-Plain XML in the archive, and it is the game's own level-warp menu — the
+Plain XML in the archive, and it is the game's own level-warp menu - the
 developers' one, shipped in the retail file. It documents the intended order of
 the game and the state each cutscene expects:
 
@@ -1046,12 +1046,12 @@ the game and the state each cutscene expects:
 </ZONE>
 ```
 
-`filter` is the zone the player arrives *from* — the same relationship
+`filter` is the zone the player arrives *from* - the same relationship
 `ZoneTrigger` and `CPlayerSpawner` encode, arrived at independently.
 
 `igcscript.xml` is its companion for cutscenes and subtitles.
 
-## The front end is XML — 40 files in `SH.ARC`
+## The front end is XML - 40 files in `SH.ARC`
 
 The entire user interface, every puzzle and the cutscene timing are plain XML
 inside the archive. Nothing is compiled. `tools/extract_scripts.py` pulls them
@@ -1080,7 +1080,7 @@ the D-pad goes from it:
 ```
 
 `xpos` / `xpos4x3` is why there are four UI containers: `UiDataPW`, `UiDataP4`,
-`UiDataNW`, `UiDataN4` — PAL and NTSC, widescreen and 4:3. They are texture
+`UiDataNW`, `UiDataN4` - PAL and NTSC, widescreen and 4:3. They are texture
 dictionaries of JPEGs (`sho_inv_bd_pw.jpg`, `sho_opt_bd_pw.jpg`, …).
 
 The vocabulary, counted over all 40 files:
@@ -1107,9 +1107,9 @@ element id or another screen.
 **59 of the 59 ids the UI references resolve, and the 2115 table hashes contain
 no collisions.**
 
-Two false starts worth recording. Nine textbook hashes were tried first —
+Two false starts worth recording. Nine textbook hashes were tried first -
 CRC32 in both cases, djb2 and its xor variant, sdbm, FNV-1, FNV-1a,
-RenderWare's `*131`, Jenkins one-at-a-time — and all scored zero, because djb2
+RenderWare's `*131`, Jenkins one-at-a-time - and all scored zero, because djb2
 was tried with its usual 5381 seed. Ghost Rider is unstripped and has
 `UTILS::GetStringHash`, which disassembles to a different function entirely:
 
@@ -1122,7 +1122,7 @@ sign over 1536 variants: exactly one fits, and it fits perfectly.
 `tools/strings.py lookup` resolves ids against the table.
 
 Also absent from the data: the boot order itself. `Logo`, `Title` and
-`BootMenu` are strings in `SLES_551.47`, and Ghost Rider — unstripped — has an
+`BootMenu` are strings in `SLES_551.47`, and Ghost Rider - unstripped - has an
 object called `..._Objects_FrontEnd_BootSequence` along with
 `LanguageSelectionScreen`, `AttractMode` and `Warnings`. SHO's archive holds 88
 object classes and **none of them are front-end**, so in this game the sequence
@@ -1194,7 +1194,7 @@ Every `string=` the 40 XML files reference, through the hash above.
 | `ui_rating_title` | Summary |
 | `ui_vibration` | VIBRATION |
 
-## `rwID_KFONT` — the button-glyph font
+## `rwID_KFONT` - the button-glyph font
 
 `FontEUR` (30 KB) and `FontJAP` (151 KB) each hold two sections: a
 `rwID_TEXDICTIONARY` with one texture (`Font_EUR` / `Font_JAP`) and a
@@ -1222,14 +1222,14 @@ The atlas size falls out of the data rather than being stated: solving
 **256 × 64** and fits all sixteen exactly.
 
 **Those sixteen are not the alphabet.** Most are 22 × 22 squares, with two wide
-ones at 51 × 27 and 43 × 28 — face buttons, d-pad and shoulder buttons. It is
+ones at 51 × 27 and 43 × 28 - face buttons, d-pad and shoulder buttons. It is
 the controller-symbol set, and `Strings.Eng` indexes it:
 
     \x03\x01 .. \x03\x10   ->  glyph 0 .. 15
 
 Those sixteen codes account for 71 of the escapes in the table, and
 `"\x03\x05 : Continue"` is the pause screen's prompt with the face button drawn
-inline. `\x03\x10` alone appears 33 times — the platform trademark, which is
+inline. `\x03\x10` alone appears 33 times - the platform trademark, which is
 why "PlayStation®2" is written without an ® in the data.
 
 Twenty-seven distinct codes appear in total; the other eleven have ASCII values
@@ -1253,18 +1253,18 @@ not have sixteen glyphs. The payload is a sequence of typed blocks:
 | id | EUR | JAP | what |
 |---|---|---|---|
 | 1 | 16 × 24 B | 16 × 24 B | the controller glyphs above |
-| 2 | 16 × 4 B | 16 × 4 B | an RGBA palette — 16 colours |
+| 2 | 16 × 4 B | 16 × 4 B | an RGBA palette - 16 colours |
 | 3 | 155 × 6 B | 100 × 6 B | kerning pairs: `[u16 left][u16 right][s16 delta]` |
 | 4 | 11088 B, count 137 | 134967 B, count 1261 | **the character set** |
 
-Block 3's first pair is `2D 00 31 00 FE FF` — hyphen against '1', pulled two
+Block 3's first pair is `2D 00 31 00 FE FF` - hyphen against '1', pulled two
 pixels closer.
 
 Block 2 explains the leftover escapes: `\x03` followed by a byte outside 1..16
 selects a text colour from those sixteen entries, which is why codes like
 `\x03A` appear once or twice each in the string table.
 
-### Block 4 — the Latin alphabet
+### Block 4 - the Latin alphabet
 
 Entries are 16 bytes after a 4-byte prologue, and the first field is the
 character code:
@@ -1278,18 +1278,18 @@ character code:
     ...   8 bytes not yet identified
 
 `FontEUR` covers ASCII plus the accented Latin the five European languages
-need — `À Á Â Ä Ç È É Ê Ì Í Î Ñ Ó Ô Ö Ú Ü ß à á â ä ç è é ê ì í î ñ ò ó ô ö ø
-ù ú û ü ý þ Œ œ` — 137 characters in all. `FontJAP` has 1261 in the same
+need - `À Á Â Ä Ç È É Ê Ì Í Î Ñ Ó Ô Ö Ú Ü ß à á â ä ç è é ê ì í î ñ ò ó ô ö ø
+ù ú û ü ý þ Œ œ` - 137 characters in all. `FontJAP` has 1261 in the same
 layout.
 
 **For a Cyrillic translation this is the real constraint, not the string
 table.** The strings are trivial to replace; the font has no Cyrillic glyphs at
 all, so `Font_EUR`'s atlas and this block both have to be extended. That is a
-manageable job — the layout is known and the atlas is a plain texture — but it
+manageable job - the layout is known and the atlas is a plain texture - but it
 is a job, and it is the reason the game shipped in six Latin-and-Japanese
 languages and no others.
 
-## Movies — `MOVIES/*.PSS`
+## Movies - `MOVIES/*.PSS`
 
 58 files, 1.7 GB, outside the archive. Sony `.PSS` is an MPEG-2 program stream:
 every one begins `00 00 01 BA` (pack header), then `00 00 01 BB` (system) and
@@ -1310,14 +1310,14 @@ The names encode aspect and language:
 | `CRD*`, `END*`, `STAT*` | credits, endings, statistics |
 
 `mainmenu.xml` opens with `bgmovie="Menu" bgaudio="menu.rws"`, and `MENUW.PSS`
-is the file it names — the mapping is the bare name plus the aspect letter plus
+is the file it names - the mapping is the bare name plus the aspect letter plus
 the language.
 
 **Not implemented.** Playing these needs an MPEG-2 decoder, which is a real
 dependency and belongs in the platform layer, not in `climax-core`. Until then
 `climax-play` draws the stages without them.
 
-## UI texture names — the `**` placeholder
+## UI texture names - the `**` placeholder
 
 The XML asks for `sho_inv_bd_**.jpg`; the archive stores `sho_inv_bd_pw`. Two
 things differ. The extension is dropped, and `**` stands for the display mode:
@@ -1325,7 +1325,7 @@ things differ. The extension is dropped, and `**` stands for the display mode:
     p / n   PAL or NTSC
     w / 4   widescreen or 4:3
 
-which is exactly the four UI containers — `UiDataPW`, `UiDataP4`, `UiDataNW`,
+which is exactly the four UI containers - `UiDataPW`, `UiDataP4`, `UiDataNW`,
 `UiDataN4`. Nineteen of the thirty-six textures the front end references are
 written with the placeholder, so without the substitution more than half the
 backgrounds resolve to nothing.
@@ -1334,16 +1334,16 @@ The rest come from `GlobalStream` (13: arrows, frames, cursors) and from the
 per-language `LocaleUI*` (4 each: the main menu's four buttons, which carry
 their words as pixels rather than as text).
 
-### Conversion — `tools/convert_movies.py`
+### Conversion - `tools/convert_movies.py`
 
 Every `.PSS` is stored 512×512 with a square sample, both for the widescreen
-`W` files and the 4:3 `N` files — measured, not assumed: `ffprobe` reports
+`W` files and the 4:3 `N` files - measured, not assumed: `ffprobe` reports
 `910,512,SAR 1:1,DAR 1:1` for `LOGOW.PSS` itself. The PS2 corrects this on
 output; nothing in the container says to.
 
 Scaling the pixels alone is not enough. A first pass here used `scale=910:512`
 without clearing the sample aspect, and ffmpeg picked a compensating SAR
-(`256:455`) that put the display aspect straight back to 1:1 — squeezed exactly
+(`256:455`) that put the display aspect straight back to 1:1 - squeezed exactly
 like the original. `setsar=1` after the scale is what makes the corrected
 aspect stick:
 
@@ -1355,7 +1355,7 @@ widths as H.264 requires. All 58 files converted this way, verified by
 set, `341:256` (≈1.332) throughout the `N` set. 1.7 GB of source becomes 855 MB
 at CRF 18.
 
-### Playback — `climax-play` and `VideoPlayer`
+### Playback - `climax-play` and `VideoPlayer`
 
 The boot sequence and the menu now play the converted clips instead of drawn
 placeholders. `src/Rendering/VideoPlayer.{h,cpp}` decodes an MP4 via FFmpeg's

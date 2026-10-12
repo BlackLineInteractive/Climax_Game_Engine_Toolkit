@@ -1,4 +1,4 @@
-# Silent Hill: Shattered Memories (Wii) — Archive and Container Reference
+# Silent Hill: Shattered Memories (Wii) - Archive and Container Reference
 
 Companion to [SH_FORMAT.md](SH_FORMAT.md), which covers Silent Hill Origins on
 PlayStation 2. This document describes the second Climax Engine title, *Silent
@@ -40,7 +40,7 @@ sys/main.dol       4 565 440 bytes
 
 ## 2. The archive
 
-### 2.1 Header — 16 bytes at offset 0
+### 2.1 Header - 16 bytes at offset 0
 
 ```
 0x00  u32  magic            0x0000FA10  (bytes 10 FA 00 00)
@@ -50,11 +50,11 @@ sys/main.dol       4 565 440 bytes
 ```
 
 This is a different container from the `"A2.0"` archive of Silent Hill Origins.
-It is four bytes shorter, and — the decisive difference — **it has no name
+It is four bytes shorter, and - the decisive difference - **it has no name
 table**. Origins stores every file name in a block at the tail of the archive;
 Shattered Memories stores a 32-bit key instead and nothing else (§2.4).
 
-### 2.2 Entry table — `entryCount × 16` bytes, from 0x10
+### 2.2 Entry table - `entryCount × 16` bytes, from 0x10
 
 ```
 0x00  u32  key               32-bit resource identifier, see §2.4
@@ -87,13 +87,13 @@ A payload is a raw zlib stream (`78 DA`) when `uncompressedSize` is non-zero, an
 stored verbatim when it is zero. This is the same rule Origins uses.
 
 All 1995 entries of `data.arc` inflate without a single failure, to 2.13 GB from
-1.40 GB stored — an overall ratio of 0.66. Eleven of them are stored rather than
+1.40 GB stored - an overall ratio of 0.66. Eleven of them are stored rather than
 deflated, and all eleven are JPEG images, which zlib cannot usefully shrink.
 
 In `igc.arc` **every one of the 289 entries is stored uncompressed.** Its content
 is already-compressed audio and pre-packed sub-archives.
 
-### 2.4 The 32-bit key — what it is, and what it is not
+### 2.4 The 32-bit key - what it is, and what it is not
 
 The first word of each entry is a unique 32-bit identifier. It is the archive's
 only lookup key: there are no names anywhere in the file.
@@ -119,7 +119,7 @@ matches in every combination.
 
 It is **not** a fold of the resource GUID. The build paths inside the containers
 name their outputs `{GUID}.dff` and `{GUID}.txd`, and every 16-byte GUID in the
-first 4 KB of 200 containers was tested as four little- and big-endian words —
+first 4 KB of 200 containers was tested as four little- and big-endian words -
 XOR-folded, summed, first word, last word, CRC-32 and Adler-32. Zero matches.
 
 It is **not a multiplicative rolling hash of the bare name.** `AFX_ITCombat.xm`
@@ -131,7 +131,7 @@ candidate key.
 
 A further hard data point: **two entries carry the identical internal name
 `AFX_ITCombat.xm` with different keys** (`0x173610EE` and `0x1129EB8A`). Whatever
-the key is derived from, it is not that string alone — either it includes a path
+the key is derived from, it is not that string alone - either it includes a path
 the payload does not record, or it is an identifier assigned at build time with
 no textual preimage at all.
 
@@ -148,12 +148,12 @@ the `data.arc` header and all 1995 entry records, and immediately after it the
 same for `igc.arc`, each introduced by the literal `EMBEDED` and the archive's
 file name. This is a cached directory so the game need not read the table from
 the disc. All 1995 keys are therefore "present in the executable", but only as
-that copy — a random control of 1995 values matches 0 times, and no key appears
+that copy - a random control of 1995 values matches 0 times, and no key appears
 as a `lis`/`ori` immediate pair anywhere in the code (0 of 1995), so the game
 does not name resources by compiled-in constants either.
 
 A third archive is embedded at 0x3F9378: a complete 6-entry archive of boot
-resources — three binary tables, two texture containers and one XML config. Five
+resources - three binary tables, two texture containers and one XML config. Five
 of its six keys are byte-identical to keys in `data.arc`, which establishes that
 **the key is a global resource identifier, stable across archives**, not a
 per-archive index or a hash of a per-archive path.
@@ -194,13 +194,13 @@ test is simply whether the payload begins with `10 FA 00 00`.
 
 ## 3. Content census
 
-### 3.1 `data.arc` — 1995 entries, 2.13 GB inflated
+### 3.1 `data.arc` - 1995 entries, 2.13 GB inflated
 
 | Count | Content |
 |-------|---------|
 | 1857 | level / model containers, beginning with a `0x0716` chunk (§4) |
 | 84 | JPEG images (73 deflated, 11 stored) |
-| 24 | audio banks — a 64-byte name field, then a FastTracker II module |
+| 24 | audio banks - a 64-byte name field, then a FastTracker II module |
 | 18 | binary tables beginning with `u32 = 2` |
 | 6 | CSV configuration tables |
 | 1 | XML (`<BOOTMENU>` …) |
@@ -215,13 +215,13 @@ The audio banks are the one class that names itself:
 0x48  ...               "Extended Module: …"  (standard XM from here)
 ```
 
-The CSV tables are readable configuration and are worth reading directly — the
+The CSV tables are readable configuration and are worth reading directly - the
 mixer table, the reverb preset table (`ExploreInteriorSmall`, `CombatLarge`, …
 with full EAX parameters for the PS2 and PSP presets side by side), the streaming
 budget table, and the psychology-profiling tables that drive the game's central
 mechanic (`Criteria Id,OPEN,CONSC,EXTRA,AGREE,…`).
 
-### 3.2 `igc.arc` — 289 entries, 1.28 GB, all stored
+### 3.2 `igc.arc` - 289 entries, 1.28 GB, all stored
 
 | Count | Content |
 |-------|---------|
@@ -246,7 +246,7 @@ length-prefixed resource names:
 The header word varies (`0x0F01`, `0x0360`, `0x036A`, `0x0118`, `0x0109`, …) and
 for most entries it equals `entrySize − declaredSize`, i.e. it is the length of
 the header block. The 19 entries tagged `0x0F01` break that pattern with a
-constant 20-byte gap instead. This header is **not fully resolved** — see §10.
+constant 20-byte gap instead. This header is **not fully resolved** - see §10.
 
 ---
 
@@ -338,8 +338,8 @@ Identical in structure to Origins and **big-endian**:
 [u32 BE size][u32 BE id][payload]
 ```
 
-with the top byte of `id` selecting the record kind — `0x20` class name, `0x40`
-GUID, `0x80` instance name, `0x00` indexed property — and names padded with
+with the top byte of `id` selecting the record kind - `0x20` class name, `0x40`
+GUID, `0x80` instance name, `0x00` indexed property - and names padded with
 `0xBF`. Floats are big-endian too.
 
 A real record, the opening bytes of a `cReflector`:
@@ -362,7 +362,7 @@ The version word of every chunk, decoded with the standard library-ID unpack:
 | Raw | Meaning | Used by |
 |-----|---------|---------|
 | `0x1802FFFF` | RW 3.6.0.2, build 0xFFFF | Climax's own `0x0716` / `0x0704` chunks |
-| `0x1C020065` | RW 3.7.0.2, build 0x0065 | RenderWare data — same build as Origins |
+| `0x1C020065` | RW 3.7.0.2, build 0x0065 | RenderWare data - same build as Origins |
 | `0x1C020055` | RW 3.7.0.2, build 0x0055 | some older assets |
 | `0x00030002` | RW 3.0.0.3 | a few legacy chunks |
 
@@ -374,7 +374,7 @@ behind "the containers are compatible"; the *packaging* around them is not.
 ## 5. Wii texture dictionaries
 
 A `rwID_TEXDICTIONARY` section's payload is a normal RenderWare texture
-dictionary — chunk `0x0016`, a `Struct` giving the texture count, then one
+dictionary - chunk `0x0016`, a `Struct` giving the texture count, then one
 `0x0015 TextureNative` per texture.
 
 ```
@@ -439,7 +439,7 @@ dataSize = sum over mipCount levels, halving w and h each time, minimum 1
 ```
 
 **Validation.** Over 150 containers holding 1217 textures, the `dataSize` field
-equals the value this formula produces for 1197 of them — every CMPR, RGBA8,
+equals the value this formula produces for 1197 of them - every CMPR, RGBA8,
 RGB5A3 and I4 texture without exception. The 20 that differ are all `C8`, which
 carries a separate palette the size field does not account for; that case is
 unresolved (§11).
@@ -458,17 +458,17 @@ and `108 + 174080 = 174188`, exactly the struct size.
 
 Each format stores whole tiles in reading order:
 
-* **CMPR** — an 8x8 tile is four 8-byte DXT1 sub-blocks covering (0,0), (4,0),
+* **CMPR** - an 8x8 tile is four 8-byte DXT1 sub-blocks covering (0,0), (4,0),
   (0,4) and (4,4). Endpoint colours are big-endian, and the 2-bit indices run
   from the *most* significant pair of each byte, the reverse of DXT1 elsewhere.
   When `c0 <= c1` the fourth index is fully transparent.
-* **RGBA8** — a 4x4 tile is 64 bytes: 32 bytes of interleaved alpha/red first,
+* **RGBA8** - a 4x4 tile is 64 bytes: 32 bytes of interleaved alpha/red first,
   then 32 of green/blue.
-* **RGB5A3** — the top bit picks the encoding: set means 5 bits per channel and
+* **RGB5A3** - the top bit picks the encoding: set means 5 bits per channel and
   full opacity, clear means 3 bits of alpha and 4 bits per channel.
-* **RGB565, IA8** — 4x4 tiles, 16 bits per texel, big-endian.
-* **I8, IA4** — 8x4 tiles, one byte per texel.
-* **I4** — 8x8 tiles, high nibble first.
+* **RGB565, IA8** - 4x4 tiles, 16 bits per texel, big-endian.
+* **I8, IA4** - 8x4 tiles, one byte per texel.
+* **I4** - 8x8 tiles, high nibble first.
 
 ### 5.4 What the corpus looks like
 
@@ -477,15 +477,15 @@ C8 20, I4 8. Mip counts are 4 for 1188 of them and 1 for the remaining 29.
 Common sizes are 512×512 (350), 256×256 (289), 128×128 (130) and 256×512 (96).
 
 The pixel data is tiled in the GameCube's block order and has to be untwiddled
-before use — the same class of problem as the PS2 swizzle in
+before use - the same class of problem as the PS2 swizzle in
 [SH_FORMAT.md](SH_FORMAT.md) §6, but a different layout.
 
 ---
 
 ## 6. Native geometry
 
-Meshes are shaped exactly like the Origins ones — a `BinMeshPLG` split table and
-a `NativeDataPLG` blob per sector — but the blob holds GX display lists and
+Meshes are shaped exactly like the Origins ones - a `BinMeshPLG` split table and
+a `NativeDataPLG` blob per sector - but the blob holds GX display lists and
 indexed attribute arrays instead of PS2 VIF packets, and it is big-endian.
 
 Both `rwID_WORLD` and `rwID_CLUMP` / `rwID_RWS` use the same blob, so one
@@ -527,7 +527,7 @@ Attributes observed, with their fixed component layout:
 
 The `type` byte is the GX attribute type and takes only two values: 2 is
 `GX_INDEX8` and 3 is `GX_INDEX16`. **It varies per attribute within one mesh**,
-and it is what fixes the width of that attribute's index in the display list —
+and it is what fixes the width of that attribute's index in the display list -
 positions are usually 16-bit while normals and colours are often 8-bit.
 
 ### 6.2 Display lists
@@ -542,8 +542,8 @@ Emitting triangles is the ordinary strip rule with alternating winding; a
 triangle with two equal corners is a stitch between strips, not a surface, and
 is dropped.
 
-`BinMeshPLG` is still the material table — mesh *n* uses material
-`meshMaterial[n] + matListWindowBase` — but its index counts describe the source
+`BinMeshPLG` is still the material table - mesh *n* uses material
+`meshMaterial[n] + matListWindowBase` - but its index counts describe the source
 geometry, not the display list, and do not match it. The GameCube exporter
 re-strips and welds: one sector declares 996 vertices and 560 triangles in its
 own header while the native data holds 406 positions, 206 normals, 7 colours and
@@ -572,8 +572,8 @@ hierarchy before an atomic's geometry sits where it belongs.
 
 **Not every geometry in a clump is native**, and assuming otherwise is what
 leaves every character without a face. A character's head is a plain
-RenderWare geometry — because it also carries delta-morph targets for facial
-animation — with everything inline in its `0x0001` struct, little-endian:
+RenderWare geometry - because it also carries delta-morph targets for facial
+animation - with everything inline in its `0x0001` struct, little-endian:
 
 ```
 u32 flags, u32 numTriangles, u32 numVertices, u32 numMorphTargets
@@ -586,7 +586,7 @@ morph target: 4 floats bounding sphere, u32 hasVertices, u32 hasNormals,
 
 Bit 24 of `flags` is the native marker; when it is clear, read the struct.
 Adult_Cheryl's head declares 1723 triangles and 983 vertices, and
-16 + 7864 + 13784 + 24 + 11796 + 11796 comes to 45 280 bytes — exactly its
+16 + 7864 + 13784 + 24 + 11796 + 11796 comes to 45 280 bytes - exactly its
 declared struct size.
 
 ### 6.4 Validation
@@ -612,7 +612,7 @@ declared struct size.
 |---|---|---|
 | Archive magic | `"A2.0"` | `0x0000FA10` |
 | Archive header | 20 bytes | 16 bytes |
-| File names | full name table at the tail | **none** — a 32-bit key only |
+| File names | full name table at the tail | **none** - a 32-bit key only |
 | Entry record | name offset, offset, sizes | key, offset, sizes |
 | Compression | zlib, stored when `uncompressedSize == 0` | identical rule |
 | Nested archives | no | yes, 10 in `igc.arc` |
@@ -651,7 +651,7 @@ The archive gives none. Four sources inside the payloads do:
 
 1. **Audio banks** state their own file name in the first 64 bytes (§3.1).
 2. **Cutscene streams** in `igc.arc` carry a name plus a table of the resources
-   they use — 2736 distinct names, in the game's own naming (`IGC_10_5_DrK.anm`,
+   they use - 2736 distinct names, in the game's own naming (`IGC_10_5_DrK.anm`,
    `AFX_02_1a.snd`).
 3. **Containers** embed the artist's build paths, which name the asset and its
    place in the project tree:
@@ -689,8 +689,8 @@ sizes follow the Nintendo GX specification.
 * **`C8` texture data size.** The 20 paletted textures do not match the mip-chain
   formula; their palette is presumably counted differently, or stored separately.
 * **The `igc.arc` stream header.** The leading word equals the header length for
-  most entries but not for the 19 tagged `0x0F01`. The rest of the block — the
-  resource-name table and what follows it — is only partly mapped.
+  most entries but not for the 19 tagged `0x0F01`. The rest of the block - the
+  resource-name table and what follows it - is only partly mapped.
 * **Skinning.** Character clumps carry a `Skin PLG (0x0116)`, which this decoder
   ignores, so they render in their rest pose.
 * **Delta-morph targets** (`0x0122`) are not read, so faces render in their
@@ -698,10 +698,10 @@ sizes follow the Nintendo GX specification.
 * **Material effects.** Ice and water use a second texture coordinate set and
   the GX TEV stages to blend a normal or refraction map (`..._Refract`,
   `..._Nrm`); the viewer samples only TEX0, so those surfaces come out flat.
-  The TEV setup is not in the asset — reading it back from a Dolphin FIFO
+  The TEV setup is not in the asset - reading it back from a Dolphin FIFO
   capture is the practical route.
-* **The new section tags** — `rwID_SPLINE`, `rwID_FUSESTATE`, `rwpID_BODYDEF`,
-  `rwID_ZONEINFO`, `rwID_DMORPHANIMATION` — are catalogued but not parsed.
+* **The new section tags** - `rwID_SPLINE`, `rwID_FUSESTATE`, `rwpID_BODYDEF`,
+  `rwID_ZONEINFO`, `rwID_DMORPHANIMATION` - are catalogued but not parsed.
 * **`rwID_AUDIODATA`** is assumed to be the counterpart of the Origins
   `rwaID_WAVEDICT` sound bank on the strength of its name and its 39 occurrences.
   Its payload has not been decoded.

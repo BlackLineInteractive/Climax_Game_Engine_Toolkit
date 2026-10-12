@@ -5,7 +5,7 @@ Done 2026-10-12, over everything committed from `c82bc07` (2026-08-14) to
 kept only so that nothing is lost; git history has it too.
 
 The rule applied: code stays in the build only if what it *does* can be traced
-to `SLES_551.47` or to `SH.ARC`. A real address in a comment is not enough —
+to `SLES_551.47` or to `SH.ARC`. A real address in a comment is not enough -
 most of the files here cite real addresses and then do something else.
 
 ---
@@ -15,7 +15,7 @@ most of the files here cite real addresses and then do something else.
 Almost every file under `SHO-port/` follows the same shape:
 
 1. a real class name, factory and constructor address from the decompile;
-2. a member layout copied from the **constructor** — the offsets it zeroes and
+2. a member layout copied from the **constructor** - the offsets it zeroes and
    the strings it stores;
 3. runtime behaviour that is **invented**: the constructor says what fields
    exist, not what the game does with them, and no file here read the update,
@@ -23,23 +23,23 @@ Almost every file under `SHO-port/` follows the same shape:
 
 So the values are often real and the meaning attached to them is not.
 `CPlayerBehaviour`'s ctor does store `4.0f` at `+0x19B0`, `100.0f` at `+0x19BC`
-and `180.0f` at `+0x1A0C` (`FUN_0012C3B0`, lines 317–347); calling them run
+and `180.0f` at `+0x1A0C` (`FUN_0012C3B0`, lines 317-347); calling them run
 speed, max stamina and turn speed was a guess, and none of the code that reads
 those offsets was ever opened.
 
 ### Mechanical check: message names
 
 `SHO-port/include/SHO/Core/EventIds.h` is generated from the one routine that
-names every `CEventId` (`FUN_001FE780`) — the game has 206 messages and no
+names every `CEventId` (`FUN_001FE780`) - the game has 206 messages and no
 others. Across the archived sources, **69 message names passed to
 `SendMsg`/`LinkMsg` as string literals are not among them.** Only one literal is
 (`EnablePlayerControl`). Re-run with the script in the session notes, or:
 
     grep -rhoE '(SendMsg|LinkMsg|link)\("[^"]+"' archive/gemini-unverified
 
-A few of the 69 are real strings in the binary that are not messages —
+A few of the 69 are real strings in the binary that are not messages -
 `Snd.Fire`, `Snd.Reload`, `FootStep`, `Crawl`, `Idle_AllReleased` sit in the
-player's string pool and look like animation-event or state names — but the
+player's string pool and look like animation-event or state names - but the
 code registered them as messages, which nothing in the game sends. The rest
 (`DoorLocked`, `CalibanStomp`, `PlayerSpawnAt`, `CheckpointReached`,
 `ScreenShake`, `GameSaved`, `CameraCut`, ...) do not exist at all.
@@ -53,24 +53,24 @@ code registered them as messages, which nothing in the game sends. The rest
 
 | File | | What was checked |
 |---|---|---|
-| `Actor/PlayerBehaviour` | L | ctor offsets/strings real (`HasBlocked` @ +0x1540 …); clip of 8 bullets, 32-slot weapon rack, 10 damage, stamina drain 4/s, fatigue at 64, 0.75× tired speed — invented. 22 "dispatcher" names registered as messages are not messages. Listens for `CameraCut`, which does not exist (already noted in `SHO-port/docs/PLAYER.md`). |
-| `Actor/CharacterController` | F | generic capsule solver (Ericson closest-point), gravity 9.81, radius 0.35 — textbook, not the engine's. |
-| `Actor/EnemyBehaviour`, `Monster` | L/F | health 100/125/150, sight 3/7.5 m, hearing 15 m, cone 45° per archetype — invented. The real per-instance tuning is in the archive (`docs/generated/sho_enemies.json`) and was not used. |
+| `Actor/PlayerBehaviour` | L | ctor offsets/strings real (`HasBlocked` @ +0x1540 …); clip of 8 bullets, 32-slot weapon rack, 10 damage, stamina drain 4/s, fatigue at 64, 0.75× tired speed - invented. 22 "dispatcher" names registered as messages are not messages. Listens for `CameraCut`, which does not exist (already noted in `SHO-port/docs/PLAYER.md`). |
+| `Actor/CharacterController` | F | generic capsule solver (Ericson closest-point), gravity 9.81, radius 0.35 - textbook, not the engine's. |
+| `Actor/EnemyBehaviour`, `Monster` | L/F | health 100/125/150, sight 3/7.5 m, hearing 15 m, cone 45° per archetype - invented. The real per-instance tuning is in the archive (`docs/generated/sho_enemies.json`) and was not used. |
 | `Actor/BossBehaviours` | F | Caliban 450 HP, Flauros 1000 HP, stomp cooldown 4 s, teleport every 6 s; every message it sends is invented. |
 | `Actor/IGCController`, `MirrorReflector`, `PlayerLight`, `PlayerSpawner` | L/F | messages invented (`CutsceneStarted`, `PlayerSpawnAt`, `StartMirrorTransition` …). |
 | `Animation/StateTransitionGraph` | L/F | `Travis_STD.rst` is real (ANIM, 20 states, 214 transitions) but this file ignores it and hard-codes its own graph with invented blend times. The comparator is close to `FUN_001A0CC0` but adds a 0.001 epsilon the original does not have (it compares exactly; ops are packed u16: `<=` 0x3D3C, `!=` 0x3D21, `<>` 0x3E3C). |
 | `Audio/AudioEngine`, `AudioEntities` | F | hand-written 3-surface footstep table; the real one is 17 surfaces from `MaterialMap` (`docs/TODO.md` §4d). |
 | `Bridge/LevelBridge` | F | feeds real level data into the invented `World`. |
 | `Camera/*` | F | `FollowCamera` is a lagged chase cam; `CameraManager` sends the non-existent `CameraCut`. The real camera cut is `PlaneTrigger` → `src/Game/CameraLinks.cpp`, which stays. |
-| `Combat/CombatSystem` | F | cone 45°, ×1.6 / ×3.0 multipliers, 1.2 m chest height — invented. |
+| `Combat/CombatSystem` | F | cone 45°, ×1.6 / ×3.0 multipliers, 1.2 m chest height - invented. |
 | `Core/EventManager`, `Behaviour`, `SystemCommands`, `Types` | F | a generic pub/sub; not the RWS message system. |
 | `Core/MessageRelay` | L | ctor `FUN_0016CEC8` has 10 string slots and **6** floats (`+0x9C..+0xB0`); the port claims 10 per-target delays and invents the relay behaviour. |
 | `Core/EventIds.h` | **R** | generated by `tools/event_ids.py`. **Kept**, at `SHO-port/include/SHO/Core/EventIds.h`. |
 | `Environment/FogConfig`, `FogSystem`, `Light` | F | fog colour `(0.65, 1.0, 0.70)`; property 0 is actually a texture name (`docs/TODO.md`). |
 | `Environment/PostProcessingFSE` | L/F | `cThreatController` enter/exit messages invented. |
-| `Inventory/*` | F | heals 25 %/75 %, fists 10 damage — the real item table (`docs/generated/sho_inventory.json`, 164 rows) was not wired in. |
+| `Inventory/*` | F | heals 25 %/75 %, fists 10 damage - the real item table (`docs/generated/sho_inventory.json`, 164 rows) was not wired in. |
 | `Progression/*` | F | save/checkpoint messages invented. |
-| `Puzzle/*` (10 puzzles) | F | no address anywhere. Till code hard-coded as `"0218"`, circuit breaker fuses 15/20/25/30/40 A target 65 A. In the game these are `TillTrigger`, `CircuitBreakerTrigger` etc. — classes with data in the archive. |
+| `Puzzle/*` (10 puzzles) | F | no address anywhere. Till code hard-coded as `"0218"`, circuit breaker fuses 15/20/25/30/40 A target 65 A. In the game these are `TillTrigger`, `CircuitBreakerTrigger` etc. - classes with data in the archive. |
 | `Triggers/*` | L/F | `ZoneTrigger` invents locked doors and `DoorLocked`/`DoorUnlocked`; the real door logic (`src/Game/ZoneLinks.cpp`) stays. |
 | `World/*` | F | `SceneQueue` here sends invented messages; the real scene queue is `src/Game/SceneQueue.cpp` (`FUN_00179D60`), which stays. |
 | `Main.cpp` | F/mixed | overwrote the level's fog every load with constants labelled "Authentic PS2 misty atmosphere"; an "SH2/SH3 style" flashlight; an invisible wall on `IntroRoad` at z = 5.5; a nearest-camera fallback; music chosen by name; a HUD with hand-typed "SILENT HILL ORIGINS"; a procedural "volumetric fog". Replaced by a new `SHO-port/src/Main.cpp` that keeps only the real data paths and labels the walk harness as such. |
@@ -84,14 +84,14 @@ code registered them as messages, which nothing in the game sends. The rest
 
 ---
 
-## Damage outside SHO-port — reverted
+## Damage outside SHO-port - reverted
 
 The same commit (`c82bc07`) changed shared code. All of it is reverted to the
 state before that commit; the full diff is `shared-code-changes.patch`.
 
 | File | What it did |
 |---|---|
-| `src/Viewer/ViewerGraphics.cpp` | raised the alpha cut from 0.02 to **0.48** — the exact bug documented as "the face disappears" (`docs/TODO.md`, Origins §1); darkened unbaked geometry ×0.42; added an "SH2/SH3" flashlight and fbm "swirling" fog to the shader; deleted the comments recording why each existing rule was there. |
+| `src/Viewer/ViewerGraphics.cpp` | raised the alpha cut from 0.02 to **0.48** - the exact bug documented as "the face disappears" (`docs/TODO.md`, Origins §1); darkened unbaked geometry ×0.42; added an "SH2/SH3" flashlight and fbm "swirling" fog to the shader; deleted the comments recording why each existing rule was there. |
 | `src/SG/SceneObject.{h,cpp}`, `src/Rendering/PlayerModel.cpp` | invented 0.2 s crossfade; **removed the check that a clip fits the skeleton** (the one that stops 53-track clips spiking a 9-bone arm). |
 | `src/Game/CameraLinks.cpp` | accepted `PlaneTrigger`s that name no camera, with fallbacks; removed the rule that those are not camera cuts. |
 | `src/Game/CharacterController.cpp` | extra snap-to-ground on every airborne step, comments deleted. |
@@ -102,11 +102,11 @@ Also removed from the toolkit (`src/Viewer/ViewerApp.cpp`, from `54581e1`):
 footsteps on a timer and a door sound, both picked by searching sound names for
 "Foot"/"Step"/"Door"/"Open". The real footstep mapping is in `docs/TODO.md` §4d.
 
-## Kept, but unverified — flagged, not removed
+## Kept, but unverified - flagged, not removed
 
-* `src/Game/ButtonTriggers.cpp` — reads real objects, but "property 0 and 1 are
+* `src/Game/ButtonTriggers.cpp` - reads real objects, but "property 0 and 1 are
   usually events" is a guess. Toolkit only.
-* `src/play_main.cpp` intro skip — the comment says the movie record tests
+* `src/play_main.cpp` intro skip - the comment says the movie record tests
   `0x120` (cross or start); the code accepts `accept || cancel`.
 * The fog path itself: `Loader.cpp` reads props 10/11/8 as RGB, which is not
   established (`docs/TODO.md`). Fog stays off in `sho-game` until `CFogConfig`'s
@@ -126,16 +126,16 @@ their offsets. That is where the recovery restarts.
 
 The first pass covered `SHO-port/` and what `c82bc07` touched. This one read
 every game-facing file under `src/` and `include/`, by content rather than by
-author — some of what follows predates Gemini.
+author - some of what follows predates Gemini.
 
 ## Fixed against the binary
 
 | Where | Was | Now |
 |---|---|---|
-| `Game/SceneQueue` | a fixed 13-step order with 0x0C = "FadeOut 1 s", 0x0D = "FadeIn 1 s", a 0x09 always pushed, and every handler gated on "the streamer" | transcribed from `FUN_00179FB8`: 0x0C/0x0D are one fader driven by a `{kind, mode, seconds}` descriptor (`FUN_0017B128`; New Game passes 0x339F68 = {0,0,1.0} and 0x339F50 = {1,0,1.0}), a mode-2 stop node follows the opening, 0x09 only when leaving a different scene, 0x0B carries "PrePurge"/"PostPurge", the closing transition sits *after* 0x11. The gate is `FUN_001EF8F8` — the fader moving — and only 9 of the 17 handlers have it. Order checked with a test host for both New Game and a room change. |
+| `Game/SceneQueue` | a fixed 13-step order with 0x0C = "FadeOut 1 s", 0x0D = "FadeIn 1 s", a 0x09 always pushed, and every handler gated on "the streamer" | transcribed from `FUN_00179FB8`: 0x0C/0x0D are one fader driven by a `{kind, mode, seconds}` descriptor (`FUN_0017B128`; New Game passes 0x339F68 = {0,0,1.0} and 0x339F50 = {1,0,1.0}), a mode-2 stop node follows the opening, 0x09 only when leaving a different scene, 0x0B carries "PrePurge"/"PostPurge", the closing transition sits *after* 0x11. The gate is `FUN_001EF8F8` - the fader moving - and only 9 of the 17 handlers have it. Order checked with a test host for both New Game and a room change. |
 | `play_main` intro | the menu played SCN01, then loaded IntroRoad | `FUN_001CF718` plays nothing; scn01 is an `FMVTrigger` inside IntroRoad (`ZoneActivate → CMessageRelay → playFMV → FMVTrigger "scn01" → relayFMVEnd → border_Start, relayIGC2`). The menu now queues IntroRoad directly; the intro waits for the message graph to be implemented. |
-| `play_main` `frontEndRows` | 380, under a comment proving 448 | 448 (the PAL framebuffer; the flag row lands at 43–56 % as the comment's measurement says). |
-| `play_main` `textScale` | 1.3, set in `550d0e4` with no basis | 1.0 — the formula from `FUN_00215190`. |
+| `play_main` `frontEndRows` | 380, under a comment proving 448 | 448 (the PAL framebuffer; the flag row lands at 43-56 % as the comment's measurement says). |
+| `play_main` `textScale` | 1.3, set in `550d0e4` with no basis | 1.0 - the formula from `FUN_00215190`. |
 
 ## Removed
 
@@ -155,22 +155,22 @@ toolkit's grey backdrop.
 not, so they now live in `src/Harness/` (namespace `ClimaxEngine::Harness`),
 each header saying so at the top:
 
-* `Body` — the sphere controller, ray and line-of-sight tests. The engine uses
+* `Body` - the sphere controller, ray and line-of-sight tests. The engine uses
   `CollisionBSP::TestSphere` with a surface-class mask; none of it is read.
-* `CameraView` — `CameraAim` / `ResolveCameraView`: tracking fallback for
+* `CameraView` - `CameraAim` / `ResolveCameraView`: tracking fallback for
   static cameras, 55° tilt cap, constraint cameras simply following, eye
   stepped through walls.
-* `ButtonTriggers` — real objects, guessed property meanings. Toolkit only.
+* `ButtonTriggers` - real objects, guessed property meanings. Toolkit only.
 
 `FindZoneSpawn` no longer falls back to an arbitrary spawner; that decision is
 the caller's (`FindPlayerSpawn`, now in `ZoneLinks`).
 
-## Kept, flagged — confirmed by the owner rather than by the binary
+## Kept, flagged - confirmed by the owner rather than by the binary
 
 * `LUMBRYRD` under the Konami logo. Not named in SLES or SH.ARC; the owner
   confirmed it from the retail game (2026-10-12). Marked as such in the code.
 
-## Still not the game's, still in the build — known and labelled
+## Still not the game's, still in the build - known and labelled
 
 * `CameraSwitcher`: which side of a PlaneTrigger is which camera, the
   unbounded plane, 0.12 hysteresis (comment says so).
@@ -180,7 +180,7 @@ the caller's (`FindPlayerSpawn`, now in `ZoneLinks`).
   checked against the UI engine (`FUN_001B5410` and neighbours).
 * Tints `0xC8505050` / white are applied as 0..255; the GS treats 0x80 as 1.0,
   so the unselected flag may be too dark and the selected one too dim. Open.
-* The New Game trigger (accept on `newgame`) — the code that really fires
+* The New Game trigger (accept on `newgame`) - the code that really fires
   `FUN_001CF718` is reached from `FUN_001D21E8`, not read.
 * Renderer approximations, all commented: CColorLight falloff, the Wii ice
   look, the 0.02 alpha cut. Fog stays off in `sho-game`.

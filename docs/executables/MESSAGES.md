@@ -1,19 +1,19 @@
 # The message table
 
 Everything in the Climax engine talks through `RWS::CEventHandler`, and the
-wiring is by **name** — `TODO.md` §4b establishes that from Ghost Rider's
+wiring is by **name** - `TODO.md` §4b establishes that from Ghost Rider's
 `RegisterMsg(CEventId&, const char*, const char*)` and
 `LinkMsg(CEventId&, const char*, unsigned short)`.
 
 What was missing was the names themselves. In the stripped Origins binary a
-message is a global with no text in it — `DAT_006B4BF8` — and the code that
+message is a global with no text in it - `DAT_006B4BF8` - and the code that
 sends it says nothing about what it is. There is exactly one place the name
 appears: the interning call that fills the global in, once, at startup.
 
     FUN_001FE780(CEventId *id, const char *name, const char *subname)
 
 `FUN_001FE780` hashes `name`, looks it up in the global id table, and either
-adopts the existing entry or makes a new one — the same de-duplication Ghost
+adopts the existing entry or makes a new one - the same de-duplication Ghost
 Rider's `RegisterMsg` performs. So each `DAT_006Bxxxx` has one registration
 site, and finding it names the global.
 
@@ -38,7 +38,7 @@ cutscenes (`IGCStart`, `IGCSkipRequest`), the save path (`MsgSaveGameData`,
 
 Two groups are worth flagging:
 
-* **`Tutorial*` — eight names (`TutorialBeenHit`, `TutorialComboLevel1`,
+* **`Tutorial*` - eight names (`TutorialBeenHit`, `TutorialComboLevel1`,
   `TutorialPickedUpEssence`, `TutorialPenanceGaugeHalf`,
   `TutorialLowEssenceReached`, `TutorialLinkGaugeFull`, `TutorialHasGrabbed`,
   `TutorialEnemyDazed`) are Ghost Rider's, not Origins'.** Essence, the penance
@@ -46,7 +46,7 @@ Two groups are worth flagging:
   They are registered by `CPlayerBehaviour` anyway, because the class is shared
   between the two games. Do not port them.
 * `race_start_line_trigger`, `boss_trigger`, `enemy_trigger`, `player_trigger`
-  are lower case and unlike everything else — trigger *type* names rather than
+  are lower case and unlike everything else - trigger *type* names rather than
   messages, interned through the same table.
 
 ---
@@ -58,7 +58,7 @@ look alike:
 
 | | |
 |---|---|
-| `FUN_001FE780(id, name, sub)` | give a global its name — the registration above |
+| `FUN_001FE780(id, name, sub)` | give a global its name - the registration above |
 | `FUN_001FF350(handler, id, ?, prio)` | **link**: this handler wants the message. Priority is `0x8000` everywhere in the player |
 | `FUN_001FED20(handler, id)` | **unlink**: walk the id's listener list, drop the entry whose handler matches |
 
@@ -69,7 +69,7 @@ not the attach handler.
 
 ## The player's own table, read out of `FUN_0012C3B0`
 
-**Registered — 22 messages the player publishes:**
+**Registered - 22 messages the player publishes:**
 
     PlayerActivate          PlayerDeactivate        KillPlayerWithExplosion
     PlayerTorchOn           PlayerTorchOff          PlayerTorchCreated
@@ -80,7 +80,7 @@ not the attach handler.
     TutorialPenanceGaugeHalf  TutorialLowEssenceReached
     TutorialLinkGaugeFull   TutorialHasGrabbed      TutorialEnemyDazed
 
-**Linked — 33 messages the player answers to:**
+**Linked - 33 messages the player answers to:**
 
     iMsgRunningTick         iMsgPausedTick          iMsgSetPausedMode
     MsgActivate             MsgDeactivate
@@ -105,7 +105,7 @@ Four things this settles that were previously assumed:
   off that link.
 * **The torch, the radio static and the screen static are three separate
   systems**, each with its own on/off pair, and each both sent *and* listened
-  to by the player — the on/off pair is how anything else in the level drives
+  to by the player - the on/off pair is how anything else in the level drives
   them.
 * **The eight `Tutorial*` are registered but never linked.** Nothing in Origins
   listens to them; they survive only because the class is shared with Ghost

@@ -1,4 +1,4 @@
-# Animation Support — Technical Specification
+# Animation Support - Technical Specification
 
 Scope: skeletal animation for Climax-engine models, plus a playback UI. Covers
 the container side (finding and pairing the data), the format side (skeleton,
@@ -13,7 +13,7 @@ read out of the data are marked **verified**; the rest is marked as such.
 ## 0. Prerequisite: fix container parsing, not the models
 
 The current loader still resolves a few things per-object instead of from the
-container structure. Animation must not be layered on top of that — it needs a
+container structure. Animation must not be layered on top of that - it needs a
 correct object graph or every animated model will inherit the same guesswork.
 
 Two things have to be true before starting:
@@ -22,7 +22,7 @@ Two things have to be true before starting:
    opens with `0x23`/`0x24` and `0x29` headers and the real `Clump` follows.
    The same walk must be used for every section type, with no special cases.
 2. **A model's placement comes from the object graph, not from heuristics.**
-   Property 1 of a `0x0704` object is not always a model transform — on volume
+   Property 1 of a `0x0704` object is not always a model transform - on volume
    classes such as `CPhysicsObject` it is the extent of a collision box
    (measured scales `(1.0, 3.54, 26.1)` and `(8.87, 5.54, 5.66)` in IntroRoad).
    The class name determines how the matrix is used. Encode that as a table of
@@ -52,7 +52,7 @@ Counts across the retail archive: 148 `HANIMANIMATION` references, 63
 ### 1.2 Pairing a clip to a model
 
 A `0x0704` object holds 16-byte GUID properties, one per section it owns. An
-animated actor references its clump *and* its clips from the same object — for
+animated actor references its clump *and* its clips from the same object - for
 example `CPlayerSpawner -> rwID_HANIMANIMATION + rwID_DMORPHANIMATION`, and
 `CIGCCamera -> rwID_CLUMP + rwID_HANIMANIMATION`. **Verified.**
 
@@ -76,15 +76,15 @@ frameCount x {
 }                      56 bytes per frame
 ```
 
-**Verified** — this is what the current loader already reads for `g_Clumps`.
+**Verified** - this is what the current loader already reads for `g_Clumps`.
 
 After the struct there is one `Extension (0x0003)` **per frame**, in order.
 Inside each:
 
 | Chunk | Meaning |
 |-------|---------|
-| `0x011E` | HAnim PLG — bone identity and, on the root, the whole bone table |
-| `0x011F` | User-data PLG — bone name |
+| `0x011E` | HAnim PLG - bone identity and, on the root, the whole bone table |
+| `0x011F` | User-data PLG - bone name |
 
 ### 2.2 HAnim PLG (`0x011E`)
 
@@ -121,7 +121,7 @@ Missing name falls back to `RootBone` for frame 1, otherwise `Bone<index>`.
 
 ### 2.4 Building the rest pose
 
-Frame matrices are **local**. Compose to world by walking parents in order —
+Frame matrices are **local**. Compose to world by walking parents in order -
 frames are stored parent-before-child, so a single forward pass works:
 
 ```
@@ -130,7 +130,7 @@ world[i] = (parent[i] >= 0) ? world[parent[i]] * local[i] : local[i]
 
 Note the reference multiplies `local * parent`, i.e. row-vector convention.
 With glm's column-major types the correct order is `parent * local`. **This is
-the single most likely place to get a silently wrong skeleton** — validate by
+the single most likely place to get a silently wrong skeleton** - validate by
 checking that the rest pose reproduces the unskinned mesh.
 
 ---
@@ -142,7 +142,7 @@ checking that the rest pose reproduces the unskinned mesh.
 Lives in the `Geometry`'s `Extension`, alongside `BinMeshPLG (0x050E)` and
 `NativeDataPLG (0x0510)`.
 
-Two layouts. Which one applies is decided by the geometry's native flag — the
+Two layouts. Which one applies is decided by the geometry's native flag - the
 same flag that already selects between stored indices and PS2 display lists.
 
 **Non-native:**
@@ -158,7 +158,7 @@ f32  inverseBoneMatrix[boneCount][16]
 f32  padding[3]
 ```
 
-**Native (PS2)** — the case that matters here:
+**Native (PS2)** - the case that matters here:
 ```
 rwChunk struct header (12 bytes)
 u32  platform
@@ -173,9 +173,9 @@ i32  padding[7]
 
 **Note the asymmetry: the native layout lists no per-vertex indices or weights
 after the inverse bind matrices.** The obvious assumption is that they ride in
-the VIF packets instead. **They do not** — see §3.2.
+the VIF packets instead. **They do not** - see §3.2.
 
-### 3.2 Where PS2 skin weights are — measured
+### 3.2 Where PS2 skin weights are - measured
 
 Every packet of a character carries exactly the same four streams as static
 geometry:
@@ -264,7 +264,7 @@ prevIndex = currentIndex - (prevFrameByteOffset / 20)
 The first N records, where N is the bone count, are the first keyframe of each
 bone. Every later record inherits the `nodeID` of the record it points back to.
 Deriving N: the reference scans for the first record whose predecessor is not
-itself, which is fragile — prefer taking the bone count from the HAnim PLG and
+itself, which is fragile - prefer taking the bone count from the HAnim PLG and
 asserting the two agree.
 
 Result: per bone, a list of `(time, quat, translation)` sorted by time.
@@ -322,14 +322,14 @@ existing `model` uniform keeps its meaning.
 
 A panel, enabled only when the loaded container has at least one skeleton.
 
-- **Clip list** — name from the section tag, duration, keyframe count.
-- **Transport** — play / pause / stop, loop toggle.
-- **Timeline** — scrubber in seconds with the current frame shown; dragging it
+- **Clip list** - name from the section tag, duration, keyframe count.
+- **Transport** - play / pause / stop, loop toggle.
+- **Timeline** - scrubber in seconds with the current frame shown; dragging it
   evaluates without playing.
-- **Speed** — 0.1x to 4x, default 1x.
-- **Bone overlay** — draw the skeleton as lines, reusing `AppendMarker` and the
+- **Speed** - 0.1x to 4x, default 1x.
+- **Bone overlay** - draw the skeleton as lines, reusing `AppendMarker` and the
   existing solid-colour program. Invaluable for spotting a wrong compose order.
-- **Rest pose** — a button that clears the clip and shows the bind pose.
+- **Rest pose** - a button that clears the clip and shows the bind pose.
 
 Time advances from the frame delta, not from a fixed step, and wraps on
 `duration` when looping.
@@ -344,8 +344,8 @@ Time advances from the frame delta, not from a fixed step, and wraps on
    `Skin PLG (0x0116)`, native layout, as described in §3.1. Step 1 of §8 can be
    skipped.
 2. **Matrix convention.** The reference is row-vector; glm is column-vector.
-   Compose order is wrong in exactly one place and the symptom — a subtly
-   deformed model — looks like bad weights.
+   Compose order is wrong in exactly one place and the symptom - a subtly
+   deformed model - looks like bad weights.
 3. **Quaternion conjugate.** Cheap to test both ways, expensive to debug later.
 4. **Keyframe grouping.** The `prevFrame / 20` chain is easy to get right and
    easy to get silently wrong; assert against the HAnim bone count.
@@ -355,7 +355,7 @@ Time advances from the frame delta, not from a fixed step, and wraps on
 
 ## 8. Order of work
 
-1. ~~Dump VIF stream layouts.~~ Done — weights are in `Skin PLG`, not the packets.
+1. ~~Dump VIF stream layouts.~~ Done - weights are in `Skin PLG`, not the packets.
 2. FrameList + HAnim + names → skeleton, rendered as a bone overlay in the rest
    pose. Verifiable on its own.
 3. Skin PLG → inverse bind matrices, per-vertex indices and weights.
@@ -371,13 +371,13 @@ step whose result cannot be seen.
 
 ## 9. Out of scope
 
-Delta-morph (`rwID_DMORPHANIMATION`, facial) — the reference has `rDeltaMorphPLG`
+Delta-morph (`rwID_DMORPHANIMATION`, facial) - the reference has `rDeltaMorphPLG`
 and chunk `0x0122`, but it targets vertex positions rather than bones and is a
 separate feature. Note it, do not build it here.
 
 ---
 
-## Clip catalogue — `CPlayerBehaviour.Travis`
+## Clip catalogue - `CPlayerBehaviour.Travis`
 
 The container names its animations `Clip_0` upwards and says nothing else about
 them: 147 clips over 7 skeletons, 118 of which fit the full body. There is no
@@ -395,10 +395,10 @@ playback list.
 | 4 | swing from above the head down to about waist |
 | 5 | as 0, faster and wider |
 | 6 | winding up |
-| 7 | hands raised above the shoulder, torso turned — waiting to strike |
+| 7 | hands raised above the shoulder, torso turned - waiting to strike |
 | 8 | strike from over the head down to about waist |
 | 26 | standing, one hand held to the side |
-| **27** | **idle** — gentle up/down sway |
+| **27** | **idle** - gentle up/down sway |
 | **28** | **run** |
 | **29** | **walk** |
 | 30 | fall / death |
@@ -409,9 +409,9 @@ playback list.
 | 35 | standing calmly, breathing |
 | 37 | fighting stance, left hand back, knees bent |
 | 38 | places something on a table with the right hand |
-| 39 | the reverse of 38 — takes it back |
+| 39 | the reverse of 38 - takes it back |
 | 40 | turns around, walking, smoothly |
-| 41 | touches a mirror — the reality transition |
+| 41 | touches a mirror - the reality transition |
 | 42 | withdraws the hand and puts it to his temple |
 | 43 | run, faster still |
 | 44 | as 34 but harder and further back |
@@ -429,7 +429,7 @@ playback list.
 | 63 | another reload |
 | 64 | holding something large two-handed (shotgun) |
 
-Between 8 and 26 are the unarmed set — punches, knife strikes, finishing kicks.
+Between 8 and 26 are the unarmed set - punches, knife strikes, finishing kicks.
 
 `Render/PlayerModel.cpp` resolves 27, 29 and 28 by name at load. Other
 characters number their clips differently, so they are looked up rather than
@@ -439,7 +439,7 @@ clip.
 ### Why the face used to stand still
 
 `frameIndex` is only resolved from the Skin PLG when a geometry touches exactly
-one bone — that is what makes a PS2 character segment rigid. Anything weighted
+one bone - that is what makes a PS2 character segment rigid. Anything weighted
 across several bones came out with `-1`, and `CClumpObject::SetMatrixAndDraw`
 required `frameIndex >= 0` before doing any posing at all, **skinning
 included**. So Travis's face and the parts parented to it loaded, textured
@@ -451,13 +451,13 @@ now "rigidly bound *or* skinned".
 The container ships seven skeletons and the body is only one of them. The face
 is its own scene object with its own hierarchy, which is why placing every
 object at the player's feet left the head hanging in the air at hip height
-while the body walked out from under it — visible with the bone overlay on as a
+while the body walked out from under it - visible with the bone overlay on as a
 long bone line running from the floating head down past the feet.
 
 Attachments are now hung off the body bone nearest to where they rest. That is
 a measurement rather than a guess: in the authored pose the face already sits
 at the head, so the closest bone is the one it belongs to. The transform is the
-same delta the rigid path uses — where the bone is now against where it rested.
+same delta the rigid path uses - where the bone is now against where it rested.
 
 `PC_TG_Idle.Face.dma` (`rwID_DMORPHANIMATION`) is a separate matter: it is the
 facial *expression*, a morph animation over the top. Riding the neck bone makes

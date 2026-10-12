@@ -1,6 +1,6 @@
 # Generated
 
-Machine output. **Do not edit by hand** — the next run overwrites it.
+Machine output. **Do not edit by hand** - the next run overwrites it.
 
 Each file's producer is listed in [../README.md](../README.md). Regenerate
 rather than patch: a hand-edit here is invisible, survives until someone reruns

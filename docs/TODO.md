@@ -18,12 +18,12 @@ of effect sheets and the ice-transition wipes (`FX_EN_Glow01`,
 What is established:
 
 * the sizes fit a 16-bit TLUT of 16 (C4) or 256 (C8) entries between the header
-  and the pixels — `FX_EN_Glow01` is 108 + 512 + 5440 = 6060 and
+  and the pixels - `FX_EN_Glow01` is 108 + 512 + 5440 = 6060 and
   `EN_TL_ICETRANSITION_3` is 108 + 512 + 65536 = 66156, both exactly their
   struct size;
 * of the six offset/format combinations tried, a palette at +0x68 read as
-  RGB565 is much the smoothest (mean neighbour difference 33.9 against 95–158);
-* **it is still wrong** — `EN_TL_ICETRANSITION_3` decodes to rainbow noise, so
+  RGB565 is much the smoothest (mean neighbour difference 33.9 against 95-158);
+* **it is still wrong** - `EN_TL_ICETRANSITION_3` decodes to rainbow noise, so
   either the palette is elsewhere or it is not a plain 16-bit TLUT.
 
 `DecodePaletted` in `src/Rendering/WiiTexture.cpp` is written and ready; only
@@ -40,7 +40,7 @@ matter of decoding the plugin and filling `Vertex::boneIds` / `boneWeights`.
 
 ### 3. Animation
 
-`rwID_HANIMANIMATION` is the most common section in the game — 4146 of them
+`rwID_HANIMANIMATION` is the most common section in the game - 4146 of them
 across `data.arc`, against 1587 clumps. Nothing reads them yet. This is the
 better corpus for the animation work than the PS2 game, and it shares the
 format design; see [ANIMATION_SPEC.md](formats/ANIMATION_SPEC.md).
@@ -51,7 +51,7 @@ geometry.
 
 ### 4. Sound
 
-`rwID_AUDIODATA` — 310 sections, presumed to be the counterpart of the Origins
+`rwID_AUDIODATA` - 310 sections, presumed to be the counterpart of the Origins
 `rwaID_WAVEDICT` sound bank purely from its name and its position in the
 container. Payload not decoded. The 279 named streams in `igc.arc` are also not
 decodable by the current parsers, which expect the PS2 ADS and RWS layouts.
@@ -74,7 +74,7 @@ actual TEV stage setup and which textures it binds.
 
 ### 6. Game objects
 
-The `0x0704` records are counted but not parsed — 19 999 of them across the
+The `0x0704` records are counted but not parsed - 19 999 of them across the
 archive. They are the same format as Origins but big-endian, so the property
 semantics (which index is the placement matrix) need re-checking for the Wii
 build. Without them there are no object markers, no level cameras, and clump
@@ -83,9 +83,9 @@ sections have to be drawn at their own origin.
 ### 7. Unparsed section types
 
 `rwID_SPLINE`, `rwID_FUSESTATE`, `rwpID_BODYDEF`, `rwID_ZONEINFO`,
-`rwID_MTEFFECTDICT` — catalogued, contents unknown.
+`rwID_MTEFFECTDICT` - catalogued, contents unknown.
 
-`rwID_KFONT` is decoded — see [SH_FORMAT.md](formats/SH_FORMAT.md). Four blocks:
+`rwID_KFONT` is decoded - see [SH_FORMAT.md](formats/SH_FORMAT.md). Four blocks:
 controller glyphs, a 16-colour palette, kerning pairs, and the character set
 (137 in `FontEUR`, 1261 in `FontJAP`).
 
@@ -101,14 +101,14 @@ remaining lead is disassembling the resource-request path in `main.dol`.
 
 ## Origins (PS2)
 
-### 1. Characters have no face — cause found, fix landed
+### 1. Characters have no face - cause found, fix landed
 
 The face texture decoded correctly and the mesh was there, but the face never
 appeared. **We were discarding it.**
 
 The material's `0x0A01` extension is three words, and the middle one is the
 blend mode. Every character head and body declares `0x00010003`, and the engine
-masks it to 16 bits exactly as we do — `ClimaxT1PipeSetupWorldMaterialPipes`
+masks it to 16 bits exactly as we do - `ClimaxT1PipeSetupWorldMaterialPipes`
 does `andi $s3, $v0, 0xffff` on the value the moment it reads it. So the mode is
 **3**, and Ghost Rider says what 3 is:
 
@@ -130,7 +130,7 @@ mode 3 into the opaque pass, sets `GL_ONE, GL_ZERO`, skips the alpha test and
 forces the output alpha to 1.
 
 **Still unexplained:** the high word. It is `0x0001` on characters and weapons,
-and `Travis_Transparency` carries `0x00010000` — the same flag with mode 0 — so
+and `Travis_Transparency` carries `0x00010000` - the same flag with mode 0 - so
 it is an independent bit, not part of the mode. What it selects is unknown.
 
 What was ruled out earlier and stays ruled out: the retracted UV-tile-offset
@@ -139,13 +139,13 @@ and MatFX (character materials carry no `0x0120`). Material `0x011F` UserData is
 still unused and still names a second texture (`n1` = `Env02`, an environment
 map) on some materials, so dual-layer characters remain undrawn.
 
-### 2. Animation — working
+### 2. Animation - working
 
 Characters animate. Clips are read, the pose is evaluated, rigid pieces follow
 their frame and weighted pieces go through the shader's skinning branch.
 
 **Finding the clips.** They are `0x1B` chunks sitting directly in the stream,
-not inside a `0x716` shell, and they are not word aligned — the same pair of
+not inside a `0x716` shell, and they are not word aligned - the same pair of
 traps the UV animations sprang, which is why the existing decoder had never once
 run. `CPlayerBehaviour.Travis` yields 147 clips; the archive holds 3029. The
 layout is confirmed by arithmetic over all of them: every clip satisfies
@@ -153,14 +153,14 @@ layout is confirmed by arithmetic over all of them: every clip satisfies
 
 **Track roots are marked by a saved pointer, not by a zero.** Each record holds
 a byte offset back to the previous keyframe of its track, but the first record
-of each track keeps the runtime pointer the file was written with — large
+of each track keeps the runtime pointer the file was written with - large
 negatives stepping by exactly the 20-byte stride. Testing `prevOffset == 0` for
 a root finds nothing at all. The rule that works is "anything that does not
 resolve to an earlier record in this clip". The track count that falls out
 matches the HAnim table: 53 tracks against 54 frames, the odd one being the
 clump root.
 
-**Where the weights are.** Not in the Skin PLG — Ghost Rider settles it, since
+**Where the weights are.** Not in the Skin PLG - Ghost Rider settles it, since
 `_rpSkinGeometryNativeRead` never writes `skin[0x14]` or `skin[0x18]`, the two
 fields `RpSkinGetVertexBoneIndices` and `RpSkinGetVertexBoneWeights` return. They
 ride with the native geometry instead, immediately after the VIF packets: four
@@ -173,13 +173,13 @@ guessing at the bone index three times and getting nowhere:
 * *Weights slipped two places at every packet seam.* There is one record per
   **unique** vertex, but a triangle strip runs on across packet boundaries, so
   every packet after the first restates the two vertices that closed the one
-  before it. A six-packet geometry uploads 220 vertices for 210 records —
+  before it. A six-packet geometry uploads 220 vertices for 210 records -
   exactly +2 per join. Reading the records straight through accumulated that
   slip and tore the model apart. Each packet after the first now starts two
   records back.
 * *The rotations were conjugated.* The reference stores them that way and the
   spec says to reproduce it, then check: if the model inverts, drop it. It
-  inverted — Travis faced backwards — so the components go in as they are.
+  inverted - Travis faced backwards - so the components go in as they are.
 
 Also fixed along the way: a VIF packet whose stream addressed a VU slot above 3
 was discarded **together with its geometry**, and `glm::quat` takes the scalar
@@ -188,7 +188,7 @@ first, where the old code passed `(x, y, z, w)`.
 **Still open:** facial animation (`rwID_DMORPHANIMATION`), and clips are named
 `Clip_N` because the section tag carries the type, not the source filename.
 
-### 3. Fire — done, with two loose ends
+### 3. Fire - done, with two loose ends
 
 Flames showed as flat slabs with hard polygon borders and did not animate. Both
 are fixed; what remains is listed at the end of this entry.
@@ -196,7 +196,7 @@ are fixed; what remains is listed at the end of this entry.
 **The hard border.** The shader dropped the vertex colour entirely on additive
 materials, to stop baked room lighting from driving effect sheets to black. That
 also threw away the vertex *alpha*, which on the flame meshes runs the full
-0..1 across the mesh and is the artist's fade — the thing that keeps a flame
+0..1 across the mesh and is the artist's fade - the thing that keeps a flame
 from ending in a straight polygon edge. The fix takes the alpha and leaves the
 RGB alone: with `SRC_ALPHA/ONE` it scales the additive contribution to nothing
 at the edges without darkening the sheet.
@@ -204,17 +204,17 @@ at the edges without darkening the sheet.
 **The animation** is implemented; the format is below. Everything else in the
 material path was measured and ruled out:
 
-* **Blend mode is correct.** Every fire material declares mode 1 — additive —
+* **Blend mode is correct.** Every fire material declares mode 1 - additive -
   and the runtime receives it (`[scene] blend modes: 0=322 1=150
   (FX_fire_Dahlia)`).
 * **The pass was wrong and is now fixed**, but was not the cause: fire already
   reached the transparent pass through its `FX_` prefix.
 * **The palette decodes correctly.** `FX_fire_Dahlia` is 8-bit; its CLUT is the
   full 1024 bytes so the GS reorder runs, and the sheet is dark red on black at
-  alpha 128 — authored so that additive blending drops the background out. It is
+  alpha 128 - authored so that additive blending drops the background out. It is
   99% fully opaque, which is why no alpha test can shape it.
 * **Addressing is WRAP**, not CLAMP, so a stretched edge texel is not it.
-* **It is not a frame atlas.** Mesh UVs span `u 0..4, v -1..1` — the sheet is
+* **It is not a frame atlas.** Mesh UVs span `u 0..4, v -1..1` - the sheet is
   tiled, not indexed.
 
 The cause is **UV animation, which we do not run**, and the format is now fully
@@ -226,7 +226,7 @@ what we draw.
 plugin (45, 31, 112, 27 and 22 occurrences across the Dahlia sheets) holding a
 slot mask and the name `FX_Generic_Torches_FX_Hub6_Torch`. The one fire texture
 without the plugin, `FX_fire_Dahlia_e`, is also the only one with a real alpha
-cutout — a plain sprite, and it needs no animation.
+cutout - a plain sprite, and it needs no animation.
 
 The material's `0x011F` Climax UserData decodes cleanly and gives **two layers**:
 
@@ -238,7 +238,7 @@ plural. We draw only `n0`.
 
 **Where the animations live.** An earlier search for a `0x2B` chunk found
 nothing because it looked for a RenderWare chunk carrying the version word.
-`0x2B` is not a chunk — it is an **RWS section type**, confirmed by Ghost Rider:
+`0x2B` is not a chunk - it is an **RWS section type**, confirmed by Ghost Rider:
 
     GetTypeID__Q214ResourceLoader24CUVAnimationStreamLoader -> 0x2B
     GetTypeID__Q214ResourceLoader27CHAnimAnimationStreamLoader -> 0x1B
@@ -264,11 +264,11 @@ The second section's first animation is `JDMaterialNode13`, 2 frames, 12.0 s.
 
 The header is **88 bytes**: the 20 above plus a 68-byte `RpUVAnimCustomData`
 (one int, the 32-byte name, then saved runtime pointers). Ghost Rider confirms
-the whole thing is stock RenderWare — it exports `RpUVAnimLinearKeyFrame*`,
+the whole thing is stock RenderWare - it exports `RpUVAnimLinearKeyFrame*`,
 `RpUVAnimParamKeyFrame*`, `_rwStreamReadSingleUVAnim` and
 `RtDictSchemaStreamReadDict`.
 
-**A keyframe is 32 bytes on disk** — an `RpUVAnimLinearKeyFrame`, which is
+**A keyframe is 32 bytes on disk** - an `RpUVAnimLinearKeyFrame`, which is
 `{prevFrame, time, matrix[6]}`. (`ClimaxT1KeyFrameStreamGetSizeCB` returns
 `numFrames * 0x18`; that 24 is the size in memory, where the pointer replaces
 two of the streamed words.) Every animation in the game uses typeID `0x1C1`,
@@ -290,8 +290,8 @@ UserData describes:
 The offsets reach whole texture units at the end of the clip (-28.0 after 28 s),
 so under WRAP addressing the loop closes seamlessly.
 
-One trap worth recording: **the sections are not word aligned** —
-`DH_1_Exterior` has one at offset 1053589 — so a scan with a stride of 4 finds
+One trap worth recording: **the sections are not word aligned** -
+`DH_1_Exterior` has one at offset 1053589 - so a scan with a stride of 4 finds
 nothing at all.
 
 **Still open on fire:**
@@ -299,12 +299,12 @@ nothing at all.
 * Only the first layer is drawn. The material's `n1` sheet needs a second draw
   with its own UV transform before the flame looks like the game's.
 * Names in the file are truncated to 31 characters, so clips whose names share a
-  prefix collide in the lookup table — 74 animations collapse to 21 entries in
+  prefix collide in the lookup table - 74 animations collapse to 21 entries in
   `DH_1_Exterior`. The material's reference is truncated identically, so the
   match still succeeds, but a fire can pick up a same-prefixed neighbour's clip.
   Whether the engine disambiguates these is not known.
 
-### 4. Camera FOV — found and applied
+### 4. Camera FOV - found and applied
 
 Level cameras had placement but no field of view; the viewport always used a
 fixed guess.
@@ -365,7 +365,7 @@ there; none of it is read yet. Note its component chain starts with
 `CSystemCommands`, not with the camera class, which is why a component-blind
 reader picks up the wrong properties for it.
 
-### 4a. Camera aim — it was in the placement matrix all along
+### 4a. Camera aim - it was in the placement matrix all along
 
 Fixed cameras were aimed at the player rather than where the designer pointed
 them, on the conclusion that the placement matrix carried no orientation. That
@@ -396,27 +396,27 @@ measurement:
     CStaticCamera      473   authored pitch mean -10.5 deg, needed -15.8  ->  error -3.6
     CConstraintCamera  417   authored pitch ZERO on 400 of 417,  needed  -11.1
 
-So `CConstraintCamera` has no authored pitch at all — its vertical aim is
+So `CConstraintCamera` has no authored pitch at all - its vertical aim is
 computed at run time, which is exactly what the class name says and why it is
 the one that visibly follows Travis. Only `CStaticCamera` is genuinely aimed.
 
 And even `CStaticCamera` is not always: its authored direction holds a walkable
 marker in frame on 350 of 471 instances. The other 121 live in the **29 of 201
-multi-camera levels where every camera shares one rotation** — a default the
+multi-camera levels where every camera shares one rotation** - a default the
 designer never touched. `HO_1_Hallway1` is one of them: all four cameras read
 yaw 180.0, pitch 0.0, while the aim needed to see the spawn points ranges from
 102 to 163 degrees of yaw and 5 to 25 down.
 
 `Game::CameraAim` therefore honours the authored direction only while it still
 holds the subject, and tracks otherwise. That is a fallback, not a reading of
-the engine — what the real code does with a defaulted matrix is unknown.
+the engine - what the real code does with a defaulted matrix is unknown.
 
-`CBaseCamera` property 1 — the `"...S"` name — is not the aim either. It is the
+`CBaseCamera` property 1 - the `"...S"` name - is not the aim either. It is the
 event name the camera answers to: `HO_1_Hallway1`'s `PlaneTrigger` names
 `camHallwayS` and `camEntranceS`, while `CMessageRelay` addresses the plain
 `camHallway`. Both names have to resolve or half the level logic goes dark.
 
-### 4b. The message system — how level logic is actually wired
+### 4b. The message system - how level logic is actually wired
 
 Everything in RenderWare Studio talks through `RWS::CEventHandler`. The core
 API, from Ghost Rider:
@@ -427,7 +427,7 @@ API, from Ghost Rider:
     QueueMsg(const CMsg&, void*) / FlushQueuedMessages()
     RWS::_SendMsg(CMsg&)                               global dispatch
 
-Note both `RegisterMsg` and `LinkMsg` take **`const char*`** — the wiring is by
+Note both `RegisterMsg` and `LinkMsg` take **`const char*`** - the wiring is by
 **name**, not by pointer or GUID. That was worth checking rather than assuming:
 across `DH_1_Hallway`, 0 of 103 GUID references in `0x0704` objects point at
 another game object, so objects genuinely do not reference each other that way.
@@ -440,7 +440,7 @@ The names are plain string properties on the objects we already parse:
     CZone           prop 0 = "DH_1_Exterior"   prop 1 = "DH_1_Hallway"
 
 So a `PlaneTrigger` is a plane that, when crossed, switches from one named
-camera to another — one property per crossing direction. That is the mechanism
+camera to another - one property per crossing direction. That is the mechanism
 behind Silent Hill's hard camera cuts on stairs and in corridors.
 `CStaticCamera` publishes the name it is found by, and `CZone` names the zones
 it borders.
@@ -459,7 +459,7 @@ properties above, not as a separate chunk.
 switch cameras when the player crosses a plane -- the first piece of real game
 logic, and it needs no format we do not already read.
 
-### 4c. Collision — solved
+### 4c. Collision - solved
 
 The collision overlay draws a fan of long spikes converging on a few points.
 Two real index bugs were found and fixed on the way (indices were not rebased
@@ -526,8 +526,8 @@ integer the port has no equivalent of, and `CollisionBSP::CastRay` is a
 separate entry point. So a query names which classes it cares about: walking,
 the camera and line of sight do not all hit the same surfaces.
 
-`CollisionMesh` keeps only `verts` and `indices` — the class word is read and
-dropped — so everything is solid to everything. That is the shape of an
+`CollisionMesh` keeps only `verts` and `indices` - the class word is read and
+dropped - so everything is solid to everything. That is the shape of an
 invisible wall: a surface meant for the camera or for sight blocking stops the
 player instead. Reading `TestSphere` in Ghost Rider settles which nibble is
 which; nothing else does.
@@ -545,7 +545,7 @@ Two genuine index bugs were also fixed on the way and remain worth keeping:
 indices were not rebased between blocks, and a vertex failing the finite check
 was skipped rather than occupying its slot, shifting every later index.
 
-### 4d. Footsteps — the surface table is in the data, all of it
+### 4d. Footsteps - the surface table is in the data, all of it
 
 `GlobalStream` holds exactly one `MaterialMap`, and its properties are the
 seventeen footstep surfaces the game has, in order:
@@ -556,7 +556,7 @@ seventeen footstep surfaces the game has, in order:
    15 water     16 wood
 
 What indexes it is the material's own `0x011F` UserData, under the key
-`surfaceType` — present in 204 of the 269 containers, 617 values in all. The
+`surfaceType` - present in 204 of the 269 containers, 617 values in all. The
 values are **doubled indices**: every one is even, none exceeds 32, and 0..32
 step 2 covers the seventeen entries exactly with no gaps.
 
@@ -573,11 +573,11 @@ entry; they read as authoring slips rather than a different encoding.
 So the sound a footstep makes is a property of the material the foot is over,
 not of the collision face, and the whole mapping is recoverable without the
 executable. (The hand-written three-surface table that `SHO-port`'s
-`AudioEngine` carried is archived, unbuilt — `archive/gemini-unverified/`.)
+`AudioEngine` carried is archived, unbuilt - `archive/gemini-unverified/`.)
 
 Still open: which cue name resolves to which sample in the level's
 `rwaID_WAVEDICT` (IntroRoad has 21), and how the material under the player is
-found at run time — the collision face indexes a plane, not a material.
+found at run time - the collision face indexes a plane, not a material.
 
 ### 5. Rooms with no lighting
 
@@ -588,7 +588,7 @@ section whose colours are genuinely zero.
 ### 6. Textures missing versus materials with no texture
 
 A mesh whose `texName` resolves but whose texture is absent renders black, and
-so does a material that legitimately has no texture — the big black wall panel
+so does a material that legitimately has no texture - the big black wall panel
 in `HO_1_Lobby`. These two cases have to be told apart before either can be
 diagnosed.
 
@@ -600,7 +600,7 @@ diagnosed.
 
 **The current `climax-play` boot sequence is wrong and should not be trusted.**
 It was written by reading the 40 UI XML files and inventing an order around
-them — `Logo → AspectSelect → LanguageSelect → MainMenu` — and the flag row's
+them - `Logo → AspectSelect → LanguageSelect → MainMenu` - and the flag row's
 layout, the stage order and the timings are all guesses. The XML describes each
 *screen*; it does not describe the *sequence*, which lives in the executable.
 
@@ -620,28 +620,28 @@ Confirmed the sequence really is in `SLES_551.47`, as a data table in `.data`:
 Both handlers that walk these tables are now decompiled, and the front end has
 been rewritten to match. What they say:
 
-* **`FUN_00151918` — the flag row.** `do { ... } while (iVar4 < 5)`: five
+* **`FUN_00151918` - the flag row.** `do { ... } while (iVar4 < 5)`: five
   entries, walked from `0x00338A5C` with a stride of 12, order GB FR IT DE ES.
-  Layout is literal in the code — 80x60 quads, the first at (32,192), each
+  Layout is literal in the code - 80x60 quads, the first at (32,192), each
   92 px further along in x with y unchanged, so it is one horizontal row.
   Selected is drawn `0xFFFFFFFF` and the rest `0xC8505050`; the original tints
   the flag itself rather than framing it. The header string above the row comes
   from `FUN_001f3640()`, i.e. the current language's own name.
-* **`FUN_00151fb8` — the aspect list.** Two entries stepping down in y, and they
+* **`FUN_00151fb8` - the aspect list.** Two entries stepping down in y, and they
   are *text*: `display_4x3` and `display_ws` go through `FUN_001f36e8`, the
   string-table lookup, not a texture lookup. Same two colours.
 * **`FUN_00152250` ("Logo") and `FUN_001521e8` are 8-byte stubs.** Those stages
-  draw nothing per frame — the movie and the copyright plate are put up
-  elsewhere — which is why searching for logo drawing code found nothing.
+  draw nothing per frame - the movie and the copyright plate are put up
+  elsewhere - which is why searching for logo drawing code found nothing.
 
 Two claims in the paragraph above were wrong and §6d corrects them: the order
 **is** in the table (the index is simply incremented, one record at a time), and
 `FUN_00152250`/`FUN_001521e8` being stubs does not mean those stages draw
-nothing — it means they draw a *movie*, which the player module puts on screen
+nothing - it means they draw a *movie*, which the player module puts on screen
 without going through the front end's draw call. The 512x448 authored space that
 `uiQuad` maps onto is still inferred from the row spanning x=32..480, not read.
 
-### 7a. Video — playing, audio still open
+### 7a. Video - playing, audio still open
 
 `MOVIES/*.PSS` (58 files, 1.7 GB) is converted by `tools/convert_movies.py` to
 MP4 at the aspect the PS2 actually displays them at (see
@@ -659,7 +659,7 @@ Open:
   wired up.
 * Only `LOGO` and `MENU` are hooked into the boot sequence. The other 56 clips
   (cutscenes, endings, credits, statistics) decode with the same class but have
-  no caller yet — they belong wherever the game-over and ending states end up.
+  no caller yet - they belong wherever the game-over and ending states end up.
 * The language-select screen's flag positions are not in any of the 40 XML
   files (that screen is built in code), so the layout `climax-play` uses for it
   is a guess, unlike every other screen it draws.
@@ -668,7 +668,7 @@ Open:
 
 The archive panel is a flat list, which is fine for finding a level by name and
 useless for understanding how a container is put together. Requested: a tree
-view — archive → entry → sections → chunks → the objects and geometry inside —
+view - archive → entry → sections → chunks → the objects and geometry inside -
 with a switch back to the flat list, and filters and search over both.
 
 The data for it already exists: `g_ShoSections` carries every section with its
@@ -693,10 +693,10 @@ chunk list. Nothing needs decoding; this is presentation.
 
 ## Both games
 
-Executable analysis has started — see [EXECUTABLES.md](executables/EXECUTABLES.md).
+Executable analysis has started - see [EXECUTABLES.md](executables/EXECUTABLES.md).
 
 Done: both binaries are mapped, the PS2 one keeps all its section names and
-58 KB of VU1 microcode, and its **complete class registry is recovered** — 126
+58 KB of VU1 microcode, and its **complete class registry is recovered** - 126
 classes with factory address and object size, in
 [`sho_class_registry.json`](generated/sho_class_registry.json).
 
@@ -710,7 +710,7 @@ Next, in order of value:
 3. The same registry walk on `main.dol`; the technique is identical but the
    scan needs indexing to cover its 4 MB text segment.
 
-### 4c. Camera cuts reverse the player's direction — and that is correct
+### 4c. Camera cuts reverse the player's direction - and that is correct
 
 Walking through HO_1_Hallway2 with a key held down, a camera cut turns Travis
 around: input is taken relative to the camera, so the same key means the
@@ -720,7 +720,7 @@ behaviour and one of the things people remember about it, so it is kept.
 What the game adds on top, and this does not yet, is a latch: the character
 holds his existing world direction until the stick is re-centred, so a cut
 mid-stride does not immediately spin him. Worth adding as an option rather than
-a replacement — the reversal itself is not a bug to fix.
+a replacement - the reversal itself is not a bug to fix.
 
 ### 6c. The real front-end state machine, read from the executable
 
@@ -731,7 +731,7 @@ does not contain the front end at all.
 
 **The critical fix was the processor.** Ghidra's `MIPS:LE:32:default` cannot
 decode Emotion Engine MMI instructions, so front-end functions decompiled to
-three lines of `halt_baddata()` — which is why every earlier attempt at the
+three lines of `halt_baddata()` - which is why every earlier attempt at the
 boot order was guesswork. Re-importing with `r5900:LE:32:default` (the
 `ghidra-emotionengine-reloaded` extension, already installed) took the failure
 count from many to **zero**, and the function count from 5807 to 7698.
@@ -795,7 +795,7 @@ dumped from `.data`:
 
 So the retail order is **language → memory card → aspect → logo movie → menu**.
 The logo is fourth, not first. There is no copyright/loading plate in this
-object at all. The splash **does** exist — it is just not a state:
+object at all. The splash **does** exist - it is just not a state:
 `FUN_001D78E0`, the engine's own init, resolves `"splash_p4.jpg"` (a literal,
 no region or language variant), makes a texture, blits it at (0,0) and presents
 it *twice*, once into each framebuffer, then frees it and never draws it again.
@@ -809,8 +809,8 @@ invented and is gone. The game's loading indicator is a separate texture,
 animated by `FUN_001F0678` (rotating quads, scaled 0.7500188 in widescreen);
 its placement has not been read yet.
 
-**`FUN_00152278`** allocates the object as 0x14 bytes — `{refcount, vtable,
-stateIndex, cursor, done}` — zeroes the last three and enters record 0. The
+**`FUN_00152278`** allocates the object as 0x14 bytes - `{refcount, vtable,
+stateIndex, cursor, done}` - zeroes the last three and enters record 0. The
 index is simply `+1` per completed record, which is why the order is the table's
 own. §6b's "the order is not in the table" was wrong.
 
@@ -822,7 +822,7 @@ own. §6b's "the order is not in the table" was wrong.
    queueing it;
 3. run the record's update; if it returns 0, stop here;
 4. otherwise run its exit, `index + 1`, run the next record's entry. The entry's
-   return value is "did this state start" — false marks it finished at once,
+   return value is "did this state start" - false marks it finished at once,
    which is the only mechanism by which a state is skipped.
 
 **The button mask is not raw pad bits.** `FUN_00193F90` remaps them:
@@ -842,25 +842,25 @@ vertical), and why `0x120` in `FUN_00152218` is cross-or-start.
   as the background and *returns whether it started*; it returns 0 outright when
   the current language is 5 (Japanese), which is how a JAP build never asks.
   Left/right only, wrapped mod 5. `FUN_001F3600` is called **on the move, not on
-  accept** — the heading is descriptor word 0 of the language under the cursor,
+  accept** - the heading is descriptor word 0 of the language under the cursor,
   the language's own name in its own script, so it changes as the cursor
   travels. Exit builds the string table from `Strings.<code>`.
 * **Memory card (`FUN_00152198/21C8`).** `FUN_001D3AD0` queues
   `MEMCARD_MSG_CHECK` and reads `PlayerData`; the record ends when the card task
-  stops reporting busy. Draws nothing — the `"Back"` movie is still up.
+  stops reporting busy. Draws nothing - the `"Back"` movie is still up.
 * **Aspect (`FUN_00151F48/F58/2120`).** Entry resets the cursor and **always
   returns 1**: the question is asked on every boot, there is no remembered path.
   Up/down, mod 2. Exit writes the mode word to the display-mode global
   (`base+0x198`), *then* stops the `"Back"` movie, then loads `LocaleUI`.
 * **Movie (`FUN_001521F8/2218/2258`).** `FUN_00180DB8(arg, 0)` resolves
-  `<movies>/<first letter>/<name><N|W>.pss` — the N/W suffix reads the same
-  display-mode global the aspect record just wrote — and the record ends on the
+  `<movies>/<first letter>/<name><N|W>.pss` - the N/W suffix reads the same
+  display-mode global the aspect record just wrote - and the record ends on the
   player's `"Ended"` message (0x006BFF68, `FUN_00151810`). Cross or start skip
   it only when the record's third word is nonzero, and the Logo record's is 0.
 * **Leave.** `FUN_001FF3F8`; the main menu is the next game state.
 
 **Language descriptors, 0x0033EFB0, 7 × 20 bytes:** `{own name (UTF-16), 3-letter
-code, font name, font id, "controller not detected" text}` — English, Français,
+code, font name, font id, "controller not detected" text}` - English, Français,
 Italiano, Deutsch, Español, Japanese, Korean. `Strings.%s` takes the code;
 `FontEUR` for the first five, `FontJAP` for the last two.
 

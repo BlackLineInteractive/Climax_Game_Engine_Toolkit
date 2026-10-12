@@ -27,7 +27,7 @@ of its own plus the components it inherits. Dumped whole into
     PsychoNurse      PsychoNurseSan    SadDaddyTongue     StraightJacket
     StraightJacketAlt                  StraightJacketBoss
 
-`CCharacterBehaviour` property 8 is health — it is the only property that
+`CCharacterBehaviour` property 8 is health - it is the only property that
 orders the way difficulty does, and the bosses sit where you would expect:
 
     PsychoNurse, PsychoNurseSan                     100
@@ -41,8 +41,8 @@ orders the way difficulty does, and the bosses sit where you would expect:
 Several `CEnemyBehaviour` properties are plainly angles and distances, and they
 separate into two groups that make the design legible even before the code is
 read. Ordinary monsters carry a cone (index 14 = 45°, 22 = 90°, 18 = 120°) and
-short ranges (15 = 3.0, 17 = 7.5, 20 = 5.0). The scripted ones —
-`CalibanBoss`, `Momma`, `SadDaddyTongue` — carry 180° and 1000.0 in the same
+short ranges (15 = 3.0, 17 = 7.5, 20 = 5.0). The scripted ones -
+`CalibanBoss`, `Momma`, `SadDaddyTongue` - carry 180° and 1000.0 in the same
 slots, which is a designer switching the sensory model off rather than widening
 it. `Butcher` is between the two: 80.0 where others have 3.0 or 15.0.
 
@@ -59,13 +59,13 @@ defaults nobody touched.
 
 Strings in the row name the assets: property 68 is the grab animation
 (`Grabbed_2Back`), 79 is a spotted cue (`2back_spotted`), and
-`CCharacterBehaviour` 9–12 are impact and spawn sounds (`2back_impact`,
+`CCharacterBehaviour` 9-12 are impact and spawn sounds (`2back_impact`,
 `rdspawn`).
 
 ## Not recovered
 
 **Which index is which.** The table above says "plainly an angle" because 45,
-90, 120 and 180 in adjacent slots are not accidental — but nothing here has
+90, 120 and 180 in adjacent slots are not accidental - but nothing here has
 been matched against the code that reads it. Ghost Rider dispatches
 `CEnemyBehaviour`'s attributes through a 51-entry jump table at `0x001294A0`
 with a field offset per index; the equivalent in Origins has not been located
@@ -75,7 +75,7 @@ is what turns the numbers above into named fields, and it is the single highest
 
 **The AI itself.** `FUN_00121AF0` (425 lines), `FUN_001285A8` (394) and
 `FUN_001291D0` (169) have not been read. The state machine in
-`src/Actor/EnemyBehaviour.cpp` — patrol, investigate, alert, chase, attack — is
+`src/Actor/EnemyBehaviour.cpp` - patrol, investigate, alert, chase, attack - is
 a guess at what a survival-horror monster does.
 
 **Sight and hearing.** The port hard-codes a 50° cone, 4.5 m unlit, 14 m with
@@ -84,8 +84,8 @@ numbers is from the game. The real ones are in the fourteen rows above,
 unlabelled, and in whatever `FUN_00121AF0` does with them.
 
 **Knockdown and the finishing stomp.** Four to six seconds down, 25% health on
-standing up, 1.2 m to stomp: invented. The mechanic is real — it is in the
-game — but every constant attached to it here was made up.
+standing up, 1.2 m to stomp: invented. The mechanic is real - it is in the
+game - but every constant attached to it here was made up.
 
 **How a monster reaches the player.** `Characters::MsgPingAwareness` and
 `MsgSetAllEnemiesAware` are real messages (see

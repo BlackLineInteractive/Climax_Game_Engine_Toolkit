@@ -8,8 +8,8 @@ Symbol survey of the main executables (ELF / `SLES`) for three Climax titles:
 
 ## Results of symbol extraction
 
-- **SHO**: `stripped` — symbols and debug information removed at release.
-- **SHSM**: `stripped` — likewise.
+- **SHO**: `stripped` - symbols and debug information removed at release.
+- **SHSM**: `stripped` - likewise.
 - **Ghost Rider**: **not stripped**. It carries a full symbol table, roughly
   **14 000 unique C++ symbols**, including namespaces, classes and methods.
 
@@ -28,25 +28,25 @@ things this toolkit re-implements.
 
 `.ARC` handling lives on the EE (main processor), not in the IOP module:
 
-- `RWS::FileSystem` — the file system root
-- `RWS::FileSystem::CArchiveManager` — manages mounted ARC archives
-- `RWS::FileSystem::CArchive` — one mounted `.ARC`
+- `RWS::FileSystem` - the file system root
+- `RWS::FileSystem::CArchiveManager` - manages mounted ARC archives
+- `RWS::FileSystem::CArchive` - one mounted `.ARC`
 
 `CArchiveManager` methods:
 
-- `FindAchive(char const*)` — spelled that way in the binary
+- `FindAchive(char const*)` - spelled that way in the binary
 - `Mount(char const*)`
 - `FindEntry(char const*, RWS::FileSystem::CArchive**)`
 
 There is also a `MemoryFileSystem` (likely for streaming into memory) and an
 `AssetTracker`. This confirms that `RTFSSIOP.IRX` only supplies raw bytes to
-`RWS::FileSystem::CArchiveManager` — see [IRX_RTFSSIOP.md](IRX_RTFSSIOP.md).
+`RWS::FileSystem::CArchiveManager` - see [IRX_RTFSSIOP.md](IRX_RTFSSIOP.md).
 
 ### 2. Audio and RWA
 
 Both an `Audio::` and an `RWS::` namespace are present:
 
-- `Audio::CAudioRelay` — audio queueing
+- `Audio::CAudioRelay` - audio queueing
 - `RWS::RwsAudio::AddDictionary(RwaWaveDict*)`
 - `RWS::RwsAudio::AllocateVirtualVoice()`
 - `RWS::RwsAudio::FadeEnvironment(int, unsigned int)`
