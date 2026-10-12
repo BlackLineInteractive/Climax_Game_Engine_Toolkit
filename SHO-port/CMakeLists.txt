@@ -67,8 +67,10 @@ target_include_directories(sho-port PUBLIC
 
 target_link_libraries(sho-port PUBLIC climax-game glm::glm)
 
-add_executable(test_sho_port tests/test_sho_port.cpp)
-target_link_libraries(test_sho_port PRIVATE sho-port)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_sho_port.cpp")
+    add_executable(test_sho_port tests/test_sho_port.cpp)
+    target_link_libraries(test_sho_port PRIVATE sho-port)
+endif()
 
 # ── sho-game: the whole game, in one executable ──────────────────────────────
 #
