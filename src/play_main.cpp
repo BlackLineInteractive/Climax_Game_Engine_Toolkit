@@ -642,26 +642,6 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
                      "[play] splash 'splash_p4' %dx%d (held while loading)\n",
                      jw, jh);
 
-        // Hold the splash screen for 1 seconds so the user can see it
-        uint64_t splashStart = SDL_GetPerformanceCounter();
-        while (true) {
-          uint64_t now = SDL_GetPerformanceCounter();
-          if ((now - splashStart) / (double)SDL_GetPerformanceFrequency() >
-              1.0) {
-            break;
-          }
-          SDL_Event e;
-          while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT)
-              exit(0);
-          }
-          glViewport(0, 0, w, h);
-          glClearColor(0, 0, 0, 1);
-          glClear(GL_COLOR_BUFFER_BIT);
-          painter.Begin(w, h);
-          painter.Quad(dx, dy, dw, dh, id, 1, 1, 1, 1);
-          SDL_GL_SwapWindow(win);
-        }
       }
     }
   }
@@ -872,21 +852,10 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
     if (measureOnly)
       return drawInner(0, 0, 0, 0, 0, 0);
 
-    // Drop shadow (drawn first so it is behind)
-    drawInner(1.5f * scale, 1.5f * scale, 0, 0, 0, a);
-
-    // Bold effect (draw slightly shifted, e.g. 0.5px right)
-    drawInner(0.5f * scale, 0.0f, r, g, b, a);
-
-    // Main text
     return drawInner(0, 0, r, g, b, a);
   };
   auto measure = [&](const std::string &t, float sc) {
     return drawText(0, 0, sc, t, 0, 0, 0, 0, true);
-  };
-  auto centre = [&](float cx, float y, float sc, const std::string &t, float r,
-                    float g, float b, float a) {
-    drawText(cx - measure(t, sc) * 0.5f, y, sc, t, r, g, b, a, false);
   };
 
   // ── video ───────────────────────────────────────────────────────────────
@@ -914,10 +883,11 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
   // decoder, so prefer the converted WAVs under SHO-port/MUSIC and only fall
   // back to the disc if they are not there.
   //
-  // LUMBRYRD is the logo's audio: it runs with LOGO*, and the menu's own
-  // ambient starts the moment the logo ends -- there is no gap and no fade
-  // built into the audio itself.
-  AudioClip menuClip, logoClip, clickClip, selectClip;
+  // LUMBRYRD is the logo's audio. Nothing in SLES_551.47 or SH.ARC names
+  // it -- the pairing comes from the retail game as played (confirmed by the
+  // project owner, 2026-10-12: it is what plays under the Konami logo).
+  // MENU is named by mainmenu.xml itself: bgaudio="menu.rws".
+  AudioClip menuClip, logoClip;
   bool haveAudioSupport =
       ClimaxEngine::Audio::CAudioRelay::GetInstance().Init();
   if (!checkOnly) {
@@ -943,9 +913,6 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
     loadTrack("L", "LUMBRYRD", logoClip);
     loadTrack("M", "MENU", menuClip);
 
-    // UI sounds (placeholders, will load if these WAVs exist in the directory)
-    loadTrack("S", "CursorMove", clickClip);
-    loadTrack("S", "Select", selectClip);
   }
   bool wide = true; // updated per frame from the window, seeded widescreen
 
@@ -1001,7 +968,8 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
   // Every movie's audio is a separate track under SHO-port/MUSIC, named after
   // the clip's base -- MENU -> MUSIC/M/MENU.WAV, SCN01 -> MUSIC/S/SCN01.WAV --
   // because on the disc it is a separate MUSIC/*.RWS, not a stream inside the
-  // .PSS. LOGO is the one clip whose track is not named after it: LUMBRYRD.
+  // .PSS. LOGO is the one clip whose track is not named after it: LUMBRYRD
+  // (see above for where that pairing comes from).
   auto movieTrack = [&](const std::string &base) -> std::string {
     const std::string stem = (base == "LOGO") ? std::string("LUMBRYRD") : base;
     return musicDir + "/" + stem.substr(0, 1) + "/" + stem + ".WAV";
@@ -1029,7 +997,7 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
         if (::Audio::LoadFile(tp, track) && track.Valid()) {
           auto &relay = ClimaxEngine::Audio::CAudioRelay::GetInstance();
           if (loop)
-            relay.PlayMusic(track, 0.65f);
+            relay.PlayMusic(track, 1.0f);
           else
             relay.PlayAudioClip(track);
           std::fprintf(stderr, "[play] track %s (%.1f s)\n", tp.c_str(),
@@ -1130,44 +1098,75 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
 
   bool inMenu = false; // set once the terminal record has been reached
   int shotFrames = 0;
-  bool playingIntro = false;   // SCN01 is up, covering the menu
-  // The menu does not cut to the intro, it goes through black: half a second
-  // down with the music, then the clip starts and half a second back up.
-  float introFade = 0.0f;      // 1 = fully black
-  bool introFadingOut = false; // going down; false while coming back up
-  bool introPending = false;   // accepted, waiting for black
+
+  // The screen fader the scene queue drives (DAT_006B4620). `level` is how
+  // black the screen is; `rate` is what FUN_001EFC60 / FUN_001EFD88 store at
+  // fader+0x10 and what FUN_001EF8F8 tests -- non-zero means moving.
+  //
+  // Which direction is "to black" is inferred, not read: FUN_00179FB8 opens
+  // with direction 1 before tearing the old scene down and closes with
+  // direction 0 after the new one is built, so 1 is down to black and 0 is
+  // back up. The fader's own draw routine has not been read.
+  struct Fader {
+    float level = 0.0f;
+    float rate = 0.0f;     // per second, towards `target`
+    float target = 0.0f;
+    bool Busy() const { return rate != 0.0f; }
+    void Start(float toLevel, float seconds) {
+      target = toLevel;
+      rate = seconds > 0.0f ? 1.0f / seconds : 1e9f;
+    }
+    void Stop() { rate = 0.0f; }
+    void Update(float dt) {
+      if (rate == 0.0f) return;
+      const float step = rate * dt;
+      if (std::fabs(target - level) <= step) { level = target; rate = 0.0f; }
+      else level += target > level ? step : -step;
+    }
+  } fader;
 
   // ── the scene queue ─────────────────────────────────────────────────────
   //
-  // FUN_001CF718 ends with FUN_00179FB8(world, "IntroRoad", ...), so when the
-  // intro clip is over the game is already asking for its first scene. The
-  // queue below is the transcription of that; this host is what it drives.
+  // New Game is FUN_001CF718, which ends with
+  // FUN_00179FB8(world, "IntroRoad", 0, 0, 0x339F50, 0x339F68, 0). The queue
+  // below is the transcription of that; this host is what it drives.
   Game::SceneQueue sceneQueue;
   struct PlaySceneHost : Game::SceneQueueHost {
       RWS::FileSystem::CArchive *arc = nullptr;
-      float *fade = nullptr;          // the same black the intro uses
+      Fader *fader = nullptr;
       std::vector<uint8_t> raw;                    // the scene container
       std::vector<NamedBlob> txds;   // its texture dictionaries
       std::string scene;
-      float t = 0.0f;
 
-      bool FadeOut(float secs) override {
-          t += 1.0f / 60.0f;
-          *fade = std::min(1.0f, t / std::max(secs, 0.01f));
-          if (*fade < 1.0f) return false;
-          t = 0.0f;
+      bool FaderBusy() override { return fader && fader->Busy(); }
+      // 0x0C FUN_0017A6B8, by mode.
+      bool Transition(int mode, float seconds) override {
+          if (!fader) return true;
+          if (mode == 0) fader->Start(1.0f, seconds);
+          else if (mode == 1) fader->Start(0.0f, seconds);
+          else {
+              // 2 and 4: FUN_001EFC18 stops it where it is. 3 calls
+              // FUN_001EFC60 with direction 2, which is not read yet.
+              if (mode == 3)
+                  std::fprintf(stderr, "[scene] transition mode 3 not recovered
+");
+              fader->Stop();
+          }
           return true;
       }
-      bool FadeIn(float secs) override {
-          t += 1.0f / 60.0f;
-          *fade = 1.0f - std::min(1.0f, t / std::max(secs, 0.01f));
-          if (*fade > 0.0f) return false;
-          t = 0.0f;
+      // 0x0D FUN_0017A7A8. With world+0x34 clear -- New Game reads it out of
+      // the descriptor's fifth word, which is 0 -- it does not wait: it turns
+      // the fader round and returns 1, so the picture comes up while the next
+      // node already hands control over.
+      bool TransitionWait(int mode, float seconds) override {
+          if (fader && (mode == 0 || mode == 1))
+              fader->Start(0.0f, seconds);
+          else if (fader)
+              fader->Stop();
           return true;
       }
       bool ClearWorld() override { raw.clear(); return true; }
       bool ReleaseResources() override { return true; }
-      bool FinishTeardown() override { return true; }
       bool LoadTextures(const std::string &name, const std::string &from) override {
           scene = name;
           // FUN_0017B398: the room's own dictionary, and -- when there is a
@@ -1228,7 +1227,7 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
           return true;
       }
       bool FreeTemporaries() override { return true; }
-      bool ResetSystems() override { return true; }
+      bool ResetSystems(const std::string &) override { return true; }
       bool StartLevelAudio() override { return true; }
 
       // Where the front end ends. Command 0x0A is FUN_0017B780, and it is the
@@ -1248,15 +1247,10 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
       }
   } sceneHost;
   sceneHost.arc = &arc;
-  sceneHost.fade = &introFade;
+  sceneHost.fader = &fader;
   bool handedOver = false;
   sceneHost.handedOver = &handedOver;
   bool sceneStarted = false;
-  // Screen-to-screen inside the menu goes through black too, the same way the
-  // menu-to-intro handover does -- just faster, because it is a step sideways
-  // rather than a handover to another part of the game.
-  std::string lastScreenId;
-  float screenFade = 0.0f;
   // A name the XML does not have (say "frontend") leaves the boot sequence
   // running, so the language and aspect screens can be shot too.
   if (!shotPath.empty() && front.Menu().Open(shotScreen)) {
@@ -1283,9 +1277,7 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
       at = comma + 1;
     }
   }
-  float menuFadeTimer = 0.0f;
   int lastState = -1;
-  float bootFadeTimer = 0.0f;
 
   // ── loop ────────────────────────────────────────────────────────────────
   bool run = true;
@@ -1377,7 +1369,6 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
       front.Update(buttons);
       if (front.StateIndex() != lastState) {
         lastState = front.StateIndex();
-        bootFadeTimer = 1.0f;
         std::fprintf(stderr, "[play] state %d %s\n", lastState,
                      Game::BootKindName(front.Kind()));
       }
@@ -1385,11 +1376,10 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
         // The terminal record: the front end object is gone and the
         // main menu is the next game state.
         inMenu = true;
-        menuFadeTimer = 1.0f; // Start fade from black for 1 second
         front.Menu().Open("mainmenu");
         if (menuClip.Valid())
-          ClimaxEngine::Audio::CAudioRelay::GetInstance().PlayMusic(
-              menuClip, 0.0f); // start at 0 volume
+          ClimaxEngine::Audio::CAudioRelay::GetInstance().PlayMusic(menuClip,
+                                                                    1.0f);
         std::fprintf(stderr, "[play] front end done -- language %s, %s\n",
                      Game::LanguageOwnName((Game::Language)host.language),
                      host.displayMode ? "widescreen" : "4:3");
@@ -1397,108 +1387,39 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
     } else {
       const std::string prevScreen = front.Menu().ScreenId();
       const std::string cmd = front.Menu().Update(in);
-      if (front.Menu().ScreenId() != lastScreenId) {
-        lastScreenId = front.Menu().ScreenId();
-        screenFade = 1.0f;   // the new screen comes up out of black
-      }
       if (!cmd.empty())
         std::fprintf(stderr, "[play] command: %s\n", cmd.c_str());
 
-      // Accepting on the new-game options screen starts the game, and the
-      // first thing the game does is the intro. `newgame.xml` has no
-      // `onaccept` on the vibration row, so this transition is not in the
-      // screen data -- it is code, and this is the port's stand-in for it
-      // until that code is read.
+      // Accepting on the new-game options screen starts the game.
+      // `newgame.xml` has no `onaccept` on the vibration row, so what turns
+      // this press into FUN_001CF718 is code, not screen data, and that code
+      // (it is reached from FUN_001D21E8) is not read yet. HARNESS: this
+      // condition stands in for it. What follows the press is not a stand-in.
       //
-      // The clip is SCN01, and its variants on the disc are exactly what
-      // FUN_001F3048 resolves: SCN01W / SCN01N for the aspect, plus one
-      // language letter (SCN01WF, WG, WI, WS), English falling through to the
-      // bare name. Subtitles are not part of the file name.
-      if (in.accept && cmd.empty() && !playingIntro &&
+      // There is no intro clip here. The intro, scn01, is not played by the
+      // menu: it is an FMVTrigger inside IntroRoad itself
+      // (ZoneActivate -> CMessageRelay -> playFMV -> FMVTrigger "scn01" ->
+      // relayFMVEnd), so it belongs to the level's message graph, which is
+      // not implemented yet.
+      if (in.accept && cmd.empty() && !sceneStarted &&
           (prevScreen == "newgame" ||
            prevScreen == "new_game_menu_screen")) {
-        introPending = true;
-        introFadingOut = true;
-        introFade = 0.0f;
-      }
-
-      if (in.up || in.down || in.left || in.right) {
-        if (clickClip.Valid())
-          ClimaxEngine::Audio::CAudioRelay::GetInstance().PlayAudioClip(
-              clickClip);
-      } else if (in.accept || in.cancel) {
-        if (selectClip.Valid())
-          ClimaxEngine::Audio::CAudioRelay::GetInstance().PlayAudioClip(
-              selectClip);
-      }
-    }
-
-    // The fade, and the handover in the middle of it.
-    if (introFadingOut) {
-      introFade += dt * 2.0f;                 // half a second to black
-      if (introFade >= 1.0f) {
-        introFade = 1.0f;
-        introFadingOut = false;
-        if (introPending) {
-          introPending = false;
-          if (host.playMovie("SCN01", false)) {
-            playingIntro = true;
-            std::fprintf(stderr, "[play] intro: SCN01 (%s, %s, subtitles %s)\n",
-                         host.displayMode ? "widescreen" : "4:3",
-                         Game::LanguageOwnName((Game::Language)host.language),
-                         front.Menu().Toggle("subtitles") ? "on" : "off");
-          }
-        }
-      }
-    } else if (introFade > 0.0f) {
-      introFade -= dt * 2.0f;                 // and half a second back up
-      if (introFade < 0.0f)
-        introFade = 0.0f;
-    }
-
-    // Cutscenes can be skipped, and the engine says so itself: `IGCStart`,
-    // `IGCActive`, `IGCSkipRequest`, `IGCSkip` and `IGCEnd` are five of the
-    // 206 registered messages (docs/executables/MESSAGES.md). A request is a
-    // separate message from the skip, so something arbitrates -- but the
-    // player-facing half is plain: a button ends the clip.
-    //
-    // Which button comes from the boot table's own movie record,
-    // `FUN_00152218`, which tests the remapped mask against 0x120 -- cross or
-    // start. That record also carries a skippable flag, and the Logo record's
-    // is 0, which is why the logo cannot be skipped and this can.
-    bool skipIntro = false;
-    if (playingIntro && (in.accept || in.cancel))
-      skipIntro = true;
-
-#ifdef CLIMAX_HAVE_FFMPEG
-    // The intro runs on the same player the boot movies use, and ends the same
-    // way they do -- when the clip runs out, not on a timer.
-    if (haveVideoSupport && playingIntro && bgVideo.IsOpen())
-      bgVideo.Update(dt);
-    if (playingIntro && (skipIntro || (bgVideo.IsOpen() && bgVideo.Finished()))) {
-#else
-    if (playingIntro && skipIntro) {
-#endif
-      host.stopMovie();
-      playingIntro = false;
-      std::fprintf(stderr, "[play] intro %s\n",
-                   skipIntro ? "skipped" : "finished");
-      // FUN_001CF718: new game -> the first scene.
-      if (!sceneStarted) {
         sceneStarted = true;
-        sceneQueue.LoadScene("IntroRoad");
-        std::fprintf(stderr, "[scene] queue: IntroRoad\n");
+        // FUN_001CF718: 0x339F68 opens, 0x339F50 closes.
+        sceneQueue.LoadScene("IntroRoad", std::string(),
+                             Game::TransitionDesc{0, 0, 1.0f},
+                             Game::TransitionDesc{1, 0, 1.0f});
+        std::fprintf(stderr, "[scene] queue: IntroRoad
+");
       }
     }
+
 #ifdef CLIMAX_HAVE_FFMPEG
     if (haveVideoSupport && inMenu && !sceneStarted) {
       const UI::Element *scr = front.Menu().Screen();
       std::string requestedMovie = scr ? scr->Attr("bgmovie") : "";
 
       static std::string currentMenuMovie;
-      if (requestedMovie.empty() && currentMenuMovie.empty()) {
-        requestedMovie = "MENU"; // Initial fallback
-      }
 
       if (!requestedMovie.empty() && currentMenuMovie != requestedMovie) {
         menuVideo.Close();
@@ -1525,33 +1446,17 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
       menuVideo.Close();
 #endif
 
-    static float currentMusicVolume = 0.0f;
-    if (inMenu && menuFadeTimer > 0.0f) {
-      menuFadeTimer -= dt;
-      if (menuFadeTimer < 0.0f)
-        menuFadeTimer = 0.0f;
-    }
-    if (inMenu) {
-        float target = (!sceneStarted && front.Menu().ScreenId() == "mainmenu") ? 1.0f : 0.0f;
-        if (currentMusicVolume < target) {
-            currentMusicVolume += dt * 0.5f; // Fade in over 2s
-            if (currentMusicVolume > target) currentMusicVolume = target;
-        } else if (currentMusicVolume > target) {
-            currentMusicVolume -= dt * 1.5f; // Fade out slightly faster
-            if (currentMusicVolume < target) currentMusicVolume = target;
-        }
-        if (currentMusicVolume <= 0.0f) {
-            ClimaxEngine::Audio::CAudioRelay::GetInstance().PauseMusic(true);
-        } else {
-            ClimaxEngine::Audio::CAudioRelay::GetInstance().PauseMusic(false);
-            ClimaxEngine::Audio::CAudioRelay::GetInstance().SetMusicVolume(
-                0.65f * currentMusicVolume);
-        }
+    // The menu's music stops with the menu.
+    static bool musicStopped = false;
+    if (sceneStarted && !musicStopped) {
+      ClimaxEngine::Audio::CAudioRelay::GetInstance().PauseMusic(true);
+      musicStopped = true;
     }
 
     // FUN_00179D60: one drain per frame.
     if (sceneQueue.Busy())
-      sceneQueue.Update(sceneHost, dt);
+      sceneQueue.Update(sceneHost);
+    fader.Update(dt);
 
     // The queue reached its handover node. Stop drawing the front end and let
     // the caller run the level on the window this loop has been using.
@@ -1561,6 +1466,9 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
       out.archive = arcPath;
       out.widescreen = host.displayMode != 0;
       out.language = host.language;
+      out.fadeLevel = fader.level;
+      out.fadeRate = fader.Busy() ? fader.rate : 0.0f;
+      out.fadeTarget = fader.target;
       run = false;
     }
 
@@ -1659,14 +1567,7 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
           const float ax = wide ? b.Float("xpos") : b.Float("xpos4x3");
           const float ay = wide ? b.Float("ypos") : b.Float("ypos4x3");
           const float bx = uiX + (ax - kUiCrop) * kUiSqueeze * uiPX;
-          
-          // Hack: the gameoptions menu is authored very bottom-heavy in the XML.
-          // The user specifically requested it to be vertically centered on screen.
-          float globalYOffset = 0.0f;
-          if (scr && scr->Attr("id") == "gameoptions") {
-              globalYOffset = -32.5f * uiPY;
-          }
-          const float by = uiY + ay * uiPY + globalYOffset;
+          const float by = uiY + ay * uiPY;
           
           const float bw = b.Float("width") * kUiSqueeze * uiPX;
           const float bh = b.Float("height") * uiPY;
@@ -1768,11 +1669,8 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
         }
       }
     } else {
-      // The idents and the notice are movies in the retail game and are
-      // not decoded yet, so each stage says what it is and what it wants.
-      // The text is the game's own, out of Strings.Eng where there is one.
-      const float cx = w * 0.5f;
-      const float sc = uiPY * 1.6f; // only the "no clip" fallback text
+      // The boot records: language, memory card, aspect and the logo movie.
+      // Every word drawn here is the game's, out of the string table.
       auto tex = [&](const std::string &n) -> GLuint {
         auto it = textures.find(n);
         return it == textures.end() ? 0 : it->second;
@@ -1941,12 +1839,6 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
           const auto lang = (Game::Language)i;
           const bool sel = i == front.Cursor();
           GLuint id = tex(Game::LanguageFlag(lang));
-          // Some sets ship a pre-lit "_h" variant; prefer it when the
-          // entry is selected, and fall back to tinting.
-          if (sel)
-            if (const GLuint hi =
-                    tex(std::string(Game::LanguageFlag(lang)) + "_h"))
-              id = hi;
           const Game::MenuTint t = sel ? on : off;
           uiQuad(row.x + i * row.step, row.y, row.w, row.h, id, t.r, t.g, t.b,
                  t.a);
@@ -1998,15 +1890,9 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
           drew = fullscreenVideo(bgVideo.Texture(), bgVideo.Width(),
                                  bgVideo.Height());
 #endif
-        if (!drew) {
-          // No decoder in this build, or the clip failed to open: say
-          // so rather than drawing an invented logo, which read as the
-          // toolkit's own branding rather than the game's.
-          centre(cx, h * 0.48f, sc, "Silent Hill Origins", 0.55f, 0.55f, 0.6f,
-                 1.0f);
-          centre(cx, h * 0.58f, sc * 0.6f, "(LOGOW.mp4 not found)", 0.35f,
-                 0.35f, 0.4f, 1.0f);
-        }
+        // No decoder in this build, or the clip failed to open: draw
+        // nothing -- playMovie has already logged why.
+        (void)drew;
         break;
       }
       case Game::BootKind::Leave:
@@ -2014,36 +1900,8 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
       }
     }
 
-#ifdef CLIMAX_HAVE_FFMPEG
-    if (playingIntro && bgVideo.IsOpen() && bgVideo.Width() > 0) {
-      const float texAR = (float)bgVideo.Width() / (float)bgVideo.Height();
-      const float winAR = (float)w / (float)h;
-      float dw, dh, dx, dy;
-      if (winAR >= texAR) { dh = (float)h; dw = dh * texAR; dy = 0.0f; dx = ((float)w - dw) * 0.5f; }
-      else                { dw = (float)w; dh = dw / texAR; dx = 0.0f; dy = ((float)h - dh) * 0.5f; }
-      painter.Quad(0, 0, (float)w, (float)h, 0, 0, 0, 0, 1.0f);
-      painter.Quad(dx, dy, dw, dh, bgVideo.Texture(), 1, 1, 1, 1);
-    }
-#endif
-    if (screenFade > 0.0f) {
-      screenFade -= dt * 3.0f;   // a third of a second
-      if (screenFade < 0.0f)
-        screenFade = 0.0f;
-      if (!playingIntro)
-        painter.Quad(0, 0, (float)w, (float)h, 0, 0, 0, 0, screenFade);
-    }
-    if (introFade > 0.0f)
-      painter.Quad(0, 0, (float)w, (float)h, 0, 0, 0, 0, introFade);
-    if (inMenu && menuFadeTimer > 0.0f) {
-      // Draw a black overlay fading out
-      painter.Quad(0, 0, w, h, 0, 0, 0, 0, menuFadeTimer);
-    }
-    
-    if (!inMenu && bootFadeTimer > 0.0f) {
-      bootFadeTimer -= dt * 2.0f;
-      if (bootFadeTimer < 0.0f) bootFadeTimer = 0.0f;
-      painter.Quad(0, 0, w, h, 0, 0, 0, 0, bootFadeTimer);
-    }
+    if (fader.level > 0.0f)
+      painter.Quad(0, 0, (float)w, (float)h, 0, 0, 0, 0, fader.level);
 
     SDL_GL_SwapWindow(win);
 

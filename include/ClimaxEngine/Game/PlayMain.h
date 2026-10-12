@@ -45,6 +45,14 @@ struct FrontEndExit {
     bool widescreen = true;
     int  language = 0;
 
+    // The screen fader as the queue left it. The closing transition is still
+    // running when 0x0A hands over (FUN_0017A7A8 starts it and returns), so
+    // the level has to carry it on: level 1 = black, moving at `fadeRate`
+    // per second towards `fadeTarget`.
+    float fadeLevel = 0.0f;
+    float fadeRate = 0.0f;
+    float fadeTarget = 0.0f;
+
     // Alive and current when startGame is true. Null otherwise.
     SDL_Window   *window = nullptr;
     SDL_GLContext context = nullptr;
