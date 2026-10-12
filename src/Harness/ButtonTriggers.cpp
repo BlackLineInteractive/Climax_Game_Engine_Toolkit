@@ -1,9 +1,9 @@
-#include "ClimaxEngine/Game/ButtonTriggers.h"
+#include "ClimaxEngine/Harness/ButtonTriggers.h"
 #include <cmath>
 #include <iostream>
 
 namespace ClimaxEngine {
-namespace Game {
+namespace Harness {
 
 namespace {
 bool InsideVolume(const glm::mat4 &m, const glm::vec3 &p, float reach) {
@@ -73,5 +73,5 @@ int ButtonTriggerAt(const std::vector<ButtonTrigger>& triggers, const glm::vec3&
     return best;
 }
 
-} // namespace Game
+} // namespace Harness
 } // namespace ClimaxEngine

@@ -5,8 +5,12 @@
 #include <glm/glm.hpp>
 #include "ClimaxEngine/Core/Types.h"
 
+// HARNESS -- toolkit only. Reads the real ButtonBoxTrigger / MessageBoxTrigger /
+// SavePoint objects, but which property is the event and which the target
+// ("usually linkNames[1]") was guessed, not read from the class's
+// FillInMessage. Not part of the game.
 namespace ClimaxEngine {
-namespace Game {
+namespace Harness {
 
 struct ButtonTrigger {
     std::string className; // "ButtonBoxTrigger", "ButtonTrigger", etc.
@@ -28,5 +32,5 @@ std::vector<ButtonTrigger> BuildButtonTriggers(const std::vector<GameObject>& ob
 // Find the closest trigger that the player is inside (if any).
 int ButtonTriggerAt(const std::vector<ButtonTrigger>& triggers, const glm::vec3& p, float reach = 0.5f);
 
-} // namespace Game
+} // namespace Harness
 } // namespace ClimaxEngine

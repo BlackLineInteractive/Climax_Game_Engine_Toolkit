@@ -8,16 +8,20 @@
 // What is the game's own, read out of the retail data:
 //   * the level, its collision (CBSP), cameras and placed objects;
 //   * the spawn point (CPlayerSpawner, named after the zone you came from);
-//   * camera cuts (PlaneTrigger names one camera per side);
+//   * which cameras a PlaneTrigger names, one per side;
 //   * doors (ZoneTrigger names destination, source, event and button);
-//   * Travis's model and his idle / walk / run clips by authored filename.
+//   * Travis's model and his idle / walk / run clips by authored filename;
+//   * the fade the scene queue started, carried on past the handover.
 //
-// What is NOT the game's, and is marked HARNESS below: input mapping, walk
-// speed, turn rate and the choice of clip. Those belong to CPlayerBehaviour's
-// state machine (FUN_001300F0, not yet read -- SHO-port/docs/PLAYER.md). The
-// harness is the same walk mode the toolkit has had since 0.6.0; it is here so
-// the recovered pieces can be seen working, and it is the socket the recovered
-// player code plugs into. Nothing in it claims to be the original.
+// What is NOT the game's, and is marked HARNESS below or lives in
+// ClimaxEngine/Harness/: input mapping, walk speed, turn rate, the choice of
+// clip, the sphere body and its collision, how a camera aims and where its eye
+// goes, which side of a PlaneTrigger is which, and how far a door reaches.
+// Those belong to CPlayerBehaviour (FUN_001300F0, not yet read --
+// SHO-port/docs/PLAYER.md), CStaticCamera / CConstraintCamera, PlaneTrigger
+// and ZoneTrigger. The harness is here so the recovered pieces can be seen
+// working, and it is the socket the recovered code plugs into. Nothing in it
+// claims to be the original.
 // ─────────────────────────────────────────────────────────────────────────────
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
@@ -37,9 +41,10 @@
 
 #include "ClimaxEngine/Core/RWS/FileSystem/CArchiveManager.h"
 #include "ClimaxEngine/Game/CameraLinks.h"
-#include "ClimaxEngine/Game/CharacterController.h"
 #include "ClimaxEngine/Game/PlayMain.h"
 #include "ClimaxEngine/Game/ZoneLinks.h"
+#include "ClimaxEngine/Harness/Body.h"
+#include "ClimaxEngine/Harness/CameraView.h"
 #include "ClimaxEngine/Loader/Loader.h"
 #include "ClimaxEngine/Platform/PS2/RwsAudio.h"
 #include "ClimaxEngine/Render/PlayerModel.h"
@@ -90,6 +95,7 @@ int main(int argc, char **argv) {
 
     SDL_Window *window = nullptr;
     SDL_GLContext glContext = nullptr;
+    float fadeLevel = 0.0f, fadeRate = 0.0f, fadeTarget = 0.0f;
 
     // ── the front end ───────────────────────────────────────────────────────
     // Splash, language, memory card, aspect, the logo movie, the main menu,
@@ -104,6 +110,9 @@ int main(int argc, char **argv) {
         glContext = fe.context;
         if (!fe.firstScene.empty()) levelName = fe.firstScene;
         if (!fe.archive.empty()) arcPath = fe.archive;
+        fadeLevel = fe.fadeLevel;
+        fadeRate = fe.fadeRate;
+        fadeTarget = fe.fadeTarget;
     }
 
     if (!window) {
@@ -161,8 +170,11 @@ int main(int argc, char **argv) {
     state.showCollision = false;
     state.showBoneOverlay = false;
     state.showWireframe = false;
+    // The toolkit's grey backdrop is a viewer setting, not the game's.
+    for (float &c : state.skyColorBot) c = 0.0f;
+    for (float &c : state.skyColorTop) c = 0.0f;
 
-    ClimaxEngine::Game::CharacterController body;
+    ClimaxEngine::Harness::CharacterController body;   // HARNESS
     ClimaxEngine::Game::CameraSwitcher switcher;
     std::vector<ClimaxEngine::Game::ZoneLink> zoneLinks;
     std::string arrivedFrom;   // zone the player came out of
@@ -301,7 +313,7 @@ int main(int argc, char **argv) {
         if (state.activeCamera >= 0 && state.activeCamera < (int)g_Cameras.size()) {
             const auto &cam = g_Cameras[(size_t)state.activeCamera];
             if (cam.fovDeg > 5.0f) fov = cam.fovDeg;
-            ClimaxEngine::Game::ResolveCameraView(g_Collision, cam, subject, eye, look);
+            ClimaxEngine::Harness::ResolveCameraView(g_Collision, cam, subject, eye, look);
         }
         const glm::mat4 view = glm::lookAt(eye, eye + look, glm::vec3(0, 1, 0));
         const glm::mat4 proj = glm::perspective(glm::radians(fov),
@@ -326,6 +338,20 @@ int main(int argc, char **argv) {
             ImGui::Text("[E] %s", doorPrompt.c_str());
             ImGui::End();
         }
+        // The closing transition of the scene queue, still running.
+        if (fadeRate != 0.0f) {
+            const float step = fadeRate * dt;
+            if (std::fabs(fadeTarget - fadeLevel) <= step) {
+                fadeLevel = fadeTarget;
+                fadeRate = 0.0f;
+            } else {
+                fadeLevel += fadeTarget > fadeLevel ? step : -step;
+            }
+        }
+        if (fadeLevel > 0.0f)
+            ImGui::GetForegroundDrawList()->AddRectFilled(
+                ImVec2(0, 0), ImGui::GetIO().DisplaySize,
+                IM_COL32(0, 0, 0, (int)(fadeLevel * 255.0f)));
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(window);

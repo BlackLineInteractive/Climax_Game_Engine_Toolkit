@@ -1,10 +1,10 @@
-#include "ClimaxEngine/Game/CharacterController.h"
+#include "ClimaxEngine/Harness/Body.h"
 
 #include <algorithm>
 #include <cmath>
 
 namespace ClimaxEngine {
-namespace Game {
+namespace Harness {
 
 glm::vec3 ClosestPointOnTriangle(const glm::vec3 &p, const glm::vec3 &a,
                                  const glm::vec3 &b, const glm::vec3 &c) {
@@ -224,14 +224,5 @@ float LastBlockerAlong(const CollisionMesh &world, const glm::vec3 &from,
     return best;
 }
 
-bool FindPlayerSpawn(const std::vector<GameObject> &objects, glm::vec3 &out) {
-    for (const GameObject &go : objects) {
-        if (go.className != "CPlayerSpawner" || go.atOrigin) continue;
-        out = go.position;
-        return true;
-    }
-    return false;
-}
-
-} // namespace Game
+} // namespace Harness
 } // namespace ClimaxEngine

@@ -163,12 +163,22 @@ add_library(climax-game STATIC
     src/Game/CameraLinks.cpp
     src/Game/SceneQueue.cpp
     src/Game/SceneObjects.cpp
-    src/Game/CharacterController.cpp
     src/Game/ZoneLinks.cpp
-    src/Game/ButtonTriggers.cpp
     src/Game/FrontEnd.cpp
 )
 target_link_libraries(climax-game PUBLIC climax-core)
+
+# ── climax-harness  (NO GL, NO SDL, NO ImGui) ─────────────────────────────────
+# Stand-ins that let the recovered pieces be walked through: a sphere body
+# against the collision mesh, a camera that tracks and steps through walls, a
+# guessed reading of button triggers. None of it is the game's code, which is
+# why it is not in climax-game. Each header says so at the top.
+add_library(climax-harness STATIC
+    src/Harness/Body.cpp
+    src/Harness/CameraView.cpp
+    src/Harness/ButtonTriggers.cpp
+)
+target_link_libraries(climax-harness PUBLIC climax-game)
 
 # ── ImGui / ImGuizmo / ImAnim sources ─────────────────────────────────────────
 set(IMGUI_SOURCES
@@ -265,7 +275,7 @@ add_subdirectory(SHO-port)
 
 target_link_libraries(ClimaxGameEngineToolkit
 
-    climax-game     # includes climax-core transitively
+    climax-harness  # includes climax-game and climax-core transitively
     OpenGL::GL
     GLEW::GLEW
     ${SHO_SDL2_TARGETS}

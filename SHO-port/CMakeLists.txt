@@ -58,6 +58,7 @@ target_include_directories(sho-game PRIVATE
 )
 
 target_link_libraries(sho-game PRIVATE
+    climax-harness
     climax-game
     climax-core
     OpenGL::GL

@@ -17,9 +17,10 @@
 #include "ImGuizmo.h"
 #include "im_anim.h"
 #include "ClimaxEngine/Game/CameraLinks.h"
-#include "ClimaxEngine/Game/CharacterController.h"
+#include "ClimaxEngine/Harness/Body.h"
+#include "ClimaxEngine/Harness/CameraView.h"
 #include "ClimaxEngine/Game/ZoneLinks.h"
-#include "ClimaxEngine/Game/ButtonTriggers.h"
+#include "ClimaxEngine/Harness/ButtonTriggers.h"
 #include "ClimaxEngine/Render/PlayerModel.h"
 #include "ClimaxEngine/Viewer/ViewerDraw.h"
 
@@ -493,7 +494,7 @@ int ViewerApp::Run(int argc, char* argv[]) {
                     LoadPlayerModel("CPlayerBehaviour.Travis");
                 }
 
-                static ClimaxEngine::Game::CharacterController body;
+                static ClimaxEngine::Harness::CharacterController body;
                 // Keyed by the container's name, not by &g_Collision: that is a
                 // global whose address never changes, so the old test never
                 // fired and neither the spawn nor the camera links were ever
@@ -501,11 +502,11 @@ int ViewerApp::Run(int argc, char* argv[]) {
                 static std::string placedFor;
                 static std::string arrivedFrom;   // zone the player came out of
                 static std::vector<ClimaxEngine::Game::ZoneLink> zoneLinks;
-                static std::vector<ClimaxEngine::Game::ButtonTrigger> buttonTriggers;
+                static std::vector<ClimaxEngine::Harness::ButtonTrigger> buttonTriggers;
 
                 if (placedFor != g_CurrentMeshContainer) {
                     zoneLinks = ClimaxEngine::Game::BuildZoneLinks(g_GameObjects);
-                    buttonTriggers = ClimaxEngine::Game::BuildButtonTriggers(g_GameObjects);
+                    buttonTriggers = ClimaxEngine::Harness::BuildButtonTriggers(g_GameObjects);
                     std::cerr << "[zone] " << zoneLinks.size()
                               << " doorway(s) in " << g_CurrentMeshContainer << "\n";
                     for (const auto &z : zoneLinks)
@@ -519,6 +520,9 @@ int ViewerApp::Run(int argc, char* argv[]) {
                         // Face the way the spawner faces -- walking out of a
                         // door should not drop the player looking at it.
                         state.camYaw = glm::degrees(atan2f(-facing.x, -facing.z));
+                    } else if (ClimaxEngine::Game::FindPlayerSpawn(g_GameObjects,
+                                                                   spawn)) {
+                        body.position = spawn;
                     } else {
                         body.position = glm::vec3(state.camPosX, state.camPosY,
                                                   state.camPosZ);
@@ -643,10 +647,10 @@ int ViewerApp::Run(int argc, char* argv[]) {
                         const float halfFov =
                             glm::radians(glm::min(c.fovDeg * 0.6f, 85.0f));
                         if (glm::dot(v / dist,
-                                     ClimaxEngine::Game::CameraAim(
+                                     ClimaxEngine::Harness::CameraAim(
                                          c, c.position, head)) < cosf(halfFov))
                             return false;
-                        return ClimaxEngine::Game::HasLineOfSight(g_Collision,
+                        return ClimaxEngine::Harness::HasLineOfSight(g_Collision,
                                                                   c.position, head);
                     };
 
@@ -659,7 +663,7 @@ int ViewerApp::Run(int argc, char* argv[]) {
                         float bestDist = 1e9f, anyDist = 1e9f;
                         for (size_t k = 0; k < g_Cameras.size(); ++k) {
                             const glm::vec3 &cp = g_Cameras[k].position;
-                            if (!ClimaxEngine::Game::HasLineOfSight(g_Collision, cp, head))
+                            if (!ClimaxEngine::Harness::HasLineOfSight(g_Collision, cp, head))
                                 continue;
                             const float dd = glm::length(cp - head);
                             if (dd < anyDist) { anyDist = dd; anySight = (int)k; }
@@ -674,7 +678,7 @@ int ViewerApp::Run(int argc, char* argv[]) {
 
                 // ── Button Triggers ─────────────────────────────────────────
                 static int s_buttonTriggerHere = -1;
-                s_buttonTriggerHere = ClimaxEngine::Game::ButtonTriggerAt(
+                s_buttonTriggerHere = ClimaxEngine::Harness::ButtonTriggerAt(
                     buttonTriggers, body.position, 0.9f);
                 if (s_buttonTriggerHere >= 0) {
                     // Similar to doors, we could display a prompt or just trigger
@@ -743,7 +747,7 @@ int ViewerApp::Run(int argc, char* argv[]) {
                                             body.position.y + state.eyeHeight * 0.6f,
                                             body.position.z);
                     glm::vec3 eye, look;
-                    ClimaxEngine::Game::ResolveCameraView(g_Collision, lc, subject,
+                    ClimaxEngine::Harness::ResolveCameraView(g_Collision, lc, subject,
                                                           eye, look);
                     state.camPosX = eye.x;
                     state.camPosY = eye.y;

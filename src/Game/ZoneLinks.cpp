@@ -73,25 +73,28 @@ int ZoneLinkAt(const std::vector<ZoneLink> &links, const glm::vec3 &p,
 bool FindZoneSpawn(const std::vector<GameObject> &objects,
                    const std::string &fromZone, glm::vec3 &posOut,
                    glm::vec3 &facingOut) {
-  const GameObject *fallback = nullptr;
+  if (fromZone.empty())
+    return false;
+  for (const GameObject &go : objects) {
+    if (go.className != "CPlayerSpawner" || go.atOrigin || go.objName != fromZone)
+      continue;
+    posOut = go.position;
+    // Row 2 is the facing direction, the same convention the cameras use.
+    const glm::vec3 f(go.transform[2]);
+    facingOut = glm::length(f) > 1e-4f ? glm::normalize(f) : glm::vec3(0, 0, 1);
+    return true;
+  }
+  return false;
+}
+
+bool FindPlayerSpawn(const std::vector<GameObject> &objects, glm::vec3 &out) {
   for (const GameObject &go : objects) {
     if (go.className != "CPlayerSpawner" || go.atOrigin)
       continue;
-    if (!fallback)
-      fallback = &go;
-    if (!fromZone.empty() && go.objName == fromZone) {
-      fallback = &go;
-      break;
-    }
+    out = go.position;
+    return true;
   }
-  if (!fallback)
-    return false;
-
-  posOut = fallback->position;
-  // Row 2 is the facing direction, the same convention the cameras use.
-  const glm::vec3 f(fallback->transform[2]);
-  facingOut = glm::length(f) > 1e-4f ? glm::normalize(f) : glm::vec3(0, 0, 1);
-  return true;
+  return false;
 }
 
 } // namespace Game

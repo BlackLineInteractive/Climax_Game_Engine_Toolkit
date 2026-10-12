@@ -5,8 +5,18 @@
 
 #include "ClimaxEngine/Core/Types.h"
 
+// ─────────────────────────────────────────────────────────────────────────────
+// HARNESS -- not the game's code.
+//
+// A sphere pushed out of the level's collision triangles. The original walks
+// Travis through `CollisionBSP::TestSphere` with a surface-class mask (the
+// top nibble of each face's fourth word, docs/TODO.md §4c), and none of that
+// is read yet: this solver treats every face as solid to everything, and its
+// radius, gravity and slope limit were chosen, not recovered. It exists so the
+// recovered parts of a level can be walked through; replace it, do not tune it.
+// ─────────────────────────────────────────────────────────────────────────────
 namespace ClimaxEngine {
-namespace Game {
+namespace Harness {
 
 // Moves a body through the level's collision mesh.
 //
@@ -49,17 +59,10 @@ glm::vec3 ClosestPointOnTriangle(const glm::vec3 &p, const glm::vec3 &a,
 float RayDown(const CollisionMesh &world, const glm::vec3 &origin,
               float maxDist, glm::vec3 *normalOut = nullptr);
 
-// Where the player starts: the CPlayerSpawner the level places. Returns false
-// when the level has none, which is true of several test containers.
-bool FindPlayerSpawn(const std::vector<GameObject> &objects, glm::vec3 &out);
-
 // True when nothing in the collision mesh sits between the two points.
 //
-// Which camera a plane hands over to is a choice between two names, and which
-// name belongs to which side is not stated anywhere -- it was a guess. This
-// makes the choice checkable instead: a camera that cannot see the player is
-// the wrong one, whatever the naming says, and these cameras are placed inside
-// walls looking in, so the wall is exactly what the test finds.
+// Used by the toolkit to second-guess which of a PlaneTrigger's two cameras
+// belongs to which side -- itself a guess (see CameraSwitcher).
 bool HasLineOfSight(const CollisionMesh &world, const glm::vec3 &from,
                     const glm::vec3 &to);
 
@@ -72,5 +75,5 @@ bool HasLineOfSight(const CollisionMesh &world, const glm::vec3 &from,
 float LastBlockerAlong(const CollisionMesh &world, const glm::vec3 &from,
                        const glm::vec3 &to);
 
-} // namespace Game
+} // namespace Harness
 } // namespace ClimaxEngine

@@ -55,15 +55,17 @@ std::vector<ZoneLink> BuildZoneLinks(const std::vector<GameObject> &objects);
 int ZoneLinkAt(const std::vector<ZoneLink> &links, const glm::vec3 &p,
                float reach = 0.0f);
 
-// Where the player appears on entering a level from `fromZone`.
-//
-// Falls back to any spawner when the name does not match, which is what
-// happens on the first level opened -- nobody arrived from anywhere. Returns
-// false only when the container has no CPlayerSpawner at all, which is true of
-// several test and prop containers.
+// Where the player appears on entering a level from `fromZone`: the
+// CPlayerSpawner whose name is that zone. Returns false when no spawner
+// carries the name -- including on the first level of a session, where nobody
+// arrived from anywhere; what to do then is the caller's decision, not this.
 bool FindZoneSpawn(const std::vector<GameObject> &objects,
                    const std::string &fromZone, glm::vec3 &posOut,
                    glm::vec3 &facingOut);
+
+// The first placed CPlayerSpawner in the level. Returns false when the level
+// has none, which is true of several test and prop containers.
+bool FindPlayerSpawn(const std::vector<GameObject> &objects, glm::vec3 &out);
 
 } // namespace Game
 } // namespace ClimaxEngine

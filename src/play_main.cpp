@@ -1148,8 +1148,7 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
               // 2 and 4: FUN_001EFC18 stops it where it is. 3 calls
               // FUN_001EFC60 with direction 2, which is not read yet.
               if (mode == 3)
-                  std::fprintf(stderr, "[scene] transition mode 3 not recovered
-");
+                  std::fprintf(stderr, "[scene] transition mode 3 not recovered\n");
               fader->Stop();
           }
           return true;
@@ -1409,8 +1408,7 @@ int ClimaxEngine::Game::RunFrontEnd(int argc, char **argv,
         sceneQueue.LoadScene("IntroRoad", std::string(),
                              Game::TransitionDesc{0, 0, 1.0f},
                              Game::TransitionDesc{1, 0, 1.0f});
-        std::fprintf(stderr, "[scene] queue: IntroRoad
-");
+        std::fprintf(stderr, "[scene] queue: IntroRoad\n");
       }
     }
 
