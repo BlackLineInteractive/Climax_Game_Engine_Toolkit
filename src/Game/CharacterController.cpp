@@ -113,16 +113,20 @@ void CharacterController::Step(const CollisionMesh &world, const glm::vec3 &move
     }
 
     velocity.y += gravity * dt;
+    // Falling speed is capped so a long drop cannot tunnel through a floor in
+    // one step; with discrete depenetration that is the only failure mode that
+    // loses the player entirely.
     velocity.y = std::max(velocity.y, -40.0f);
 
-    // Horizontal movement and wall depenetration
+    // Horizontal first, then vertical. Separating them is what makes a wall
+    // stop movement without also killing the fall, and a floor stop the fall
+    // without also gluing the body to the wall it is brushing.
     position += glm::vec3(move.x, 0.0f, move.z);
 
     glm::vec3 floorNormal(0.0f);
     bool hitFloor = false;
     Depenetrate(world, position, radius, floorNormal, hitFloor, maxSlope);
 
-    // Vertical movement and floor depenetration
     position.y += velocity.y * dt;
 
     floorNormal = glm::vec3(0.0f);
@@ -133,14 +137,8 @@ void CharacterController::Step(const CollisionMesh &world, const glm::vec3 &move
     if (grounded) {
         groundNormal = glm::normalize(floorNormal);
         if (velocity.y < 0.0f) velocity.y = 0.0f;
-    } else {
-        // Smooth downward slope tracking (e.g. descending road hills)
-        SnapToGround(world, 0.50f);
     }
 }
-
-
-
 
 bool CharacterController::SnapToGround(const CollisionMesh &world, float maxDrop) {
     if (world.indices.empty()) return false;
