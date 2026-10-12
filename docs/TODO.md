@@ -572,8 +572,8 @@ entry; they read as authoring slips rather than a different encoding.
 
 So the sound a footstep makes is a property of the material the foot is over,
 not of the collision face, and the whole mapping is recoverable without the
-executable. `SHO-port`'s `AudioEngine` currently carries a hand-written three
--surface table ("4 road, 4 tile, 4 wood samples") that is not the game's.
+executable. (The hand-written three-surface table that `SHO-port`'s
+`AudioEngine` carried is archived, unbuilt — `archive/gemini-unverified/`.)
 
 Still open: which cue name resolves to which sample in the level's
 `rwaID_WAVEDICT` (IntroRoad has 21), and how the material under the player is

@@ -388,6 +388,7 @@ void LoadLevelData(const std::string &displayName,
   
   // Use StreamLoader to process the entire container
   ClimaxEngine::RWS::RwMemoryStream stream(container.data(), container.size());
+  ClimaxEngine::ResourceLoader::ResetWorldDedupe();
   ClimaxEngine::ResourceLoader::CResourceHandler::GetInstance().ProcessStream(displayName.c_str(), &stream, container.size());
 
   // Textures
@@ -531,6 +532,7 @@ void LoadTexturesFromTxd(const std::string &txdPath,
 void LoadGeometry(const std::string &geomPath) {
   std::vector<uint8_t> data = ReadWholeFile(geomPath);
   ClimaxEngine::RWS::RwMemoryStream stream(data.data(), data.size());
+  ClimaxEngine::ResourceLoader::ResetWorldDedupe();
   ClimaxEngine::ResourceLoader::CResourceHandler::GetInstance().ProcessStream(geomPath.c_str(), &stream, data.size());
 }
 
@@ -758,6 +760,10 @@ static void ParseGameObject(const std::vector<uint8_t> &data, size_t off,
               if (propId == 2) go.fogStart = val;
               if (propId == 3) go.fogEnd = val;
               if (propId == 5) go.fogDensity = val;
+              // Read as an RGB triple, and that reading is NOT established:
+              // property 0 is a texture name (FX_fog_ALPHA), and property 12
+              // at +0x98, right before these, is -0.2 in IntroRoad. See
+              // docs/TODO.md, the CFogConfig section.
               if (propId == 10) go.fogColor.r = val;
               if (propId == 11) go.fogColor.g = val;
               if (propId == 8) go.fogColor.b = val;
@@ -1092,6 +1098,7 @@ void ParseContainerStructureData(const std::vector<uint8_t> &data) {
 
   // New StreamLoader API
   ClimaxEngine::RWS::RwMemoryStream memStream(data);
+  ClimaxEngine::ResourceLoader::ResetWorldDedupe();
   ClimaxEngine::ResourceLoader::CResourceHandler::GetInstance().ProcessStream("Container", &memStream, sz);
 
   ParseUVAnimations(data);

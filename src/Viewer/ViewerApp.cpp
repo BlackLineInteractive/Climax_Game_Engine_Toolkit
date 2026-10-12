@@ -568,27 +568,6 @@ int ViewerApp::Run(int argc, char* argv[]) {
                     if (want < 0) want = g_Player.idleClip;
                     if (want >= 0 && want != g_Player.currentClip)
                         s_playerClipName = g_Player.PlayClipAt(want);
-                        
-                    // ── Footsteps ───────────────────────────────────────────
-                    if (moving) {
-                        static float s_footstepTimer = 0.0f;
-                        s_footstepTimer += dt;
-                        const float stepInterval = running ? 0.35f : 0.5f;
-                        if (s_footstepTimer >= stepInterval) {
-                            s_footstepTimer = 0.0f;
-                            // Play a footstep sound if available
-                            if (!g_Sounds.empty()) {
-                                // Find a sound that might be a footstep
-                                for (const auto& snd : g_Sounds) {
-                                    if (snd.name.find("Foot") != std::string::npos || 
-                                        snd.name.find("Step") != std::string::npos) {
-                                        PlayAudioClip(snd);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
 
                 // Camera planes: crossing one hands the view to the camera
@@ -624,16 +603,6 @@ int ViewerApp::Run(int argc, char* argv[]) {
                             std::cout << "[zone] " << link.fromZone << " -> "
                                       << link.toZone << "  (" << link.eventName
                                       << ")\n";
-                            // ── Door Sound ────────────────────────────────
-                            if (!g_Sounds.empty()) {
-                                for (const auto& snd : g_Sounds) {
-                                    if (snd.name.find("Door") != std::string::npos || 
-                                        snd.name.find("Open") != std::string::npos) {
-                                        PlayAudioClip(snd);
-                                        break;
-                                    }
-                                }
-                            }
                             LoadLevelFromArc(idx);
                         } else {
                             std::cerr << "[zone] no container named "

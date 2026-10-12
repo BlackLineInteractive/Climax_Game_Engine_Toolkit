@@ -73,10 +73,14 @@ table. Some trigger volumes are the wrong size, which needs the executable read
 rather than guessed at.
 
 The gameplay systems above the level — Travis's state machine, the monsters,
-items — exist in `SHO-port/` as working stand-ins rather than transcriptions,
-and `SHO-port/docs/` says for each one exactly what was recovered from the
-retail build and what is a placeholder. That is the current front line of the
-work.
+items, combat, puzzles — are not in the build. An earlier attempt at them was
+written without the decompiled executable; it is kept, unbuilt, in
+`archive/gemini-unverified/` with an audit of what in it was real
+(`AUDIT.md` there). They come back one recovered function at a time, each with
+its `SLES_551.47` address. Until then, walking in `sho-game` is a harness —
+camera-relative movement and idle/walk/run — and is labelled as one in the
+source. `SHO-port/docs/` holds the facts already recovered and what to read
+next.
 
 ---
 
@@ -418,14 +422,10 @@ ClimaxGameEngineToolkit  (executable — SDL + GL + ImGui; links climax-game)
   src/Platform/Wii/WiiTexture.cpp        — GX texture decoder (GPU upload)
   src/Rendering/…                        — GL/Metal backend, GPU mesh, player model
 
-sho-port   (static library — no GL, no SDL, no ImGui; links climax-game)
-  SHO-port/src/Actor/                    — Travis, the monsters
-  SHO-port/src/Combat/, Inventory/       — weapons, items
-  SHO-port/src/Triggers/, Puzzle/        — level logic and the ten puzzles
-  SHO-port/src/World/, Camera/, Audio/   — world, cameras, sound
-  SHO-port/include/SHO/Core/EventIds.h   — the 206 message names, generated
+SHO-port/include/SHO/Core/EventIds.h     — the 206 message names, generated
+archive/gemini-unverified/               — unbuilt; see AUDIT.md there
 
-sho-game   (executable — the game; SDL + GL; links sho-port)
+sho-game   (executable — the game; SDL + GL; links climax-game)
   src/play_main.cpp                      — the front end: boot, menu, intro
   SHO-port/src/Main.cpp                  — the level, from the handover onward
   src/Rendering/VideoPlayer.cpp          — FFmpeg-based FMV player (optional)
