@@ -17,7 +17,7 @@ adopts the existing entry or makes a new one — the same de-duplication Ghost
 Rider's `RegisterMsg` performs. So each `DAT_006Bxxxx` has one registration
 site, and finding it names the global.
 
-`tools/event_ids.py` does that as a text search over `decomp/sles_r5900/`,
+`tools/event_ids.py` does that as a text search over `decomp/sho_sles_out/ghidra_clean/`,
 resolving the second argument through the ELF. It recovers **206 messages**,
 committed as [`sho_event_ids.json`](../generated/sho_event_ids.json) and emitted
 as `SHO-port/include/SHO/Core/EventIds.h`.
@@ -150,5 +150,5 @@ between rooms keeps one Travis instead of respawning him.
 
     python3 tools/event_ids.py
 
-Reads `decomp/sles_r5900/` and `game-iso/SHO/SLES_551.47`; writes
+Reads `decomp/sho_sles_out/ghidra_clean/` and `game-iso/SHO/SLES_551.47`; writes
 `docs/generated/sho_event_ids.json` and `SHO-port/include/SHO/Core/EventIds.h`.

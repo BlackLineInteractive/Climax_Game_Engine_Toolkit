@@ -3,15 +3,20 @@
 The gameplay half of the port. `climax-core` reads the retail data and
 `climax-game` holds the systems that were transcribed out of the executable —
 the boot sequence, the front end, the scene queue, the camera and zone links.
-This directory is everything above that: Travis, the monsters, items, combat,
-the puzzles.
+This directory is where everything above that goes: Travis, the monsters,
+items, combat, the puzzles.
 
-It is the least finished part of the project, and it is worth being blunt about
-why. The data side has a method: open the archive, measure, check the reading
-against the whole corpus rather than against one level. The code side has the
-same method available — 7698 decompiled functions under `decomp/sles_r5900/` —
-and most of this directory was written without using it. What is here works,
-and a good deal of it is plausible, but plausible is not the same as recovered.
+Right now it holds almost nothing, on purpose. The first attempt at those
+systems was written without the 7698 decompiled functions under
+`decomp/sho_sles_out/` — real class names and constructor layouts, invented
+behaviour, and 69 message names the game does not have. It was audited on
+2026-10-12 and moved, unbuilt, to `archive/gemini-unverified/`; `AUDIT.md`
+there goes through it file by file. What is left here is the generated
+message table (`include/SHO/Core/EventIds.h`), `src/Main.cpp` (the level
+loop, with its walk harness labelled as such) and these documents.
+
+Code comes back one recovered function at a time, with its `SLES_551.47`
+address beside it.
 
 So each document below is split the same way:
 
@@ -19,9 +24,9 @@ So each document below is split the same way:
 anyone can re-run. If a number appears under this heading it came out of the
 retail build.
 
-**Not recovered** — what the code currently does instead, marked as such. These
-are placeholders with a shape that feels right, and every one of them is a
-thing to go and read out of the binary.
+**Not recovered** — what the archived code did instead. None of it is built
+any more; it is listed so the next reading knows which guesses to check, not
+which to keep.
 
 Nothing should move from the second heading to the first without an address or
 a command line beside it.
@@ -38,7 +43,7 @@ a command line beside it.
 Three sources, in descending order of trust.
 
 **The retail executable, `game-iso/SHO/SLES_551.47`.** Stripped, so a function
-is `FUN_00136CC8` and a global is `DAT_006B4C50`. `decomp/sles_r5900/` holds
+is `FUN_00136CC8` and a global is `DAT_006B4C50`. `decomp/sho_sles_out/ghidra_clean/` holds
 the whole thing decompiled with the Emotion Engine processor module — see
 `docs/TODO.md` §6c for why the stock MIPS module produces garbage here.
 

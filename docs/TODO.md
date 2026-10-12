@@ -724,7 +724,7 @@ a replacement — the reversal itself is not a bug to fix.
 
 ### 6c. The real front-end state machine, read from the executable
 
-Full decompilation now exists: `decomp/sles_r5900/` (7698 functions, index in
+Full decompilation now exists: `decomp/sho_sles_out/ghidra_clean/` (7698 functions, index in
 `decomp/sles_r5900_index.tsv`). The earlier 464-function set under
 `decomp/sho_sles_out/` is the HandleAttributes call-graph closure only, and it
 does not contain the front end at all.
