@@ -47,10 +47,10 @@ void CalibanBehaviour::PerformStompAttack() {
 // CFlaurosBehaviour
 // ─────────────────────────────────────────────────────────────────────────────
 FlaurosBossBehaviour::FlaurosBossBehaviour()
-    : EnemyBehaviour(EnemyArchetype::CalibanBoss) {
+    : EnemyBehaviour(EnemyArchetype::FlaurosBoss) {
     m_className = "CFlaurosBehaviour";
-    m_health = 350.0f;
-    m_maxHealth = 350.0f;
+    m_health = 1000.0f;
+    m_maxHealth = 1000.0f;
 }
 
 void FlaurosBossBehaviour::OnUpdate(float dt) {
@@ -74,11 +74,11 @@ void FlaurosBossBehaviour::TeleportTo(const Core::Vec3& newPos) {
 // CSadDaddyBehaviour
 // ─────────────────────────────────────────────────────────────────────────────
 SadDaddyBehaviour::SadDaddyBehaviour()
-    : EnemyBehaviour(EnemyArchetype::CalibanBoss) {
+    : EnemyBehaviour(EnemyArchetype::SadDaddyTongue) {
     m_className = "CSadDaddyBehaviour";
     // 0x0013B090: Initial state values
-    m_health = 500.0f;
-    m_maxHealth = 500.0f;
+    m_health = 800.0f;
+    m_maxHealth = 800.0f;
     m_isCatatonic = true; // 0x2d5c = 1
     m_leaveCatatonicMsg = "LeaveCatatonic"; // 0x2d90
     m_swipeCooldown = 0.0f;

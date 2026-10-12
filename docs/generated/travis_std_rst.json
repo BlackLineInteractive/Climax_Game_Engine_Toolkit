@@ -1,0 +1,3641 @@
+{
+  "magic": "ANIM",
+  "numStates": 20,
+  "numTransitions": 214,
+  "layerCount": 5,
+  "transitions": [
+    {
+      "offset": "0x11724",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "Enter_Stance14",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x117c8",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "GoPain",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11824",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "GoFatigue",
+      "conditions": [
+        {
+          "var": "Injured",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11880",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "WeaponSwitch1",
+      "conditions": [
+        {
+          "var": "Fatigued",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11994",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "FinishingMove",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11a70",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Pickup_FLoor",
+      "conditions": [
+        {
+          "var": "PickupTable",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11acc",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Pickup_NoAnim",
+      "conditions": [
+        {
+          "var": "PickupFloor",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11b28",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "GoPain1",
+      "conditions": [
+        {
+          "var": "PickupNoAnim",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11b84",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "GoFatigue1",
+      "conditions": [
+        {
+          "var": "Injured",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11be0",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "ReleasedStick2",
+      "conditions": [
+        {
+          "var": "Fatigued",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11c98",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.35,
+      "name": "Enter_Stance3",
+      "conditions": [
+        {
+          "var": "HasRun",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11cf4",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "AllReleased21",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11d50",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "ReleasedStick1",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11e50",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.15,
+      "name": "NotKnackered2",
+      "conditions": [
+        {
+          "var": "HasRun",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11eac",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Enter_Stance1",
+      "conditions": [
+        {
+          "var": "AnimTime",
+          "valA": 0.75,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "Fatigued",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11f2c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "AllReleased19",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x11f88",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "ReleasedStick5",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12088",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.15,
+      "name": "Enter_Stance",
+      "conditions": [
+        {
+          "var": "HasRun",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x120e4",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "AllReleased18",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12140",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "Knackered",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x121e4",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "R_Released",
+      "conditions": [
+        {
+          "var": "Fatigued",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "AnimTime",
+          "valA": 0.75,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12264",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.4,
+      "name": "AllReleased7",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "StateTime",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x122e4",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "R_Released_Moving2",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12388",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.4,
+      "name": "StateTime9",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "StateTime",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "MovementValue",
+          "valA": 0.25,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x1242c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "ReleasedStick7",
+      "conditions": [
+        {
+          "var": "StateTime",
+          "valA": 0.45,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "Fatigued",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12508",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "RunLetGo4",
+      "conditions": [
+        {
+          "var": "StateTime",
+          "valA": 0.45,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12564",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.15,
+      "name": "AllReleased20",
+      "conditions": [
+        {
+          "var": "HasRun",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x125c0",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "Enter_Stance2",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12664",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "Attacked_no_Stance",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x126c0",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "R_Released1",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12740",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.4,
+      "name": "R_Released_Moving",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "StateTime",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x127c0",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.4,
+      "name": "Attack_Sword_FORWARD",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "StateTime",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "MovementValue",
+          "valA": 0.25,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x129ac",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Attack_Unarmed",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 6.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12a2c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Attack_SwordType1",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12ad0",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "FireGun",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 5.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12b50",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "PlayerReload",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12bd0",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "FireAutomatic",
+      "conditions": [
+        {
+          "var": "HasReloaded",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12c50",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "PlayerReloadShotgun1",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 9.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12cd0",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Attack_Bulk",
+      "conditions": [
+        {
+          "var": "HasReloaded",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 3.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12d50",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Attack_Bat_FORWARD2",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 8.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12e74",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "FireShotgun",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 7.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12ef4",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "PlayerReloadShotgun",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 2.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12f74",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "FireRifle1",
+      "conditions": [
+        {
+          "var": "HasReloaded",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 2.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x12ff4",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "PlayerReloadAutomatic1",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 3.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13074",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Attack_Knife_FORWARD",
+      "conditions": [
+        {
+          "var": "HasReloaded",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 9.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13198",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "AnimEnded",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 4.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13218",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AllReleased8",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13274",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded2",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13318",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "Cross_Pressed1",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13374",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Cross_Pressed10",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "AnimTime",
+          "valA": 0.8,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "AnimTime",
+          "valA": 0.9,
+          "valB": 0.0,
+          "op": "<="
+        }
+      ]
+    },
+    {
+      "offset": "0x1343c",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded3",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "AnimTime",
+          "valA": 0.8,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x134e0",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AllReleased9",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x1353c",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded4",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x135e0",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "Grabbed2Struggle",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x1363c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "TNF_Won",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13750",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "GL_2_Idle",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x137ac",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "AnimFinished",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13808",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "GF2Idle",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13864",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "AnimEnd",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x138c0",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.1,
+      "name": "AnimEnded5",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13978",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded6",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13a78",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Cross_Pressed6",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "SubAnimTime",
+          "valA": 0.8,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "SubAnimTime",
+          "valA": 1.18,
+          "valB": 0.0,
+          "op": "<="
+        }
+      ]
+    },
+    {
+      "offset": "0x13b40",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded7",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "SubAnimTime",
+          "valA": 0.8,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13c40",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded8",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13d40",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Cross_Pressed7",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "SubAnimTime",
+          "valA": 0.65,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "SubAnimTime",
+          "valA": 0.75,
+          "valB": 0.0,
+          "op": "<="
+        }
+      ]
+    },
+    {
+      "offset": "0x13e08",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded13",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "SubAnimTime",
+          "valA": 0.65,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13eac",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AllReleased14",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13f08",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded_letGoOfButton",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x13fac",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.3,
+      "name": "AnimEnded_HeldButton",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "!="
+        }
+      ]
+    },
+    {
+      "offset": "0x14008",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.2,
+      "name": "AttackReleased",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14064",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.1,
+      "name": "AnimTime",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x140c0",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.43,
+      "name": "LetGoOfButton",
+      "conditions": [
+        {
+          "var": "AnimTime",
+          "valA": 0.2,
+          "valB": 0.0,
+          "op": ">="
+        }
+      ]
+    },
+    {
+      "offset": "0x1411c",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.2,
+      "name": "AnimEnded15",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "!="
+        }
+      ]
+    },
+    {
+      "offset": "0x14178",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AllReleased15",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x141d4",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded_letGoOfButton1",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14278",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.3,
+      "name": "AnimEnded22",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "!="
+        }
+      ]
+    },
+    {
+      "offset": "0x142d4",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.2,
+      "name": "AttackReleased1",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14330",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.1,
+      "name": "AnimTime1",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x143e8",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.2,
+      "name": "AnimEnded17",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "!="
+        }
+      ]
+    },
+    {
+      "offset": "0x14444",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AllReleased13",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x144a0",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "Exiting_Sword",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x145b4",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "Exiting_Bat",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14680",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AnimEnded20",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x146dc",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AnimFinished2",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14738",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "AnimEnded23",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14794",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.2,
+      "name": "AnimEnded21",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x147f0",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.2,
+      "name": "AnimEnded24",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x1484c",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.2,
+      "name": "AnimEnded25",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x148a8",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.2,
+      "name": "AnimEnded26",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14904",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AllReleased16",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14960",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded27",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14a04",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AnimEnded28",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14abc",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded29",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14c18",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.35,
+      "name": "Enter_Stance9",
+      "conditions": [
+        {
+          "var": "HasRun",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14c74",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "ReleasedStick8",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14d2c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.15,
+      "name": "NotKnackered",
+      "conditions": [
+        {
+          "var": "HasRun",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14d88",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Enter_Stance7",
+      "conditions": [
+        {
+          "var": "AnimTime",
+          "valA": 0.75,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "Fatigued",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14e08",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "ReleasedStick10",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14ec0",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.15,
+      "name": "Enter_Stance6",
+      "conditions": [
+        {
+          "var": "HasRun",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14f1c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "Knackered1",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14f78",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "StateTime10",
+      "conditions": [
+        {
+          "var": "Fatigued",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "AnimTime",
+          "valA": 0.75,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x14ff8",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "RunLetGo7",
+      "conditions": [
+        {
+          "var": "StateTime",
+          "valA": 0.45,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "Fatigued",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15078",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.15,
+      "name": "Enter_Stance8",
+      "conditions": [
+        {
+          "var": "HasRun",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x150d4",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "StateTime5",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15130",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AnimEnded30",
+      "conditions": [
+        {
+          "var": "StateTime",
+          "valA": 0.45,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x1518c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AllReleased22",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x151e8",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded31",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x1528c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "Cross_Pressed5",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x152e8",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "AnimEnded32",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "AnimTime",
+          "valA": 0.55,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x1538c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AllReleased23",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x153e8",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded33",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x1548c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "Exiting_Fist",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15558",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.1,
+      "name": "AnimEnd1",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x155b4",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "AnimEnd2",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15610",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "GF2Idle1",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x1566c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "GW_2_Idle1",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x156c8",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "GL_2_Idle1",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15724",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Won2",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15880",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.1,
+      "name": "Won",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x159dc",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.1,
+      "name": "BatType",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15a38",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "SwordType",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 6.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15a94",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "FistType",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 5.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15af0",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "FullyAutomatic",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15b4c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "BulkWeapon",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 9.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasBullets",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15bcc",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "handgunWeapon1",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 8.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15c28",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Guns",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasBullets",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15ca8",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "SpearType",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasBullets",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15d28",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Gun",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 7.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15d84",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Gun2",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 2.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasBullets",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15e04",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "FullyAutomatic1",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 3.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasBullets",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15e84",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Gun3",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 9.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasBullets",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15f04",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Gun4",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 2.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasBullets",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x15f84",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "KnifeType1",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 3.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasBullets",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16004",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "AnimEnded34",
+      "conditions": [
+        {
+          "var": "HeldWeaponClass",
+          "valA": 4.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16060",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AllReleased24",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x160bc",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded35",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16160",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AnimEnd5",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x161bc",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.1,
+      "name": "AmDown",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16218",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimFinished4",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16274",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "GotIt",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x162d0",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.1,
+      "name": "AmDown1",
+      "conditions": [
+        {
+          "var": "PickupDone",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x1632c",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimFinished5",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16388",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "GotIt1",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x163e4",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.1,
+      "name": "AllReleased25",
+      "conditions": [
+        {
+          "var": "PickupDone",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16440",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "SubAnimFinished7",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x1659c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AllReleased26",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x165f8",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded37",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x1669c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "IsLoaded_Rifle",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x166f8",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "IsLoaded_Shotgun",
+      "conditions": [
+        {
+          "var": "HasBullets",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 3.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16778",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "EmptyHasAmmo",
+      "conditions": [
+        {
+          "var": "HasBullets",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 2.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x167f8",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "IsLoaded_Auto",
+      "conditions": [
+        {
+          "var": "HasBullets",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAmmo",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16878",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "AllOuttaLuck",
+      "conditions": [
+        {
+          "var": "HasBullets",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 9.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x168f8",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "IsLoaded",
+      "conditions": [
+        {
+          "var": "HasBullets",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAmmo",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16978",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "AllReleased27",
+      "conditions": [
+        {
+          "var": "HasBullets",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x169d4",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "ReloadAnimEnd2",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16a78",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.1,
+      "name": "dummystate",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16b0c",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.1,
+      "name": "AllReleased28",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16b68",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "NoFatigue",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16c0c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "Enter_Stance10",
+      "conditions": [
+        {
+          "var": "Fatigued",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16c68",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "Idle2Walk5",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16d20",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "NoPain",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16dc4",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "Idle2Walk7",
+      "conditions": [
+        {
+          "var": "Injured",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16e7c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "WeaponSwitchFatigued",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x16f34",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "Idle2Walk4",
+      "conditions": [
+        {
+          "var": "Fatigued",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x1706c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Enter_Stance11",
+      "conditions": [
+        {
+          "var": "PickupFloor",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x170c8",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "Pickup_Table1",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17124",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Pickup_NoAnim2",
+      "conditions": [
+        {
+          "var": "PickupTable",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17180",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "WeaponSwitchPained",
+      "conditions": [
+        {
+          "var": "PickupNoAnim",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17238",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "FinishingMove2",
+      "conditions": [
+        {
+          "var": "Injured",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17314",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "Pickup_Table2",
+      "conditions": [
+        {
+          "var": "HasStanced",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17370",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Pickup_FLoor2",
+      "conditions": [
+        {
+          "var": "PickupTable",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x173cc",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "Idle2Walk6",
+      "conditions": [
+        {
+          "var": "PickupFloor",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17484",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "EmptyHasAmmo1",
+      "conditions": [
+        {
+          "var": "PickupNoAnim",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x174e0",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "AllOuttaLuck1",
+      "conditions": [
+        {
+          "var": "HasAmmo",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x1753c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "AnimFinished6",
+      "conditions": [
+        {
+          "var": "HasAmmo",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17598",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AnimEnded38",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x175f4",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AllReleased33",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17650",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded39",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x176f4",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AllReleased34",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17750",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "LeaveStateHasAmmo",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x177d0",
+      "srcState": 0,
+      "dstState": 1,
+      "blendDuration": 0.1,
+      "name": "LeaveStateHasNoBulletHasAmmo",
+      "conditions": [
+        {
+          "var": "HasBullets",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "SubAnimTime",
+          "valA": 0.3,
+          "valB": 0.0,
+          "op": ">="
+        }
+      ]
+    },
+    {
+      "offset": "0x17850",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "LeaveStateHasNoBulletOrAmmo",
+      "conditions": [
+        {
+          "var": "HasBullets",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "!="
+        },
+        {
+          "var": "HasAmmo",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x178d0",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "LeaveStateHasNoBulletHasAmmo1",
+      "conditions": [
+        {
+          "var": "HasBullets",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "!="
+        },
+        {
+          "var": "HasAmmo",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "!="
+        }
+      ]
+    },
+    {
+      "offset": "0x17950",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "LeaveStateHasAmmo1",
+      "conditions": [
+        {
+          "var": "HasBullets",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "!="
+        },
+        {
+          "var": "HasAmmo",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17a50",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "LeaveStateHasNoBulletsOrAmmo",
+      "conditions": [
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17ad0",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "AnimEnded40",
+      "conditions": [
+        {
+          "var": "HasBullets",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "!="
+        },
+        {
+          "var": "HasAmmo",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "!="
+        }
+      ]
+    },
+    {
+      "offset": "0x17b50",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AllReleased36",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17bac",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded41",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17c50",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "Grabbed2Struggle1",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17cac",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "TNF_Won1",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17dc0",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "GL_2_Idle2",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17e1c",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.1,
+      "name": "GF2Idle2",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17e78",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.3,
+      "name": "AllReleased37",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17ed4",
+      "srcState": 0,
+      "dstState": 2,
+      "blendDuration": 0.1,
+      "name": "AnimEnded86",
+      "conditions": [
+        {
+          "var": "HasBlocked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasAttacked",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HasReloaded",
+          "valA": 0.0,
+          "valB": 0.0,
+          "op": "=="
+        }
+      ]
+    },
+    {
+      "offset": "0x17f78",
+      "srcState": 0,
+      "dstState": 0,
+      "blendDuration": 0.2,
+      "name": "AnimEnded85",
+      "conditions": [
+        {
+          "var": "AnimFinished",
+          "valA": 1.0,
+          "valB": 0.0,
+          "op": "=="
+        },
+        {
+          "var": "HeldWeaponClass",
+          "valA": 8.0,
+          "valB": 0.0,
+          "op": "!="
+        }
+      ]
+    }
+  ]
+}

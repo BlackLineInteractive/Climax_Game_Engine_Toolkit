@@ -55,6 +55,7 @@ set(SHO_PORT_SOURCES
     src/Actor/BossBehaviours.cpp
     src/Environment/PostProcessingFSE.cpp
     src/Actor/IGCController.cpp
+    src/Animation/StateTransitionGraph.cpp
 )
 
 add_library(sho-port STATIC ${SHO_PORT_SOURCES})

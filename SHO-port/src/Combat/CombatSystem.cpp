@@ -59,14 +59,17 @@ AttackResult CombatSystem::PerformAttack(
     if (weapon->GetCategory() == Inventory::ItemCategory::WeaponRanged) {
         // Ranged Attack (Gunshot)
         if (weapon->GetAmmoInClip() <= 0) {
-            // Empty click sound event
-            Core::EventManager::GetInstance().SendMsg("WeaponDryFire", attacker);
+            // Snd.Empty @ 0x0068E470
+            Core::EventManager::GetInstance().SendMsg("Snd.Empty", attacker);
             return result;
         }
 
         // Consume bullet
         weapon->SetAmmoInClip(weapon->GetAmmoInClip() - 1);
-        Core::EventManager::GetInstance().SendMsg("WeaponFired", attacker, (void*)weapon->GetId().c_str());
+        // Snd.Fire @ 0x0068E450 & Muzzle Flash FX @ 0x0068FA30
+        Core::EventManager::GetInstance().SendMsg("Snd.Fire", attacker, (void*)weapon->GetId().c_str());
+        Core::EventManager::GetInstance().SendMsg("FX_Muzzle_Flash", attacker, (void*)"FX_Muzzle_Flash_Handgun.rws");
+        Core::EventManager::GetInstance().SendMsg("FX_Shell_Casings", attacker, (void*)"FX_Shell_Casings.rws");
 
         // Find target in narrow cone (15 deg)
         Actor::Actor* hitActor = FindTargetInCone(attackerPos, attackerFwd, weapon->GetRange(), 15.0f, potentialTargets);
@@ -78,7 +81,8 @@ AttackResult CombatSystem::PerformAttack(
             result.damageDealt = dmg;
             result.enemyKilled = !hitActor->IsAlive();
 
-            Core::EventManager::GetInstance().SendMsg("TargetHit", hitActor, &dmg, sizeof(dmg));
+            // SLES DamageEnemyTarget @ 0x0068E400
+            Core::EventManager::GetInstance().SendMsg("DamageEnemyTarget", hitActor, &dmg, sizeof(dmg));
         }
         return result;
     }
@@ -96,7 +100,7 @@ AttackResult CombatSystem::PerformAttack(
         attackRange = 1.0f;
     }
 
-    Core::EventManager::GetInstance().SendMsg("WeaponSwing", attacker, (void*)weapon->GetId().c_str());
+    Core::EventManager::GetInstance().SendMsg("FootStep", attacker);
 
     Actor::Actor* hitActor = FindTargetInCone(attackerPos, attackerFwd, attackRange, coneAngle, potentialTargets);
     if (hitActor) {
@@ -111,11 +115,14 @@ AttackResult CombatSystem::PerformAttack(
         bool broke = weapon->DegradeDurability(1);
         if (broke) {
             result.weaponBroke = true;
-            Core::EventManager::GetInstance().SendMsg("WeaponBroken", attacker, (void*)weapon->GetId().c_str());
+            // SLES WeaponBreak @ 0x0068F1F0 & FX_WPN_Break.rws @ 0x0068FAB0
+            Core::EventManager::GetInstance().SendMsg("WeaponBreak", attacker, (void*)weapon->GetId().c_str());
+            Core::EventManager::GetInstance().SendMsg("FX_WPN_Break", attacker, (void*)"FX_WPN_Break.rws");
             Inventory::InventoryManager::GetInstance().RemoveItem(weapon->GetId(), 1);
         }
 
-        Core::EventManager::GetInstance().SendMsg("TargetHit", hitActor, &dmg, sizeof(dmg));
+        // SLES DamageEnemyTarget @ 0x0068E400
+        Core::EventManager::GetInstance().SendMsg("DamageEnemyTarget", hitActor, &dmg, sizeof(dmg));
     }
 
     return result;
@@ -139,7 +146,9 @@ bool CombatSystem::ReloadWeapon(Inventory::ItemDef* weapon) {
     weapon->SetAmmoInClip(weapon->GetAmmoInClip() + toLoad);
     ammoItem->SetCount(ammoItem->GetCount() - toLoad);
 
-    Core::EventManager::GetInstance().SendMsg("WeaponReloaded", weapon);
+    // SLES Snd.Reload @ 0x0068E460 & PlayerReload @ 0x0068E430
+    Core::EventManager::GetInstance().SendMsg("Snd.Reload", weapon);
+    Core::EventManager::GetInstance().SendMsg("PlayerReload", weapon);
     return true;
 }
 

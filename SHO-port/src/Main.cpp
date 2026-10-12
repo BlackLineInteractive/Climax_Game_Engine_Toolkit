@@ -28,6 +28,7 @@
 #include "SHO/Environment/FogSystem.h"
 #include "SHO/Triggers/TriggerSystem.h"
 #include "SHO/Core/MessageRelay.h"
+#include "SHO/Animation/StateTransitionGraph.h"
 
 
 #include "ClimaxEngine/Core/RWS/FileSystem/CArchiveManager.h"
@@ -614,28 +615,62 @@ int main(int argc, char** argv) {
 
         g_Player.Advance(dt);
 
-        if (g_Player.loaded) {
-            bool moving = glm::length(wish) > 1e-3f;
-            int wantClip = moving ? (isRunning ? g_Player.runClip : g_Player.walkClip) : g_Player.idleClip;
-            if (wantClip < 0) wantClip = g_Player.idleClip;
-            if (wantClip >= 0 && wantClip != g_Player.currentClip) {
-                s_playerClipName = g_Player.PlayClipAt(wantClip);
-            }
+        static SHO::Animation::StateTransitionGraph s_animGraph;
+        auto player = world.GetPlayer();
+        if (player) {
+            // Map inputs to authentic PS2 controller buttons for PlayerBehaviour
+            using namespace SHO::Core;
+            PadButton btns = PadButton::None;
+            if (isRunning) btns = btns | PadButton::Square;
+            if (keys[SDL_SCANCODE_SPACE]) btns = btns | PadButton::Cross;
+            if (keys[SDL_SCANCODE_R] || (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT))) btns = btns | PadButton::R1;
+            if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT)) btns = btns | PadButton::Cross;
+            if (keys[SDL_SCANCODE_E]) btns = btns | PadButton::Circle;
+            if (keys[SDL_SCANCODE_F]) btns = btns | PadButton::Circle;
 
-            if (moving) {
-                static float s_footstepTimer = 0.0f;
-                s_footstepTimer += dt;
-                float stepInterval = isRunning ? 0.32f : 0.48f;
-                if (s_footstepTimer >= stepInterval) {
-                    s_footstepTimer = 0.0f;
-                    SHO::Audio::AudioEngine::GetInstance().PlayFootstep(
-                        (currentLevelName.find("HO_") != std::string::npos || currentLevelName.find("Room") != std::string::npos)
-                        ? SHO::Audio::SurfaceMaterial::Tile
-                        : SHO::Audio::SurfaceMaterial::Road
-                    );
+            player->SetInputMask(btns);
+            float forwardMag = glm::length(wish);
+            player->SetAnalogStick(wish.x, isRunning ? -forwardMag : -forwardMag * 0.5f);
+            player->OnUpdate(dt);
+
+            if (g_Player.loaded) {
+                // Evaluate authentic Travis_STD.rst state machine
+                std::string targetClip = s_animGraph.Update(*player, dt);
+                int wantClip = g_Player.FindClip(targetClip);
+                if (wantClip < 0) {
+                    // Fallback to usable clip slots if specific variant is absent
+                    auto curState = s_animGraph.GetCurrentState();
+                    if (curState == SHO::Animation::PlayerAnimState::RunningFast ||
+                        curState == SHO::Animation::PlayerAnimState::Running) {
+                        wantClip = g_Player.runClip;
+                    } else if (curState == SHO::Animation::PlayerAnimState::Walking) {
+                        wantClip = g_Player.walkClip;
+                    } else if (curState == SHO::Animation::PlayerAnimState::Fatigued_Idle ||
+                               curState == SHO::Animation::PlayerAnimState::Injured_Idle) {
+                        wantClip = g_Player.tiredClip >= 0 ? g_Player.tiredClip : g_Player.idleClip;
+                    } else {
+                        wantClip = g_Player.idleClip;
+                    }
+                }
+
+                if (wantClip >= 0 && wantClip != g_Player.currentClip) {
+                    s_playerClipName = g_Player.PlayClipAt(wantClip);
+                }
+
+                if (glm::length(wish) > 1e-3f) {
+                    static float s_footstepTimer = 0.0f;
+                    s_footstepTimer += dt;
+                    float stepInterval = isRunning ? 0.32f : 0.48f;
+                    if (s_footstepTimer >= stepInterval) {
+                        s_footstepTimer = 0.0f;
+                        SHO::Audio::AudioEngine::GetInstance().PlayFootstep(
+                            (currentLevelName.find("HO_") != std::string::npos || currentLevelName.find("Room") != std::string::npos)
+                            ? SHO::Audio::SurfaceMaterial::Tile
+                            : SHO::Audio::SurfaceMaterial::Road
+                        );
+                    }
                 }
             }
-
         }
 
         // Update Travis Flashlight (SH2/SH3 Style Cinematic Dynamic Spotlight from chest pocket)
