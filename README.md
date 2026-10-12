@@ -388,7 +388,7 @@ left-button drag at a time, and the gizmo only appears once a level is loaded.
 
 ## Project Structure
 
-The build produces two executables and three libraries. The boundary is
+The build produces two executables and three libraries plus a harness. The boundary is
 enforced by the linker: `climax-core` and `climax-game` have no GL/SDL/ImGui
 symbols, so any accidental include causes a link error instead of a silent
 violation.
@@ -405,9 +405,15 @@ climax-core   (static library — no GL, no SDL, no ImGui)
 
 climax-game   (static library — no GL, no SDL, no ImGui; links climax-core)
   src/Game/FrontEnd.cpp                  — boot sequence state machine
-  src/Game/CameraLinks.cpp               — fixed-camera selection & cutting
-  src/Game/CharacterController.cpp       — player movement, collision, doors
-  src/Game/ZoneLinks.cpp                 — level-to-level transition graph
+  src/Game/SceneQueue.cpp                — FUN_00179FB8 / FUN_00179D60 scene loading
+  src/Game/CameraLinks.cpp               — PlaneTrigger camera pairs & cutting
+  src/Game/ZoneLinks.cpp                 — doors and spawn points
+
+climax-harness  (static library — no GL, no SDL, no ImGui; links climax-game)
+  Stand-ins, not the game's code; each header says so.
+  src/Harness/Body.cpp                   — sphere body against the collision mesh
+  src/Harness/CameraView.cpp             — camera aim / eye placement
+  src/Harness/ButtonTriggers.cpp         — toolkit-only trigger reading
 
 ClimaxGameEngineToolkit  (executable — SDL + GL + ImGui; links climax-game)
   src/main.cpp                           — render loop, GL shaders, input
